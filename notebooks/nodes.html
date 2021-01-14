@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+<center>
+<h1>Material Transport Network</h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 1000;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "#FF9999", "id": "f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768", "label": "orange production, fresh grade \n orange, fresh grade \n APOS, S \n South Africa", "level": 0, "mass": 2, "shape": "dot", "title": "f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768"}, {"color": "#FF9999", "id": "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8", "label": "orange production, fresh grade \n orange, fresh grade \n APOS, S \n United States", "level": 0, "mass": 2, "shape": "dot", "title": "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8"}, {"color": "#FF9999", "id": "760f1858-b0ef-3280-930e-88ebe4645061", "label": "orange production, fresh grade \n orange, fresh grade \n APOS, S \n Rest-of-World", "level": 0, "mass": 2, "shape": "dot", "title": "760f1858-b0ef-3280-930e-88ebe4645061"}, {"color": "#9999FF", "id": "44ad59ca-4fe0-394c-a6d9-5dea68783c23", "label": "transport, freight train, diesel \n transport, freight train \n APOS, S \n United States", "level": 1, "mass": 2, "shape": "dot", "title": "44ad59ca-4fe0-394c-a6d9-5dea68783c23"}, {"color": "#9999FF", "id": "f615ae37-fa6d-4a47-958c-23234c986400", "label": "transport, freight train, diesel \n transport, freight train \n APOS, S \n Rest-of-World", "level": 1, "mass": 2, "shape": "dot", "title": "f615ae37-fa6d-4a47-958c-23234c986400"}, {"color": "#9999FF", "id": "9106bf8d-869d-425f-b8ee-0bf9a78bcf65", "label": "transport, freight train, diesel \n transport, freight train \n APOS, S \n South Africa", "level": 1, "mass": 2, "shape": "dot", "title": "9106bf8d-869d-425f-b8ee-0bf9a78bcf65"}, {"color": "#9999FF", "id": "97aa2533-ae98-3f8f-b3e2-3acb9d66a010", "label": "transport, freight train, electricity \n transport, freight train \n APOS, S \n Rest-of-World", "level": 1, "mass": 2, "shape": "dot", "title": "97aa2533-ae98-3f8f-b3e2-3acb9d66a010"}, {"color": "#9999FF", "id": "b37252a8-fbb5-47cb-a3aa-1485d090bdfd", "label": "transport, freight train, electricity \n transport, freight train \n APOS, S \n South Africa", "level": 1, "mass": 2, "shape": "dot", "title": "b37252a8-fbb5-47cb-a3aa-1485d090bdfd"}, {"color": "#9999FF", "id": "660ba3fe-d7a5-4c43-8777-27d331934edf", "label": "transport, freight, lorry 16-32 metric ton, EURO1 \n transport, freight, lorry 16-32 metric ton, EURO1 \n APOS, S \n South Africa", "level": 1, "mass": 2, "shape": "dot", "title": "660ba3fe-d7a5-4c43-8777-27d331934edf"}, {"color": "#9999FF", "id": "fe7d1840-4341-40fd-ba6d-fbba126ca7d3", "label": "transport, freight, lorry 16-32 metric ton, EURO2 \n transport, freight, lorry 16-32 metric ton, EURO2 \n APOS, S \n South Africa", "level": 1, "mass": 2, "shape": "dot", "title": "fe7d1840-4341-40fd-ba6d-fbba126ca7d3"}, {"color": "black", "id": "output", "label": "output", "level": 2, "mass": 2, "shape": "dot", "title": "output"}]);
+        edges = new vis.DataSet([]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

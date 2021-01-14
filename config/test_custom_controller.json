@@ -1,0 +1,247 @@
+{
+    "settings": {},
+    "doc_path": "",
+    "specification": "<class 'mola.specification5.SelectionSpecification'>",
+    "controller": "CustomController",
+    "db_file": "C:/data/openlca/sqlite/system/CSV_juice_ecoinvent_36_apos_lci_20200206_20201029-102818.sqlite",
+    "sets": {
+        "F_m": [
+            "9891d347-28f8-434d-896a-84a19a4c68a6",
+            "1f7bbd3e-fcd1-412d-8608-035b855ea735"
+        ],
+        "F_t": [
+            "03bf1369-1eec-49d0-bc4b-8b29efa826b9",
+            "0ace02fa-eca5-482d-a829-c18e46a52db4"
+        ],
+        "D": [
+            "d1"
+        ],
+        "P_m": [
+            "64867712-23c4-3be5-a50e-3631e74571a6",
+            "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8"
+        ],
+        "P_t": [
+            "44ad59ca-4fe0-394c-a6d9-5dea68783c23",
+            "c742d973-9033-307f-8382-b996a1982056"
+        ],
+        "KPI": [
+            "ad74382a-add4-35c8-b373-7f8dedc80733"
+        ],
+        "OBJ": [
+            "environment",
+            "cost"
+        ],
+        "F": [],
+        "P": []
+    },
+    "parameters": {
+        "C": [
+            {
+                "index": [
+                    "9891d347-28f8-434d-896a-84a19a4c68a6",
+                    "d1"
+                ],
+                "value": 1
+            },
+            {
+                "index": [
+                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                    "d1"
+                ],
+                "value": 1
+            }
+        ],
+        "d": [
+            {
+                "index": [
+                    "64867712-23c4-3be5-a50e-3631e74571a6",
+                    "9891d347-28f8-434d-896a-84a19a4c68a6"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "64867712-23c4-3be5-a50e-3631e74571a6",
+                    "1f7bbd3e-fcd1-412d-8608-035b855ea735"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
+                    "9891d347-28f8-434d-896a-84a19a4c68a6"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
+                    "1f7bbd3e-fcd1-412d-8608-035b855ea735"
+                ],
+                "value": 0
+            }
+        ],
+        "Demand": [
+            {
+                "index": [
+                    "d1"
+                ],
+                "value": 0
+            }
+        ],
+        "Total_Demand": [
+            {
+                "index": [
+                    "d1"
+                ],
+                "value": 0
+            }
+        ],
+        "J": [
+            {
+                "index": [
+                    "9891d347-28f8-434d-896a-84a19a4c68a6",
+                    "64867712-23c4-3be5-a50e-3631e74571a6",
+                    "03bf1369-1eec-49d0-bc4b-8b29efa826b9",
+                    "44ad59ca-4fe0-394c-a6d9-5dea68783c23"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "9891d347-28f8-434d-896a-84a19a4c68a6",
+                    "64867712-23c4-3be5-a50e-3631e74571a6",
+                    "03bf1369-1eec-49d0-bc4b-8b29efa826b9",
+                    "c742d973-9033-307f-8382-b996a1982056"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "9891d347-28f8-434d-896a-84a19a4c68a6",
+                    "64867712-23c4-3be5-a50e-3631e74571a6",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "44ad59ca-4fe0-394c-a6d9-5dea68783c23"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "9891d347-28f8-434d-896a-84a19a4c68a6",
+                    "64867712-23c4-3be5-a50e-3631e74571a6",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "c742d973-9033-307f-8382-b996a1982056"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "9891d347-28f8-434d-896a-84a19a4c68a6",
+                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
+                    "03bf1369-1eec-49d0-bc4b-8b29efa826b9",
+                    "44ad59ca-4fe0-394c-a6d9-5dea68783c23"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "9891d347-28f8-434d-896a-84a19a4c68a6",
+                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
+                    "03bf1369-1eec-49d0-bc4b-8b29efa826b9",
+                    "c742d973-9033-307f-8382-b996a1982056"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "9891d347-28f8-434d-896a-84a19a4c68a6",
+                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "44ad59ca-4fe0-394c-a6d9-5dea68783c23"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "9891d347-28f8-434d-896a-84a19a4c68a6",
+                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "c742d973-9033-307f-8382-b996a1982056"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                    "64867712-23c4-3be5-a50e-3631e74571a6",
+                    "03bf1369-1eec-49d0-bc4b-8b29efa826b9",
+                    "44ad59ca-4fe0-394c-a6d9-5dea68783c23"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                    "64867712-23c4-3be5-a50e-3631e74571a6",
+                    "03bf1369-1eec-49d0-bc4b-8b29efa826b9",
+                    "c742d973-9033-307f-8382-b996a1982056"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                    "64867712-23c4-3be5-a50e-3631e74571a6",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "44ad59ca-4fe0-394c-a6d9-5dea68783c23"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                    "64867712-23c4-3be5-a50e-3631e74571a6",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "c742d973-9033-307f-8382-b996a1982056"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
+                    "03bf1369-1eec-49d0-bc4b-8b29efa826b9",
+                    "44ad59ca-4fe0-394c-a6d9-5dea68783c23"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
+                    "03bf1369-1eec-49d0-bc4b-8b29efa826b9",
+                    "c742d973-9033-307f-8382-b996a1982056"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "44ad59ca-4fe0-394c-a6d9-5dea68783c23"
+                ],
+                "value": 1
+            },
+            {
+                "index": [
+                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "c742d973-9033-307f-8382-b996a1982056"
+                ],
+                "value": 0
+            }
+        ]
+    }
+}

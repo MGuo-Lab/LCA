@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Tue Sep 22 16:42:34 BST 2020:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.15.1.3 - (1853019): instance a816c00e-0174-b67b-1534-000000b4aa38 
+on database directory Y:\media\KCL_Supply_Chain_Optimisation\LCA_workshop\ecoinvent_36_apos_unit_20191212 with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@1698c449 
+Loaded from file:/C:/db-derby-10.15.1.3-bin/lib/derby.jar
+java.vendor=AdoptOpenJDK
+java.runtime.version=11.0.8+10
+user.dir=Z:\work\Projects\LCA\Derby
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
