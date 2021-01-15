@@ -25,5 +25,5 @@ class TestUtils(TestCase):
         self.assertIsInstance(spec, ms.ScheduleSpecification)
 
         spec1 = mu.create_specification(cls, settings={'distance_calculated': True})
-        self.assertEqual(spec1.settings['distance_calculated']['value'], True)
+        self.assertEqual(spec1.settings['distance_calculated'], True)
 

@@ -1,6 +1,5 @@
 import sys
 import json
-import os
 import webbrowser
 from zipfile import ZipFile
 from pathlib import Path
@@ -105,17 +104,20 @@ class MolaMainWindow(QMainWindow):
     def import_sqlite_database(self):
         zip_filter = 'zip files (*.zip)'
         # zip_name = QFileDialog.getOpenFileName(self, 'Import sqlite database', str(Path.home()), zip_filter)
-        zip_name = QFileDialog.getOpenFileName(self, 'Import sqlite database', 'Z:\data\openlca\sqlite\system', zip_filter)
+        zip_name = QFileDialog.getOpenFileName(self, 'Import sqlite database', 'C:\data\openlca\zip', zip_filter)
+        db_output_path = self.system['data_path'].joinpath(Path(zip_name[0]).with_suffix('.sqlite').name)
 
-        try:
-            print('Uncompressing', zip_name[0], 'to', self.system['data_path'])
-            with ZipFile(zip_name[0], 'r') as zr:
-                zr.extractall(self.system['data_path'])
-            db_path = os.path.splitext(self.system['data_path'].joinpath(zip_name[0]))[0]
-            self.manager.add_database(db_path)
-        except:
-            QMessageBox.critical(self, 'Error', 'Cannot uncompress ' + zip_name[0],
-                                 QMessageBox.Ok)
+        if zip_name[0] == '' or db_output_path.exists():
+            QMessageBox.critical(self, 'Error', 'Database already exists', QMessageBox.Ok)
+        else:
+            try:
+                print('Uncompressing', zip_name[0], 'to', self.system['data_path'])
+                with ZipFile(zip_name[0], 'r') as zr:
+                    zr.extractall(self.system['data_path'])
+                self.manager.add_database(db_output_path)
+            except:
+                QMessageBox.critical(self, 'Error', 'Cannot uncompress ' + zip_name[0],
+                                     QMessageBox.Ok)
 
     def open_database(self):
         sqlite_filter = 'sqlite files (*.sqlite)'
@@ -130,24 +132,26 @@ class MolaMainWindow(QMainWindow):
             print('Cancelled open database')
 
     def new_model(self):
-        dialog = md.NewModelDialog(parent=self)
-        if dialog.exec():
-            name, specification_class, controller_class, database = dialog.get_inputs()
-            config_file = self.system['config_path'].joinpath(name)
-            if config_file.exists():
-                QMessageBox.about(self, "Error", "Configuration file " + str(config_file.absolute()) +
-                                  " already exists")
-            else:
-                item = QTreeWidgetItem(self.manager.db_item, [name])
-                self.manager.db_tree.clearSelection()
-                item.setSelected(True)
-                self.manager.new_model(config_file, specification_class, controller_class, database)
-                self.save_model()
+        # TODO this should really go into manager class
+        if len(self.manager.db_items) > 0:
+            dialog = md.NewModelDialog(parent=self, db_files=self.manager.db_items.keys())
+            if dialog.exec():
+                name, specification_class, controller_class, database = dialog.get_inputs()
+                config_file = self.system['config_path'].joinpath(name + '.json')
+                if config_file.exists():
+                    QMessageBox.about(self, "Error", "Configuration file " + str(config_file.absolute()) +
+                                      " already exists")
+                else:
+                    item = QTreeWidgetItem(self.manager.db_items[database], [config_file.stem])
+                    self.manager.db_tree.clearSelection()
+                    item.setSelected(True)
+                    self.manager.new_model(config_file, specification_class, controller_class, database)
+                    self.save_model()
 
     def save_model(self):
         try:
             if isinstance(self.manager.controller, mc.Controller):
-                # TODO this should go into the Controller class
+                # TODO this should go into the Controller/Manager class
                 config = self.manager.controller.get_config()
                 with open(str(self.manager.controller_config_file), 'w') as fp:
                     json.dump(config, fp, indent=4)

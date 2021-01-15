@@ -39,7 +39,7 @@ class TestScheduleSpecification(TestCase):
         with open(parameters_json.name, 'w') as fp:
             json.dump(config['parameters'], fp)
 
-        self.spec.update_setting('distance_calculated', True)
+        self.spec.settings['distance_calculated'] = True
         model_instance = self.spec.populate([sets_json.name, parameters_json.name])
 
         sets_json.close()

@@ -8,12 +8,12 @@ import molaqt.controllers as mqc
 
 
 class NewModelDialog(QDialog):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, db_files=None):
         super().__init__(parent)
         self.setWindowTitle("New Model")
 
         self.name = QLineEdit(self)
-        self.name.setText('test_model.json')
+        self.name.setText('test_model')
         self.specification = QComboBox(self)
 
         # builder combobox
@@ -32,7 +32,9 @@ class NewModelDialog(QDialog):
 
         self.database = QComboBox(self)
         # FIXME turn into hash
-        self.database.addItem("C:/data/openlca/sqlite/system/CSV_juice_ecoinvent_36_apos_lci_20200206_20201029-102818.sqlite")
+        self.db_files = {f.stem: f for f in db_files}
+        # self.database.addItem("C:/data/openlca/sqlite/system/CSV_juice_ecoinvent_36_apos_lci_20200206_20201029-102818.sqlite")
+        self.database.addItems(self.db_files.keys())
         button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, self)
 
         layout = QFormLayout(self)
@@ -60,7 +62,7 @@ class NewModelDialog(QDialog):
         current_spec_class = spec_class[self.specification.currentIndex()]
         current_builder_class = self.builder_class[builder_text[self.builder.currentIndex()]]
         return self.name.text(), current_spec_class, \
-               current_builder_class, self.database.currentText()
+               current_builder_class, self.db_files[self.database.currentText()]
 
 
 class RenameModelDialog(QDialog):

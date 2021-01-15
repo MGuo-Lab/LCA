@@ -1,10 +1,9 @@
 import sys
-import os
 import json
+from pathlib import Path
 from PyQt5.QtWidgets import QWidget, QTreeWidget, QLabel, QTreeWidgetItem, QAction, \
     QMessageBox, QSplitter, QHBoxLayout
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap
 import molaqt.controllers as mc
 import molaqt.dialogs as md
 import molaqt.utils as mqu
@@ -26,15 +25,10 @@ class ModelManager(QWidget):
         self.controller = QLabel()
 
         # db tree
-        db_name = 'ecoinvent_36_apos_lci_20200206'
+        # db_name = 'ecoinvent_36_apos_lci_20200206'
         self.db_tree = QTreeWidget()
         self.db_tree.setHeaderLabels(['Database'])
         self.db_tree.setMinimumWidth(250)
-        self.db_item = QTreeWidgetItem(self.db_tree, [db_name])
-        self.db_item.setExpanded(True)
-        config_item = []
-        for cf in os.listdir(system['config_path']):
-            config_item.append(QTreeWidgetItem(self.db_item, [cf]))
         self.db_tree.itemDoubleClicked.connect(self.item_double_clicked)
 
         # context menu for db tree
@@ -45,6 +39,23 @@ class ModelManager(QWidget):
         self.rename_model_action = QAction("Rename model")
         self.rename_model_action.triggered.connect(self.rename_model)
         self.db_tree.addAction(self.rename_model_action)
+
+        # find the user sqlite databases and add them to db tree
+        self.db_items = {}
+        db_files = list(system['data_path'].glob('*.sqlite'))
+        for db_file in db_files:
+            self.db_items[db_file] = QTreeWidgetItem(self.db_tree, [db_file.stem])
+            self.db_items[db_file].setExpanded(True)
+
+        # add each model config to its database item by examining db_file entry
+        config_item = []
+        for cf in system['config_path'].glob('*.json'):
+            with open(str(cf)) as fp:
+                config_json = json.load(fp)
+            if 'db_file' in config_json:
+                config_db = Path(config_json['db_file'])
+                if config_db.exists():
+                    config_item.append(QTreeWidgetItem(self.db_items[config_db], [cf.stem]))
 
         # arrange widgets in splitter
         box = QHBoxLayout()
@@ -60,7 +71,7 @@ class ModelManager(QWidget):
         if self.db_tree.indexOfTopLevelItem(item) == -1:
             config_file = self.system['config_path'].joinpath(item.text(0))
             print('Loading model', config_file)
-            self.set_controller(config_file)
+            self.set_controller(config_file.with_suffix('.json'))
 
     def new_model(self, config_file, specification_class, controller_class, database):
         self.controller_config_file = config_file
@@ -81,14 +92,14 @@ class ModelManager(QWidget):
             model_name = index.text(0)
             choice = QMessageBox.question(
                 self,
-                'Delete model ' + model_name,
-                'Confirm delete model ' + model_name + ' from ' + db_index.text(0) + '?',
+                'Delete model',
+                'Confirm delete ' + model_name + ' from ' + db_index.text(0) + '?',
                 QMessageBox.Yes | QMessageBox.No
             )
             if choice == QMessageBox.Yes:
                 db_index.removeChild(index)
                 self.replace_controller(QLabel())
-                os.remove(self.system['config_path'].joinpath(model_name))
+                self.system['config_path'].joinpath(model_name).with_suffix('.json').unlink()
                 print("Deleted", model_name)
             else:
                 pass
@@ -100,24 +111,24 @@ class ModelManager(QWidget):
             model_name = index.text(0)
             dialog = md.RenameModelDialog(current_model_name=model_name, parent=self)
             if dialog.exec():
-                old_config_file = self.system['config_path'].joinpath(model_name)
+                old_config_path = self.system['config_path'].joinpath(model_name).with_suffix('.json')
                 new_model_name = dialog.new_model_name.text()
-                new_config_file = self.system['config_path'].joinpath(new_model_name)
-                if new_config_file.exists():
-                    QMessageBox.about(self, "Error", "Configuration file " + str(new_config_file.absolute()) +
+                new_config_path = self.system['config_path'].joinpath(new_model_name).with_suffix('.json')
+                if new_config_path.exists():
+                    QMessageBox.about(self, "Error", "Configuration file " + str(new_config_path.absolute()) +
                                       " already exists")
-                elif self.controller is not None and not self.controller.saved:
+                elif not isinstance(self.controller, QLabel) and not self.controller.saved:
                     QMessageBox.about(self, "Error", "Model not saved")
                 else:
                     db_index.removeChild(index)
                     if self.controller is not None:
                         self.replace_controller(QLabel())
-                    os.rename(old_config_file, new_config_file)
-                    qtw = QTreeWidgetItem(self.db_item, [new_model_name])
+                    old_config_path.rename(new_config_path)
+                    qtw = QTreeWidgetItem(db_index, [new_model_name])
                     db_index.addChild(qtw)
                     self.db_tree.clearSelection()
                     qtw.setSelected(True)
-                    print("Renamed", model_name, 'to', dialog.new_model_name)
+                    print("Renamed", model_name, 'to', dialog.new_model_name.text())
 
     def set_controller(self, config_file):
         self.controller_config_file = config_file
@@ -146,7 +157,7 @@ class ModelManager(QWidget):
         self.splitter.setStretchFactor(1, 2)
         self.controller = new_controller
 
-    def add_database(self, db_file):
-        db_name = os.path.splitext(os.path.basename(db_file))[0]
-        self.db_item = QTreeWidgetItem(self.db_tree, [db_name])
-        self.db_item.setSelected(True)
+    def add_database(self, db_path):
+        db_item = QTreeWidgetItem(self.db_tree, [db_path.stem])
+        self.db_items[db_path] = db_item
+        db_item.setSelected(True)
