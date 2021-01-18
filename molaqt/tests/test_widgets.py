@@ -119,3 +119,29 @@ class TestProcessFlow(TestCase):
         if 'IGNORE_EXEC' not in os.environ:
             app.exec()
         pass
+
+
+class TestLinkParameterDiagram(TestCase):
+
+    # get lookups from db
+    conn = di.get_sqlite_connection()
+    lookup = dv.LookupTables(conn)
+
+    setting = mqu.system_settings(testing=True)
+    config_path = setting['config_path'].joinpath('Orange_Toy_Model.json')
+
+    # load test configuration file
+    with open(str(config_path)) as jf:
+        model_config = json.load(jf)
+
+    spec = ms.SelectionSpecification()
+
+    def test_init(self):
+        link_diagram = mw.LinkParameterDiagram('J', self.model_config['parameters'], self.model_config['sets'],
+                                               self.lookup, self.spec)
+        link_diagram.show()
+        link_diagram.resize(800, 600)
+
+        if 'IGNORE_EXEC' not in os.environ:
+            app.exec()
+        pass

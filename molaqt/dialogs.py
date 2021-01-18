@@ -1,8 +1,6 @@
-from PyQt5.QtWidgets import QDialog, QLineEdit, QDialogButtonBox, QFormLayout, QApplication
-from PyQt5.QtWidgets import QComboBox, QHBoxLayout, QLabel, QWidget, QApplication, QDesktopWidget
-from PyQt5.QtGui import QPixmap, QPainter, QFont
-from PyQt5.Qt import QPoint
-from PyQt5.QtCore import Qt
+from pathlib import Path
+from PyQt5.QtWidgets import QDialog, QLineEdit, QDialogButtonBox, QFormLayout, QFileDialog
+from PyQt5.QtWidgets import QComboBox, QApplication, QPushButton, QHBoxLayout, QWidget
 import mola.specification5 as ms
 import molaqt.controllers as mqc
 
@@ -30,18 +28,25 @@ class NewModelDialog(QDialog):
         for spec in self.specifications:
             self.specification.addItem(spec)
 
+        # add databases to combobox
         self.database = QComboBox(self)
-        # FIXME turn into hash
         self.db_files = {f.stem: f for f in db_files}
-        # self.database.addItem("C:/data/openlca/sqlite/system/CSV_juice_ecoinvent_36_apos_lci_20200206_20201029-102818.sqlite")
         self.database.addItems(self.db_files.keys())
         button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, self)
+
+        # documentation
+        self.doc_widget = DocWidget()
+        # self.doc_button = QPushButton('...')
+        # self.doc_box = QHBoxLayout()
+        # self.doc_box.addWidget(self.doc_path)
+        # self.doc_box.addWidget(self.doc_button)
 
         layout = QFormLayout(self)
         layout.addRow("Name", self.name)
         layout.addRow("Specification", self.specification)
         layout.addRow("Builder", self.builder)
         layout.addRow("Database", self.database)
+        layout.addRow("Documentation", self.doc_widget)
         layout.addWidget(button_box)
 
         button_box.accepted.connect(self.accept)
@@ -61,8 +66,37 @@ class NewModelDialog(QDialog):
         builder_text = list(self.builders.values())
         current_spec_class = spec_class[self.specification.currentIndex()]
         current_builder_class = self.builder_class[builder_text[self.builder.currentIndex()]]
-        return self.name.text(), current_spec_class, \
-               current_builder_class, self.db_files[self.database.currentText()]
+        return (
+            self.name.text(),
+            current_spec_class,
+            current_builder_class,
+            self.db_files[self.database.currentText()],
+            Path(self.doc_widget.path.text())
+        )
+
+
+class DocWidget(QWidget):
+
+    def __init__(self):
+        super().__init__()
+
+        # widgets
+        self.path = QLineEdit()
+        button = QPushButton('...')
+        button.clicked.connect(self.find_file)
+
+        # layout
+        layout = QHBoxLayout(self)
+        layout.addWidget(self.path)
+        layout.addWidget(button)
+        layout.setContentsMargins(0, 0, 0, 0)
+        self.setLayout(layout)
+
+    def find_file(self):
+        doc_file = QFileDialog.getOpenFileName(self, 'Open file', str(Path.home()),
+                                               "HTML files (*.html)")
+        if doc_file[0] != '':
+            self.path.setText(doc_file[0])
 
 
 class RenameModelDialog(QDialog):
@@ -84,11 +118,3 @@ class RenameModelDialog(QDialog):
         button_box.rejected.connect(self.reject)
 
 
-if __name__ == '__main__':
-
-    import sys
-    app = QApplication(sys.argv)
-    dialog = NewModelDialog()
-    if dialog.exec():
-        print(dialog.get_inputs())
-    exit(0)

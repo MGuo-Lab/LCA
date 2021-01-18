@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Mon Jan 11 17:37:25 GMT 2021:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.15.1.3 - (1853019): instance a816c00e-0176-f286-1e91-000000a3fac8 
+Sun Jan 17 11:54:02 GMT 2021:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.15.1.3 - (1853019): instance a816c00e-0177-1031-e45f-000000a46000 
 on database directory Z:\work\code\Python\LCA\mola\resources\db\derby\juice_empty with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@6bbe85a8 
 Loaded from file:/Z:/share/db-derby-10.15.1.3-bin/lib/derby.jar
 java.vendor=AdoptOpenJDK

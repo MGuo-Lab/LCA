@@ -4,10 +4,20 @@ import pygeodesy.formy as pygeo
 import math
 
 import pyomo.environ as pe
+from pyomo.environ import units as pu
 import pyomo.dataportal as pyod
 import mola.sqlgenerator as sq
 import mola.dataimport as di
 import pandas as pd
+
+# units
+pu.load_definitions_from_strings([
+    'F = [Flow]',
+    'F_m = [Material Flow]',
+    'F_s = [Service Flow]',
+    'F_t = [Transport Flow]',
+    'D = [Demand]'
+])
 
 
 class Specification:
@@ -36,7 +46,9 @@ class Specification:
 
 
 class SelectionSpecification(Specification):
-    """Alex pyomo specification"""
+    """
+    Alex pyomo specification
+    """
     user_defined_sets = {
         'P_m': 'Processes producing material flows in the optimisation problem',
         'P_t': 'Processes producing transport flows in the optimisation problem',
@@ -49,10 +61,10 @@ class SelectionSpecification(Specification):
         'E': 'Elementary Flows in OpenLCA database',
     }
     user_defined_parameters = {
-        'C': {'index': ['F_m', 'D'], 'doc': 'Conversion factor for material flows'},
-        'Demand': {'index': ['D'], 'doc': 'Specific demand'},
-        'Total_Demand': {'index': ['D'], 'doc': 'Total demand'},
-        'd': {'index': ['P', 'F_m'], 'doc': 'Distance'},
+        'C': {'index': ['F_m', 'D'], 'doc': 'Conversion factor for material flows', 'unit': pu.D/pu.F_m},
+        'Demand': {'index': ['D'], 'doc': 'Specific demand', 'unit': pu.D},
+        'Total_Demand': {'index': ['D'], 'doc': 'Total demand', 'unit': pu.D},
+        'd': {'index': ['P', 'F_m'], 'doc': 'Distance', 'unit': pu.km},
         'J': {'index': ['F_m', 'P_m', 'F_t', 'P_t'],
               'doc': 'Binary conversion factor between material and transport flows', 'within': 'Binary'},
     }
@@ -104,17 +116,19 @@ class SelectionSpecification(Specification):
 
         # Variables
         abstract_model.Flow = pe.Var(abstract_model.F_m, abstract_model.P_m,
-                                     within=pe.NonNegativeReals, doc='Material flow')
+                                     within=pe.NonNegativeReals, doc='Material flow', units=pu.F_m)
         abstract_model.Specific_Material_Transport_Flow = pe.Var(abstract_model.F_m, abstract_model.P_m,
                                                                  abstract_model.F_t, abstract_model.P_t,
                                                                  within=pe.NonNegativeReals,
-                                                                 doc='Specific Material Transport Flow')
+                                                                 doc='Specific Material Transport Flow',
+                                                                 units=pu.F_m)
         abstract_model.Specific_Transport_Flow = pe.Var(abstract_model.F_t, abstract_model.P_t,
                                                         within=pe.NonNegativeReals,
-                                                        doc='Specific Transport Flow')
+                                                        doc='Specific Transport Flow',
+                                                        units=pu.F_m * pu.F_t)
         abstract_model.Demand_Selection = pe.Var(abstract_model.D,
-                                                        within=pe.Binary,
-                                                        doc='Selection of Demand Product')
+                                                 within=pe.Binary,
+                                                 doc='Selection of Demand Product')
 
         # objectives
         def environment_objective_rule(model, kpi):
@@ -288,7 +302,9 @@ class SelectionSpecification(Specification):
 
 
 class ScheduleSpecification(Specification):
-    """Miao pyomo specification"""
+    """
+    Miao pyomo specification
+    """
     user_defined_sets = {
         'P_m': 'Processes producing material flows in the optimisation problem',
         'P_t': 'Processes producing transport flows in the optimisation problem',
@@ -308,14 +324,14 @@ class ScheduleSpecification(Specification):
         'AKPI': 'All key performance indicators in an openLCA database',
     }
     user_defined_parameters = {
-        'C': {'index': ['F_m', 'K', 'D', 'T'], 'doc': 'Conversion factor for material flows'},
-        'Demand': {'index': ['D', 'K', 'T'], 'doc': 'Specific demand'},
-        'Total_Demand': {'index': ['D', 'K'], 'doc': 'Total demand'},
+        'C': {'index': ['F_m', 'K', 'D', 'T'], 'doc': 'Conversion factor for material flows', 'unit': pu.D/pu.F_m},
+        'Demand': {'index': ['D', 'K', 'T'], 'doc': 'Specific demand', 'unit': pu.D},
+        'Total_Demand': {'index': ['D', 'K'], 'doc': 'Total demand', 'unit': pu.D},
         'L': {'index': ['F_m', 'P_m', 'F_s', 'P_s'], 'doc': 'Binary conversion factor between service flows',
               'within': 'Binary'},
-        'X': {'index': ['K', 'T'], 'doc': 'Longitude'},
-        'Y': {'index': ['K', 'T'], 'doc': 'Latitude'},
-        'd': {'index': ['P', 'F_m', 'K', 'T'], 'doc': 'Distance'},
+        'X': {'index': ['K', 'T'], 'doc': 'Longitude', 'unit': pu.km},
+        'Y': {'index': ['K', 'T'], 'doc': 'Latitude', 'unit': pu.km},
+        'd': {'index': ['P', 'F_m', 'K', 'T'], 'doc': 'Distance', 'unit': pu.km},
         'J': {'index': ['F_m', 'P_m', 'F_t', 'P_t'],
               'doc': 'Binary conversion factor between material and transport flows', 'within': 'Binary'},
         'w': {'index': ['OBJ'], 'doc': 'Objective weights'},
@@ -356,7 +372,11 @@ class ScheduleSpecification(Specification):
                 within = pe.Binary
             else:
                 within = pe.Reals
-            abstract_model.add_component(param, pe.Param(*idx, doc=val['doc'], within=within))
+            if 'unit' in val:
+                unit = val['unit']
+            else:
+                unit = None
+            abstract_model.add_component(param, pe.Param(*idx, doc=val['doc'], within=within, units=unit))
 
         # Database parameters
         abstract_model.Ef = pe.Param(abstract_model.KPI, abstract_model.E, default=0)
@@ -380,22 +400,24 @@ class ScheduleSpecification(Specification):
 
         # Variables
         abstract_model.Flow = pe.Var(abstract_model.F_m, abstract_model.P_m, abstract_model.K, abstract_model.T,
-                                     within=pe.NonNegativeReals, doc='Material flow')
+                                     within=pe.NonNegativeReals, doc='Material flow', units=pu.F_m)
         abstract_model.Storage_Service_Flow = pe.Var(abstract_model.F, abstract_model.P, abstract_model.K,
                                                      abstract_model.T, within=pe.NonNegativeReals,
-                                                     doc='Storage Service Flow')
+                                                     doc='Storage Service Flow', units=pu.F_s)
         abstract_model.Specific_Material_Transport_Flow = pe.Var(abstract_model.F_m, abstract_model.P_m,
                                                                  abstract_model.F_t, abstract_model.P_t,
                                                                  abstract_model.K, abstract_model.T,
                                                                  within=pe.NonNegativeReals,
-                                                                 doc='Specific Material Transport Flow')
+                                                                 doc='Specific Material Transport Flow',
+                                                                 units=pu.F_m)
         abstract_model.Specific_Transport_Flow = pe.Var(abstract_model.F_t, abstract_model.P_t,
                                                         abstract_model.K, abstract_model.T,
                                                         within=pe.NonNegativeReals,
-                                                        doc='Specific Transport Flow')
+                                                        doc='Specific Transport Flow',
+                                                        units=pu.F_m * pu.F_t)
         abstract_model.Demand_Selection = pe.Var(abstract_model.D, abstract_model.K, abstract_model.T,
-                                                        within=pe.Binary,
-                                                        doc='Selection of Demand Product')
+                                                 within=pe.Binary,
+                                                 doc='Selection of Demand Product')
 
         # objectives
         def environment_objective_rule(model, kpi):

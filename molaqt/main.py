@@ -136,7 +136,7 @@ class MolaMainWindow(QMainWindow):
         if len(self.manager.db_items) > 0:
             dialog = md.NewModelDialog(parent=self, db_files=self.manager.db_items.keys())
             if dialog.exec():
-                name, specification_class, controller_class, database = dialog.get_inputs()
+                name, specification_class, controller_class, database, doc_path = dialog.get_inputs()
                 config_file = self.system['config_path'].joinpath(name + '.json')
                 if config_file.exists():
                     QMessageBox.about(self, "Error", "Configuration file " + str(config_file.absolute()) +
@@ -145,7 +145,7 @@ class MolaMainWindow(QMainWindow):
                     item = QTreeWidgetItem(self.manager.db_items[database], [config_file.stem])
                     self.manager.db_tree.clearSelection()
                     item.setSelected(True)
-                    self.manager.new_model(config_file, specification_class, controller_class, database)
+                    self.manager.new_model(config_file, specification_class, controller_class, database, doc_path)
                     self.save_model()
 
     def save_model(self):

@@ -78,12 +78,3 @@ class ModelBuild(QWidget):
         dlg.show()
 
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    # config_file = Path('Z:/work/code/Python/LCA/config/model_config.json')
-    config_file = Path('/config/test_custom_controller.json')
-    with open(config_file) as fp:
-        config = json.load(fp)
-    gui = ModelBuild(config)
-    gui.show()
-    sys.exit(app.exec_())

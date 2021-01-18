@@ -4,10 +4,10 @@ import json
 import mola.utils as mu
 
 
-def get_new_config(specification_class, database_path):
+def get_new_config(specification_class, database_path, doc_path):
     new_config = {
         'settings': {},
-        'doc_path': '',
+        'doc_path': str(doc_path),
         'specification': str(specification_class),
         'db_file': str(database_path),
         'sets': [],

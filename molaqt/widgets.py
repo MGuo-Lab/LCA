@@ -5,6 +5,8 @@ from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QGridLayout, QTableVie
     QAbstractItemView, QComboBox, QDialogButtonBox, QPushButton, QWidget, QListWidget, QAction, QLabel, QInputDialog,\
     QVBoxLayout, QSlider, QCheckBox, QApplication, QHBoxLayout, QMessageBox
 from PyQt5.QtWebEngineWidgets import QWebEngineView
+from pyvis.network import Network
+import networkx as ns
 
 import molaqt.datamodel as md
 import mola.utils as mu
@@ -340,7 +342,7 @@ class ParametersEditor(QWidget):
 
         # parameter widget
         parameter_name = next(iter(self.par))
-        parameter_name = 'J'
+        # parameter_name = 'J'
         self.parameter_widget = QLabel()
         # self.parameter_widget.set_parameter(parameter_name, self.par[parameter_name])
 
@@ -396,7 +398,12 @@ class ParameterWidget(QWidget):
         super().__init__()
 
         # parameter label
-        param_doc_str = name + ': ' + spec.user_defined_parameters[name]['doc']
+        if 'unit' in spec.user_defined_parameters[name]:
+            unit = spec.user_defined_parameters[name]['unit']
+        else:
+            unit = 'None'
+        param_doc_str = name + ': ' + spec.user_defined_parameters[name]['doc'] + ', ' + \
+            'Unit: ' + str(unit)
         param_doc_label = QLabel(param_doc_str)
 
         # table of parameters
@@ -1050,3 +1057,73 @@ class ConfigurationWidget(QWidget):
 
     def boolean_state(self, bw, setting):
         self.spec.settings[setting] = bw.isChecked()
+
+
+class LinkParameterDiagram(QWidget):
+
+    def __init__(self, parameter, parameters, sets, lookup, spec):
+
+        super().__init__()
+        index_sets = spec.user_defined_parameters['J']['index']
+
+        # convert parameter ref ids to names
+        df = pd.DataFrame(parameters[parameter])
+        df[index_sets] = pd.DataFrame(df["index"].to_list(), columns=index_sets)
+        df = df.drop('index', axis=1)
+
+        # nodes
+        g = Network(width='100%', height=1000, heading='Link Parameter Diagram')
+        nodes = sets['P_m'] + sets['P_t']
+        titles = lookup.get_single_column('P', nodes)['P']
+        titles = [t.replace('|', '\n') for t in titles]
+        colors = ['#FF9999' if n in sets['P_m'] else '#9999FF' for n in nodes]
+        levels = [0 if n in sets['P_m'] else 1 for n in nodes]
+        nodes += ['output']
+        titles += ['output']
+        colors += ['black']
+        levels += [2]
+        for i in range(len(nodes)):
+            g.add_node(nodes[i], title=nodes[i], label=titles[i], color=colors[i], level=levels[i], mass=2)
+        # g.write_html("nodes.html")
+
+        # edges
+        for index, row in df.iterrows():
+            if row['value']:
+                g.add_edge(row['P_m'], row['P_t'], title=row['F_m'])
+                g.add_edge(row['P_t'], 'output', title=row['F_t'])
+
+        g.set_options("""
+        var options = {
+          "edges": {
+            "color": {
+              "inherit": true
+            },
+            "smooth": false
+          },
+          "layout": {
+            "hierarchical": {
+              "enabled": true,
+              "direction": "LR",
+              "levelSeparation": 300
+            }
+          },
+          "physics": {
+            "enabled": false,
+            "hierarchicalRepulsion": {
+              "centralGravity": 0
+            },
+            "minVelocity": 0.75,
+            "solver": "hierarchicalRepulsion"
+          }
+        }
+        """)
+
+        # write to temporary file to view in browser or webengine?
+        g.write_html("material_transport_network.html")
+
+        # layout = QVBoxLayout(self)
+        # layout.setContentsMargins(0, 0, 0, 0)
+        # layout.addWidget(self.zoom)
+        # layout.addWidget(self.documentation)
+        # self.setLayout(layout)
+

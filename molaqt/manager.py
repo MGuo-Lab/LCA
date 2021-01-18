@@ -73,11 +73,11 @@ class ModelManager(QWidget):
             print('Loading model', config_file)
             self.set_controller(config_file.with_suffix('.json'))
 
-    def new_model(self, config_file, specification_class, controller_class, database):
+    def new_model(self, config_file, specification_class, controller_class, database, doc_path):
         self.controller_config_file = config_file
 
         # get a new config dict
-        new_config = mqu.get_new_config(specification_class, database)
+        new_config = mqu.get_new_config(specification_class, database, doc_path)
 
         # instantiate controller using config
         new_controller = controller_class(new_config)
