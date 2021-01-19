@@ -1,11 +1,5 @@
-import sys
-import json
-import re
-import importlib
 import pandas as pd
-from pathlib import Path
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QListWidget, QTableView, QGridLayout, QMessageBox
-from PyQt5.QtCore import QAbstractTableModel, Qt
+from PyQt5.QtWidgets import QWidget, QPushButton, QListWidget, QTableView, QGridLayout, QMessageBox
 import mola.output as mo
 import mola.utils as mu
 import molaqt.datamodel as dm

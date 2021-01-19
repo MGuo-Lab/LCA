@@ -1,12 +1,16 @@
+import webbrowser
+from pathlib import Path
+
 import pandas as pd
+
 from PyQt5.QtCore import Qt, QUrl, pyqtSlot
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QGridLayout, QTableView, QHeaderView, QLineEdit, QDialog, \
     QAbstractItemView, QComboBox, QDialogButtonBox, QPushButton, QWidget, QListWidget, QAction, QLabel, QInputDialog,\
-    QVBoxLayout, QSlider, QCheckBox, QApplication, QHBoxLayout, QMessageBox
+    QVBoxLayout, QSlider, QCheckBox, QApplication, QHBoxLayout, QMessageBox, QTabWidget
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from pyvis.network import Network
-import networkx as ns
+from tempfile import NamedTemporaryFile
 
 import molaqt.datamodel as md
 import mola.utils as mu
@@ -433,9 +437,9 @@ class LinkingParameterWidget(QWidget):
         param_doc_str = name + ': ' + spec.user_defined_parameters[name]['doc'] + ' (Linking)'
         param_doc_label = QLabel(param_doc_str)
 
-        # table of parameters
+        # table of parameters (affects table!)
         self.parameter_table = QTableView()
-        index_sets = spec.user_defined_parameters[name]['index']
+        index_sets = self.spec.user_defined_parameters[name]['index']
         self.parameter_table.setModel(md.ParameterModel(table, index_sets, lookup))
         self.parameter_table.setColumnHidden(0, True)
 
@@ -451,8 +455,10 @@ class LinkingParameterWidget(QWidget):
         # buttons
         self.add_link = QPushButton('Add link')
         self.remove_link = QPushButton('Remove link')
+        self.visualise = QPushButton('Visualise')
         self.add_link.clicked.connect(self.add_link_clicked)
         self.remove_link.clicked.connect(self.remove_link_clicked)
+        self.visualise.clicked.connect(self.visualise_clicked)
 
         # set dropdowns
         set_layout = QGridLayout()
@@ -475,32 +481,39 @@ class LinkingParameterWidget(QWidget):
         grid_layout.addWidget(self.link_combobox, 1, 1)
         grid_layout.addWidget(self.add_link, 1, 2)
         grid_layout.addWidget(self.remove_link, 1, 3)
-        grid_layout.addLayout(set_layout, 2, 0, 1, 4)
-        grid_layout.addWidget(self.parameter_table, 3, 0, 1, 4)
+        grid_layout.addWidget(self.visualise, 1, 4)
+        grid_layout.addLayout(set_layout, 2, 0, 1, 5)
+        grid_layout.addWidget(self.parameter_table, 3, 0, 1, 5)
         grid_layout.setColumnStretch(1, 2)
         grid_layout.setColumnStretch(2, 2)
         grid_layout.setColumnStretch(3, 2)
+        grid_layout.setColumnStretch(4, 2)
         self.setLayout(grid_layout)
 
     def link_changed(self, index):
-        link_key = list(self.link.keys())[index]
-        # get the ref ids from table for link_num
-        table_row_num = self.link[link_key]
-        link_row = self.table.loc[table_row_num]
-        link_ref_ids = self.table['Index'][table_row_num]
-        print('Link', link_key, ':', link_row)
+        if len(self.link) > 0:
+            link_key = list(self.link.keys())[index]
+            # get the ref ids from table for link_num
+            table_row_num = self.link[link_key]
+            link_row = self.table.loc[table_row_num]
+            link_ref_ids = self.table['Index'][table_row_num]
+            print('Link', link_key, ':', link_row)
 
-        # set text from ref id lookup for each combobox
-        for ref_id, set_name in zip(link_ref_ids, self.spec.user_defined_parameters[self.name]['index']):
-            ref_id_text = self.lookup.get_single_column(set_name, ref_id)[0]
-            index = self.set_combobox[set_name].findText(ref_id_text, Qt.MatchFixedString)
-            if index >= 0:
-                self.set_combobox[set_name].setCurrentIndex(index)
-                self.parameter_table.selectRow(table_row_num)
+            # set text from ref id lookup for each combobox
+            for ref_id, set_name in zip(link_ref_ids, self.spec.user_defined_parameters[self.name]['index']):
+                ref_id_text = self.lookup.get_single_column(set_name, ref_id)[0]
+                index = self.set_combobox[set_name].findText(ref_id_text, Qt.MatchFixedString)
+                if index >= 0:
+                    self.set_combobox[set_name].setCurrentIndex(index)
+                    self.parameter_table.selectRow(table_row_num)
 
     def add_link_clicked(self):
-        new_link_num = len(self.link)
-        print('add new link', new_link_num)
+        # the new link number is the last in self.link+1 or 0
+        if len(self.link) > 0:
+            last_link_num = list(self.link)[-1]
+            new_link_num = int(last_link_num) + 1
+        else:
+            new_link_num = 0
 
         # get the combobox selections
         selected_item = {set_name: cb.currentText() for set_name, cb in self.set_combobox.items()}
@@ -508,23 +521,35 @@ class LinkingParameterWidget(QWidget):
 
         # update table
         row_match = (df == pd.Series(selected_item)).all(1)
-        table_row = row_match.index[row_match][0]
-        if self.table.at[table_row, 'Value'] == 1:
-            QMessageBox.information(self, 'Link already exists', "Choose another set combination", QMessageBox.Ok)
-        else:
-            self.table.at[table_row, 'Value'] = 1
-            self.link[str(new_link_num)] = table_row
-            self.link_combobox.addItem(str(new_link_num))
-            self.link_combobox.setCurrentIndex(new_link_num)
+        if len(row_match) > 0:
+            table_row = row_match.index[row_match][0]
+            if self.table.at[table_row, 'Value'] == 1:
+                self.parameter_table.selectRow(table_row)
+                QMessageBox.information(self, 'Link already exists', "Choose another set combination", QMessageBox.Ok)
+            else:
+                print('Adding new link at table row', table_row)
+                self.table.at[table_row, 'Value'] = 1
+                self.link[str(new_link_num)] = table_row
+                self.link_combobox.addItem(str(new_link_num))
+                self.link_combobox.setCurrentIndex(new_link_num)
 
     def remove_link_clicked(self):
         index = self.link_combobox.currentIndex()
         if index >= 0:
             link_key = list(self.link.keys())[index]
             print('removing link', link_key)
-            self.link_combobox.removeItem(index)
             self.table.at[self.link[link_key], 'Value'] = 0
             del self.link[link_key]
+            self.link_combobox.removeItem(index)  # this calls link_changed
+
+    def visualise_clicked(self):
+        print('visualising links')
+        index_sets = self.spec.user_defined_parameters[self.name]['index']
+        parameter_diagram = LinkParameterDiagram(self.table, index_sets, self.lookup)
+        html_path = parameter_diagram.get_html_path()
+        url = html_path.resolve().as_uri()
+        new = 2  # new tab
+        webbrowser.open(url, new=new)
 
 # class ProcessFlow(QWidget):
 #
@@ -1059,40 +1084,37 @@ class ConfigurationWidget(QWidget):
         self.spec.settings[setting] = bw.isChecked()
 
 
-class LinkParameterDiagram(QWidget):
+class LinkParameterDiagram():
+    """
+    Assumes product flows are odd sets and processes are even sets in the ordering of the
+    linking parameter.
+    """
 
-    def __init__(self, parameter, parameters, sets, lookup, spec):
+    def __init__(self, table, index_sets, lookup, node_lookup='P'):
 
-        super().__init__()
-        index_sets = spec.user_defined_parameters['J']['index']
+        self.table = table
+        self.index_sets = index_sets
+        self.node_sets = index_sets[1::2]
+        self.edge_sets = index_sets[0::2]
 
-        # convert parameter ref ids to names
-        df = pd.DataFrame(parameters[parameter])
-        df[index_sets] = pd.DataFrame(df["index"].to_list(), columns=index_sets)
-        df = df.drop('index', axis=1)
+        # bring the index into the DataFrame
+        df = pd.DataFrame(table["Index"].to_list(), columns=index_sets)
 
         # nodes
-        g = Network(width='100%', height=1000, heading='Link Parameter Diagram')
-        nodes = sets['P_m'] + sets['P_t']
-        titles = lookup.get_single_column('P', nodes)['P']
+        self.g = Network(width='100%', height=800, heading='Link Parameter Diagram')
+        # self.g.show_buttons()
+        nodes = [ref_id for n in self.node_sets for ref_id in df[n].unique()]
+        titles = lookup.get_single_column(node_lookup, nodes)[node_lookup]
         titles = [t.replace('|', '\n') for t in titles]
-        colors = ['#FF9999' if n in sets['P_m'] else '#9999FF' for n in nodes]
-        levels = [0 if n in sets['P_m'] else 1 for n in nodes]
+        colors = ['#FF9999' if n in df['P_m'].unique() else '#9999FF' for n in nodes]
+        levels = [i for i, n in enumerate(self.node_sets) for ref_id in df[n].unique()]
         nodes += ['output']
         titles += ['output']
         colors += ['black']
         levels += [2]
         for i in range(len(nodes)):
-            g.add_node(nodes[i], title=nodes[i], label=titles[i], color=colors[i], level=levels[i], mass=2)
-        # g.write_html("nodes.html")
-
-        # edges
-        for index, row in df.iterrows():
-            if row['value']:
-                g.add_edge(row['P_m'], row['P_t'], title=row['F_m'])
-                g.add_edge(row['P_t'], 'output', title=row['F_t'])
-
-        g.set_options("""
+            self.g.add_node(nodes[i], title=nodes[i], label=titles[i], color=colors[i], level=levels[i], mass=2)
+        self.g.set_options("""
         var options = {
           "edges": {
             "color": {
@@ -1118,12 +1140,32 @@ class LinkParameterDiagram(QWidget):
         }
         """)
 
-        # write to temporary file to view in browser or webengine?
-        g.write_html("material_transport_network.html")
+        # HTML widget
+        self.viewer = QWebEngineView()
+        # edges between node sets
+        edge_boundary = self.node_sets + ['output']
+        for index, row in self.table.iterrows():
+            if row['Value']:
+                row_index = {s: row['Index'][i] for i, s in enumerate(self.index_sets)}
+                for i, (a, b) in enumerate(zip(edge_boundary, edge_boundary[1:])):
+                    if b == 'output':
+                        self.g.add_edge(row_index[a], 'output', title=row_index[self.edge_sets[i]])
+                    else:
+                        self.g.add_edge(row_index[a], row_index[b], title=row_index[self.edge_sets[i]])
 
+        # layout
         # layout = QVBoxLayout(self)
         # layout.setContentsMargins(0, 0, 0, 0)
-        # layout.addWidget(self.zoom)
-        # layout.addWidget(self.documentation)
+        # layout.addWidget(self.viewer)
         # self.setLayout(layout)
 
+    def get_html_path(self):
+        # write html to temp file
+        temp_html = NamedTemporaryFile(suffix='.html', delete=False)
+        self.g.write_html(temp_html.name)
+        temp_html.close()
+        # url = QUrl.fromLocalFile(temp_html.name)
+        # self.viewer.load(url)
+        # self.viewer.setZoomFactor(1.0)
+
+        return Path(temp_html.name)

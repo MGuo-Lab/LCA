@@ -1,15 +1,17 @@
-import json
+import webbrowser
 import os
 import sys
 from unittest import TestCase
 from pathlib import Path
 
+import pandas as pd
 from PyQt5.QtWidgets import QApplication
 
 import mola.dataimport as di
 import mola.dataview as dv
 import mola.specification5 as ms
 import molaqt.utils as mqu
+import mola.utils as mu
 import molaqt.widgets as mw
 
 app = QApplication(sys.argv)
@@ -19,13 +21,7 @@ class Widgets(TestCase):
     # get lookups from db
     conn = di.get_sqlite_connection()
     lookup = dv.LookupTables(conn)
-
-    system_setting = mqu.system_settings(testing=True)
-    config_path = system_setting['config_path'].joinpath('Orange_Toy_Model.json')
-
-    # load test configuration file
-    with open(str(config_path)) as jf:
-        model_config = json.load(jf)
+    model_config, spec = mqu.get_config('Orange_Toy_Model.json')
 
     def test_lookup_widget(self):
         lookup_widget = mw.LookupWidget(self.lookup, 'P_m')
@@ -38,8 +34,7 @@ class Widgets(TestCase):
         self.assertIsInstance(lookup_widget, mw.LookupWidget)
 
     def test_sets_editor(self):
-        spec = ms.ScheduleSpecification()
-        sets_editor = mw.SetsEditor(self.model_config['sets'], spec, self.lookup)
+        sets_editor = mw.SetsEditor(self.model_config['sets'], self.spec, self.lookup)
         sets_editor.show()
 
         if 'IGNORE_EXEC' not in os.environ:
@@ -47,8 +42,7 @@ class Widgets(TestCase):
         self.assertIsInstance(sets_editor, mw.SetsEditor)
 
     def test_parameters_editor(self):
-        spec = ms.ScheduleSpecification()
-        parameters_editor = mw.ParametersEditor(self.model_config['sets'], self.model_config['parameters'], spec,
+        parameters_editor = mw.ParametersEditor(self.model_config['sets'], self.model_config['parameters'], self.spec,
                                                 self.lookup)
         parameters_editor.resize(800, 600)
         parameters_editor.show()
@@ -79,8 +73,7 @@ class Widgets(TestCase):
     #     self.assertIsInstance(parameters_editor2, mw.ParametersEditor2)
 
     def test_configuration_widget(self):
-        spec = ms.ScheduleSpecification()
-        config_widget = mw.ConfigurationWidget(spec)
+        config_widget = mw.ConfigurationWidget(self.spec)
         config_widget.show()
 
         if 'IGNORE_EXEC' not in os.environ:
@@ -88,7 +81,7 @@ class Widgets(TestCase):
         self.assertIsInstance(config_widget, mw.ConfigurationWidget)
 
     def test_about_widget(self):
-        about_widget = mw.AboutWidget(self.system_setting)
+        about_widget = mw.AboutWidget(mqu.system_settings(testing=True))
         about_widget.show()
 
         if 'IGNORE_EXEC' not in os.environ:
@@ -100,15 +93,7 @@ class TestProcessFlow(TestCase):
     # get lookups from db
     conn = di.get_sqlite_connection()
     lookup = dv.LookupTables(conn)
-
-    setting = mqu.system_settings(testing=True)
-    config_path = setting['config_path'].joinpath('test_custom_controller.json')
-
-    # load test configuration file
-    with open(str(config_path)) as jf:
-        model_config = json.load(jf)
-
-    spec = ms.SelectionSpecification()
+    model_config, spec = mqu.get_config('test_custom_controller.json', testing=True)
 
     def test_init(self):
         process_flow = mw.ProcessFlow(self.model_config['sets'], self.model_config['parameters'],
@@ -126,21 +111,23 @@ class TestLinkParameterDiagram(TestCase):
     # get lookups from db
     conn = di.get_sqlite_connection()
     lookup = dv.LookupTables(conn)
+    model_config, spec = mqu.get_config('Orange_Toy_Model.json', testing=True)
 
-    setting = mqu.system_settings(testing=True)
-    config_path = setting['config_path'].joinpath('Orange_Toy_Model.json')
-
-    # load test configuration file
-    with open(str(config_path)) as jf:
-        model_config = json.load(jf)
-
-    spec = ms.SelectionSpecification()
+    # rebuild parameters
+    pars = mu.build_parameters(model_config['sets'], model_config['parameters'], spec)
 
     def test_init(self):
-        link_diagram = mw.LinkParameterDiagram('J', self.model_config['parameters'], self.model_config['sets'],
-                                               self.lookup, self.spec)
-        link_diagram.show()
-        link_diagram.resize(800, 600)
+        # convert parameter json to DataFrame
+        df = pd.DataFrame(self.pars['J'])
+        index_sets = self.spec.user_defined_parameters['J']['index']
+        # df[index_sets] = pd.DataFrame(df["index"].to_list(), columns=index_sets)
+        # df = df.drop('index', axis=1)
+
+        link_diagram = mw.LinkParameterDiagram(df, index_sets, self.lookup)
+        html_path = link_diagram.get_html_path()
+        url = html_path.resolve().as_uri()
+        new = 2  # new tab
+        webbrowser.open(url, new=new)
 
         if 'IGNORE_EXEC' not in os.environ:
             app.exec()

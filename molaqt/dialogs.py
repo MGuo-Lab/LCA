@@ -71,7 +71,7 @@ class NewModelDialog(QDialog):
             current_spec_class,
             current_builder_class,
             self.db_files[self.database.currentText()],
-            Path(self.doc_widget.path.text())
+            self.doc_widget.path.text()
         )
 
 

@@ -105,9 +105,10 @@ class MolaMainWindow(QMainWindow):
         zip_filter = 'zip files (*.zip)'
         # zip_name = QFileDialog.getOpenFileName(self, 'Import sqlite database', str(Path.home()), zip_filter)
         zip_name = QFileDialog.getOpenFileName(self, 'Import sqlite database', 'C:\data\openlca\zip', zip_filter)
+        if zip_name[0] == '':
+            return
         db_output_path = self.system['data_path'].joinpath(Path(zip_name[0]).with_suffix('.sqlite').name)
-
-        if zip_name[0] == '' or db_output_path.exists():
+        if db_output_path.exists():
             QMessageBox.critical(self, 'Error', 'Database already exists', QMessageBox.Ok)
         else:
             try:
@@ -136,7 +137,7 @@ class MolaMainWindow(QMainWindow):
         if len(self.manager.db_items) > 0:
             dialog = md.NewModelDialog(parent=self, db_files=self.manager.db_items.keys())
             if dialog.exec():
-                name, specification_class, controller_class, database, doc_path = dialog.get_inputs()
+                name, specification_class, controller_class, database, doc_file = dialog.get_inputs()
                 config_file = self.system['config_path'].joinpath(name + '.json')
                 if config_file.exists():
                     QMessageBox.about(self, "Error", "Configuration file " + str(config_file.absolute()) +
@@ -145,7 +146,7 @@ class MolaMainWindow(QMainWindow):
                     item = QTreeWidgetItem(self.manager.db_items[database], [config_file.stem])
                     self.manager.db_tree.clearSelection()
                     item.setSelected(True)
-                    self.manager.new_model(config_file, specification_class, controller_class, database, doc_path)
+                    self.manager.new_model(config_file, specification_class, controller_class, database, doc_file)
                     self.save_model()
 
     def save_model(self):

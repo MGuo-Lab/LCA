@@ -4,16 +4,30 @@ import json
 import mola.utils as mu
 
 
-def get_new_config(specification_class, database_path, doc_path):
+def get_new_config(specification_class, database_path, doc_file):
     new_config = {
         'settings': {},
-        'doc_path': str(doc_path),
+        'doc_path': doc_file,
         'specification': str(specification_class),
         'db_file': str(database_path),
         'sets': [],
         'parameters': [],
     }
     return new_config
+
+
+def get_config(json_file_name, testing=True):
+    setting = system_settings(testing=True)
+    config_path = setting['config_path'].joinpath(json_file_name)
+
+    # load configuration file
+    with open(str(config_path)) as jf:
+        model_config = json.load(jf)
+
+    spec = mu.create_specification(model_config['specification'])
+
+    return model_config, spec
+
 
 def system_settings(development=False, testing=False):
     d = dict()
