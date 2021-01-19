@@ -1,5 +1,5 @@
 # Bulk export from derby to CSV and then use pandas to write the CSVs to a sqlite database
-# remove os dependency
+# remove os dependency - file path format seems to crash Java driver
 import os
 from pathlib import Path
 import zipfile
@@ -14,6 +14,7 @@ db_folder = csv_path + '/' + db
 sqlite_folder = 'C:/data/openlca/sqlite/system'
 derby_driver = 'C:/share/db-derby-10.15.1.3-bin/lib/derby.jar'
 derby_db_dir = 'C:/Users/Paul/openLCA-data-1.4/databases'
+zip_dir = 'C:/data/openlca/zip'
 
 # convert Derby database to CSV
 conn = di.get_jdbc_connection(derby_db_dir + '/' + db, derby_driver)
@@ -30,4 +31,5 @@ di.create_csv_indices(sqlite_file)
 
 # compress the sqlite file
 sqlite_path = Path(sqlite_file)
-zipfile.ZipFile(sqlite_path.with_suffix('.zip'), mode='w').write(sqlite_path)
+zip_file = zip_dir + '/' + str(sqlite_path.with_suffix('.zip').name)
+zipfile.ZipFile(zip_file, mode='w', compression=zipfile.ZIP_DEFLATED).write(sqlite_path, arcname=sqlite_path.name)

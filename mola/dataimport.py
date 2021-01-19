@@ -547,9 +547,10 @@ def create_json_indices(db_file):
 def create_csv_indices(db_file):
     """
     Create indices on tables in a sqlite database created from CSVs exported from Derby
-    :param db_file: database connection
+    :param db_file: database file
     :return: None
     """
+    print("Building indices on", db_file)
     conn = get_sqlite_connection(db_file)
     c = conn.cursor()
 
