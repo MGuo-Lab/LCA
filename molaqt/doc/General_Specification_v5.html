@@ -3,7 +3,7 @@
 <head><meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>General_Specification v5</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>General_Specification_v5</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 
 
 
@@ -14264,7 +14264,7 @@ a.anchor-link {
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>These are notes on how we translate a specification of an optimisation problem for MOLA into an abstract Pyomo model. The abstract model is made concrete using dummy data and then solved. The output is shown for demonstration and does not correspond to a real optimisation problem.</p>
+<p>These are notes on how we translate a specification of an optimisation problem for MOLA into an abstract Pyomo model. The abstract model is made concrete using dummy data and then solved. The output does not correspond to a real optimisation problem.</p>
 
 </div>
 </div>
@@ -14275,7 +14275,7 @@ a.anchor-link {
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>This is the version 5 of the general model specification. It contains a modified transport service flow and a recipe selection binary variable.</p>
+<p>This is the version 5 of the LP specification. It contains a modified transport service flow and a recipe selection binary variable.</p>
 
 </div>
 </div>
@@ -14526,7 +14526,7 @@ $$
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>where the recipe selection variable satisfies</p>
 $$
-\sum_d \alpha_{d, k ,t} \leq 1.
+\sum_d \alpha_{d, k ,t} = 1.
 $$
 </div>
 </div>
@@ -15180,9 +15180,9 @@ SELECT &#34;TBL_IMPACT_METHODS&#34;.&#34;NAME&#34; &#34;method_NAME&#34;,&#34;TB
 
 
 
-<div id="430aafc7-f816-4b63-b752-f27c69b47e13" class="jupyter-widgets jp-OutputArea-output ">
+<div id="4c46d611-d3e6-425f-9d0d-233759ab740e" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('430aafc7-f816-4b63-b752-f27c69b47e13');
+var element = document.getElementById('4c46d611-d3e6-425f-9d0d-233759ab740e');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
 {"model_id": "35a0045b9d59456a98af26fe43203eec", "version_major": 2, "version_minor": 0}
@@ -15202,9 +15202,9 @@ var element = document.getElementById('430aafc7-f816-4b63-b752-f27c69b47e13');
 
 
 
-<div id="91a10a38-0b78-4d22-9b49-30166006b5d3" class="jupyter-widgets jp-OutputArea-output ">
+<div id="c86e70cc-ad7a-4059-ab4e-8d407d4fee55" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('91a10a38-0b78-4d22-9b49-30166006b5d3');
+var element = document.getElementById('c86e70cc-ad7a-4059-ab4e-8d407d4fee55');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
 {"model_id": "0241739679b04f889560742772b8893b", "version_major": 2, "version_minor": 0}
@@ -15224,9 +15224,9 @@ var element = document.getElementById('91a10a38-0b78-4d22-9b49-30166006b5d3');
 
 
 
-<div id="a7ef637d-e50c-4e92-8f5a-a83e053ef06e" class="jupyter-widgets jp-OutputArea-output ">
+<div id="5b0a3b93-88b8-4a22-804d-029009600a21" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('a7ef637d-e50c-4e92-8f5a-a83e053ef06e');
+var element = document.getElementById('5b0a3b93-88b8-4a22-804d-029009600a21');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
 {"model_id": "d3f438fe88454c838069dd5a925b2291", "version_major": 2, "version_minor": 0}
@@ -15246,9 +15246,9 @@ var element = document.getElementById('a7ef637d-e50c-4e92-8f5a-a83e053ef06e');
 
 
 
-<div id="e398bf0c-c7fa-4079-a061-795b23b390c5" class="jupyter-widgets jp-OutputArea-output ">
+<div id="d4759ecf-aee9-42b0-9e77-e12195e96111" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('e398bf0c-c7fa-4079-a061-795b23b390c5');
+var element = document.getElementById('d4759ecf-aee9-42b0-9e77-e12195e96111');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
 {"model_id": "5f726629f02d43bc80f21aa982789ecc", "version_major": 2, "version_minor": 0}
@@ -15344,9 +15344,9 @@ var element = document.getElementById('e398bf0c-c7fa-4079-a061-795b23b390c5');
 
 
 
-<div id="99c78c77-c648-4836-8632-2cc5d6a2ac82" class="jupyter-widgets jp-OutputArea-output ">
+<div id="93d99b6c-c3fd-4104-9f43-db074790200d" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('99c78c77-c648-4836-8632-2cc5d6a2ac82');
+var element = document.getElementById('93d99b6c-c3fd-4104-9f43-db074790200d');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
 {"model_id": "684362275c10410fb027e909b41f3667", "version_major": 2, "version_minor": 0}
@@ -15366,9 +15366,9 @@ var element = document.getElementById('99c78c77-c648-4836-8632-2cc5d6a2ac82');
 
 
 
-<div id="402b3637-a188-49d3-b9ec-5973b2a1957b" class="jupyter-widgets jp-OutputArea-output ">
+<div id="447d3e78-eed8-4038-b620-9b92de38401b" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('402b3637-a188-49d3-b9ec-5973b2a1957b');
+var element = document.getElementById('447d3e78-eed8-4038-b620-9b92de38401b');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
 {"model_id": "353ca4e7daed43a3a492d6ce4d958ee0", "version_major": 2, "version_minor": 0}
@@ -15388,9 +15388,9 @@ var element = document.getElementById('402b3637-a188-49d3-b9ec-5973b2a1957b');
 
 
 
-<div id="b9191e92-1f31-4c7d-9be4-7d0c6957fb6d" class="jupyter-widgets jp-OutputArea-output ">
+<div id="9a055eb5-d88b-4385-a5bc-c5d8d4a06680" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('b9191e92-1f31-4c7d-9be4-7d0c6957fb6d');
+var element = document.getElementById('9a055eb5-d88b-4385-a5bc-c5d8d4a06680');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
 {"model_id": "118afcb050d1429a9cd548526f2aefed", "version_major": 2, "version_minor": 0}
@@ -15410,9 +15410,9 @@ var element = document.getElementById('b9191e92-1f31-4c7d-9be4-7d0c6957fb6d');
 
 
 
-<div id="8d021b4b-f07c-4f0b-bf84-365bde7224e2" class="jupyter-widgets jp-OutputArea-output ">
+<div id="d400df4d-4a23-41ab-a781-ea2d69c841ed" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('8d021b4b-f07c-4f0b-bf84-365bde7224e2');
+var element = document.getElementById('d400df4d-4a23-41ab-a781-ea2d69c841ed');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
 {"model_id": "fd815b8ca2bf4548a3c8c715ce98a064", "version_major": 2, "version_minor": 0}
@@ -15680,9 +15680,9 @@ WARNING: DEPRECATED: Providing construction data to SetOperator objects is
 
 
 
-<div id="2c0916cb-ed86-4bb6-bbe9-29057ac12b7b" class="jupyter-widgets jp-OutputArea-output ">
+<div id="4225e34e-3331-4b03-a90e-538f7c08fa56" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('2c0916cb-ed86-4bb6-bbe9-29057ac12b7b');
+var element = document.getElementById('4225e34e-3331-4b03-a90e-538f7c08fa56');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
 {"model_id": "e56f51faf5a44f4ba2dd7951aefbbceb", "version_major": 2, "version_minor": 0}
@@ -16321,9 +16321,9 @@ obj1 : Size=1, Index=KPI, Active=True
 
 
 
-<div id="76576c9e-b540-49b9-a66d-0be724c0f0c9" class="jupyter-widgets jp-OutputArea-output ">
+<div id="3d3f0da5-7573-455d-be0a-3923af6640e2" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('76576c9e-b540-49b9-a66d-0be724c0f0c9');
+var element = document.getElementById('3d3f0da5-7573-455d-be0a-3923af6640e2');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
 {"model_id": "766ad9479ba841eeac9dd4e0c6c4c9bb", "version_major": 2, "version_minor": 0}
@@ -16377,9 +16377,9 @@ var element = document.getElementById('76576c9e-b540-49b9-a66d-0be724c0f0c9');
 
 
 
-<div id="a4ee9929-c46e-4146-9514-1933fc2a4d7b" class="jupyter-widgets jp-OutputArea-output ">
+<div id="daabcfdf-feea-4f7f-853f-d8a785c94cc6" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('a4ee9929-c46e-4146-9514-1933fc2a4d7b');
+var element = document.getElementById('daabcfdf-feea-4f7f-853f-d8a785c94cc6');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
 {"model_id": "7e7e427f2709483ba987d5ef5f7b00ca", "version_major": 2, "version_minor": 0}
@@ -16434,9 +16434,9 @@ solution because pyomo only supports a single objective function.</p>
 
 
 
-<div id="2869cbe3-e6ca-4289-8a0a-7bb527b8edcf" class="jupyter-widgets jp-OutputArea-output ">
+<div id="d15961e2-2806-49d6-a599-98560aaf8681" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('2869cbe3-e6ca-4289-8a0a-7bb527b8edcf');
+var element = document.getElementById('d15961e2-2806-49d6-a599-98560aaf8681');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
 {"model_id": "fba43b39c3b540cc866b58b52e955fea", "version_major": 2, "version_minor": 0}

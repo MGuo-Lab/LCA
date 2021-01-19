@@ -1,0 +1,87 @@
+{
+    "settings": {
+        "distance_calculated": false,
+        "test_setting": false
+    },
+    "doc_path": "Z:\\work\\code\\Python\\LCA\\molaqt\\doc\\Toy_Problem_E1_Citrus_Fruit_Cost.html",
+    "specification": "<class 'mola.specification5.ScheduleSpecification'>",
+    "controller": "StandardController",
+    "db_file": "C:\\data\\openlca\\sqlite\\system\\CSV_juice_ecoinvent_36_apos_lci_20200206_20201029-102818.sqlite",
+    "sets": {
+        "F_m": [],
+        "F_s": [],
+        "F_t": [],
+        "D": [
+            "d1"
+        ],
+        "T": [
+            "t1"
+        ],
+        "K": [
+            "k1"
+        ],
+        "P_m": [],
+        "P_t": [],
+        "P_s": [],
+        "KPI": [],
+        "OBJ": [
+            "environment",
+            "cost"
+        ],
+        "F": [],
+        "P": []
+    },
+    "parameters": {
+        "X": [
+            {
+                "index": [
+                    "k1",
+                    "t1"
+                ],
+                "value": Infinity
+            }
+        ],
+        "Y": [
+            {
+                "index": [
+                    "k1",
+                    "t1"
+                ],
+                "value": Infinity
+            }
+        ],
+        "Demand": [
+            {
+                "index": [
+                    "d1",
+                    "k1",
+                    "t1"
+                ],
+                "value": 0
+            }
+        ],
+        "Total_Demand": [
+            {
+                "index": [
+                    "d1",
+                    "k1"
+                ],
+                "value": 0
+            }
+        ],
+        "w": [
+            {
+                "index": [
+                    "environment"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "cost"
+                ],
+                "value": 0
+            }
+        ]
+    }
+}
