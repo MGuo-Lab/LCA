@@ -1,7 +1,7 @@
 # unit tests for dataimport module
 from unittest import TestCase
+from pathlib import Path
 import mola.dataimport as di
-import sqlite3
 import tempfile
 
 
@@ -18,8 +18,16 @@ class DataImport(TestCase):
         self.assertEqual(j['meta.info']['client'], 'openLCA 1.10.2')
 
     def test_get_derby(self):
-        conn = di.get_jdbc_connection("Z:/work/code/Python/LCA/mola/resources/db/derby/juice_empty",
-                                      "Z:/share/db-derby-10.15.1.3-bin/lib/derby.jar")
-        df_dict = di.get_derby(conn, table_name=[["APP", "TBL_PROCESSES"]])
+        db_folder = 'Z:/work/code/Python/LCA/mola/resources/db/derby/juice_empty'
+        db_driver = 'Z:/share/db-derby-10.15.1.3-bin/lib/derby.jar'
+        # test connection with strings
+        conn = di.get_jdbc_connection(db_folder, db_driver)
+        df_dict = di.get_derby(conn, table_name=[['APP', 'TBL_PROCESSES']])
+        conn.close()
+        self.assertEqual(len(df_dict), 1)
+
+        # test connection with Paths
+        conn = di.get_jdbc_connection(Path(db_folder), Path(db_driver))
+        df_dict = di.get_derby(conn, table_name=[['APP', 'TBL_PROCESSES']])
         conn.close()
         self.assertEqual(len(df_dict), 1)

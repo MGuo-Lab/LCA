@@ -20,12 +20,16 @@ def get_index_value_parameters(parameter_dict):
 def build_instance(config, settings=None):
     """
     Build a model instance from a configuration dictionary using configuration settings.
-    :param config: dict
-    :param settings: dict
+
+    The config dict contains a specification settings key, but these are the values on disk.
+    The settings dict reflects updated settings in the current python session.
+    :param config: dict of configuration data
+    :param settings: dict of specification settings
     :return: concreteModel
     """
-
-    # create a Specification object
+    # create a Specification object using configuration settings in config if settings is None
+    if settings is None and 'settings' in config:
+        settings = config['settings']
     spec = create_specification(config['specification'], settings)
 
     # write out temp json files for set and parameters for DataPortal
@@ -47,7 +51,8 @@ def build_instance(config, settings=None):
 
 def create_specification(spec_class, settings=None):
     """
-    Create a Specification object
+    Create a Specification object and update its configuration settings from
+    its defaults.
     :param spec_class: name of class
     :param settings: dict of specification settings
     :return: Specification object

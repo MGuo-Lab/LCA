@@ -1,3 +1,4 @@
+from pathlib import Path
 import jaydebeapi as jdbc
 import pandas as pd
 import numpy as np
@@ -33,15 +34,15 @@ def get_jdbc_connection(db_dir_name, derby_jar):
     """ Get JDBC connection to an uncompressed Derby database.
         Needs an installed JVM.
     :param db_dir_name: full path to Derby folder
-    :param derby_jar: name of jar
+    :param derby_jar: full path of Derby driver jar
     :return: connection object or None
     """
 
     conn = None
     try:
         conn = jdbc.connect("org.apache.derby.iapi.jdbc.AutoloadedDriver",
-                            "jdbc:derby:" + db_dir_name,
-                            {'user': "", 'password': ""}, derby_jar)
+                            "jdbc:derby:" + str(db_dir_name),
+                            {'user': "", 'password': ""}, str(derby_jar))
     except sqlite3.Error as e:
         print(e)
 
@@ -60,11 +61,11 @@ def derby_to_csv(db_conn, db_folder, separate_lob=False):
     """
     Uses the SYSCS_UTIL.SYSCS_EXPORT_TABLE method to export to headerless CSV files.
     :param db_conn JDBC connection
-    :param csv_folder full path to databases folder
+    :param db_folder full path to Derby database folder
     :return: path to folder containing CSV files
     """
 
-    csv_path = db_folder + '_' + str(time.strftime("%Y%m%d-%H%M%S"))
+    csv_path = str(db_folder) + '_' + str(time.strftime("%Y%m%d-%H%M%S"))
     os.makedirs(csv_path)
 
     table_name = get_derby_tables(db_conn)
@@ -95,7 +96,7 @@ def derby_to_csv(db_conn, db_folder, separate_lob=False):
                            "'UTF-8'")
         print(call_str)
         curs.execute(call_str)
-    return csv_path
+    return Path(csv_path)
 
 
 def csv_to_sqlite(csv_folder, db_file, table_cols, method=None, chunk_size=1000000):
@@ -103,24 +104,25 @@ def csv_to_sqlite(csv_folder, db_file, table_cols, method=None, chunk_size=10000
     Get openLCA CSV data in a folder and convert to a sqlite database.
 
     :param csv_folder folder containing CSV files for each table
-    :param db_file: file name for sqlite db
+    :param db_file: full path to sqlite db
     :param table_cols dictionary of table column names
+    :param method argument passed to DataFrame.to_sql
     :param chunk_size: chunk size for pandas
-    :return: file path of sqlite db
+    :return: Path of sqlite db
     """
 
     # get all the CSVs in folder
-    csv_name = [f for f in os.listdir(csv_folder) if f.endswith('.csv')]
+    csv_name = [f for f in os.listdir(str(csv_folder)) if f.endswith('.csv')]
 
     # connect to sqlite database
-    if os.path.exists(db_file):
-        os.remove(db_file)
-    sqlite_conn = get_sqlite_connection(db_file)
+    if os.path.exists(str(db_file)):
+        os.remove(str(db_file))
+    sqlite_conn = get_sqlite_connection(str(db_file))
 
     # write each CSV file to sqlite db
     for tbl in csv_name:
 
-        csv_file = csv_folder + '/' + tbl
+        csv_file = str(csv_folder) + '/' + tbl
         if os.path.getsize(csv_file) > 0:
             print("Importing file", tbl)
             tbl_name = os.path.splitext(tbl)[0]
@@ -514,12 +516,12 @@ def get_sqlite_connection(db_file=get_default_db_file()):
     """
     Get a database connection to the SQLite database.
 
-    :param db_file: database file
+    :param db_file: full path to database file
     :return: Connection object or None
     """
     conn = None
     try:
-        conn = sqlite3.connect(db_file)
+        conn = sqlite3.connect(str(db_file))
     except sqlite3.Error as e:
         print(e, db_file)
 

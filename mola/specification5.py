@@ -328,12 +328,13 @@ class ScheduleSpecification(Specification):
         'Demand': {'index': ['D', 'K', 'T'], 'doc': 'Specific demand', 'unit': pu.D},
         'Total_Demand': {'index': ['D', 'K'], 'doc': 'Total demand', 'unit': pu.D},
         'L': {'index': ['F_m', 'P_m', 'F_s', 'P_s'], 'doc': 'Binary conversion factor between service flows',
-              'within': 'Binary'},
+              'within': 'Binary', 'nodes': ['P_m', 'P_t'], 'edges': ['F_m', 'F_t']},
         'X': {'index': ['K', 'T'], 'doc': 'Longitude', 'unit': pu.km},
         'Y': {'index': ['K', 'T'], 'doc': 'Latitude', 'unit': pu.km},
         'd': {'index': ['P', 'F_m', 'K', 'T'], 'doc': 'Distance', 'unit': pu.km},
         'J': {'index': ['F_m', 'P_m', 'F_t', 'P_t'],
-              'doc': 'Binary conversion factor between material and transport flows', 'within': 'Binary'},
+              'doc': 'Binary conversion factor between material and transport flows', 'within': 'Binary',
+              'nodes': ['P_m', 'P_t'], 'edges': ['F_m', 'F_t']},
         'w': {'index': ['OBJ'], 'doc': 'Objective weights'},
     }
     # db parameters need to be constructed explicitly
@@ -386,17 +387,19 @@ class ScheduleSpecification(Specification):
         def ei_rule(model, kpi, f, p):
             return sum(model.Ef[kpi, e]*model.EF[e, f, p] for e in model.E)
         abstract_model.EI = pe.Param(abstract_model.KPI, abstract_model.F, abstract_model.P, rule=ei_rule)
-        abstract_model.XI = pe.Param(abstract_model.P_m, abstract_model.F_m, doc="Longitude")
-        abstract_model.YI = pe.Param(abstract_model.P_m, abstract_model.F_m, doc="Latitude")
+        abstract_model.XI = pe.Param(abstract_model.P_m, abstract_model.F_m, doc="Longitude", units=pu.km)
+        abstract_model.YI = pe.Param(abstract_model.P_m, abstract_model.F_m, doc="Latitude", units=pu.km)
 
         # distances calculated from db
         def distance_rule(model, pm, fm, k, t):
             if self.settings['distance_calculated']:
-                return pygeo.haversine(model.Y[k, t], model.X[k, t], model.YI[pm, fm], model.XI[pm, fm]) / 1000
+                # need to strip units for call to pygeo.haversine
+                return pygeo.haversine(model.Y[k, t].value, model.X[k, t].value, model.YI[pm, fm].value, model.XI[pm, fm].value) / 1000 * pu.km
             else:
                 return model.d[pm, fm, k, t]
         self.abstract_model.dd = pe.Param(abstract_model.P_m, abstract_model.F_m, abstract_model.K,
-                                          abstract_model.T, rule=distance_rule, doc='Calculated distance')
+                                          abstract_model.T, rule=distance_rule, doc='Calculated distance',
+                                          units=pu.km)
 
         # Variables
         abstract_model.Flow = pe.Var(abstract_model.F_m, abstract_model.P_m, abstract_model.K, abstract_model.T,

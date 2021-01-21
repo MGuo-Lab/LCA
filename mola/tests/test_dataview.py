@@ -7,9 +7,8 @@ import mola.dataimport as di
 
 
 class DataView(TestCase):
-    # testing from full db
-    db_file = 'C:/data/openlca/sqlite/system/CSV_juice_ecoinvent_36_apos_lci_20200206_20201029-102818.sqlite'
-    conn = di.get_sqlite_connection(db_file)
+    # testing from full default db
+    conn = di.get_sqlite_connection()
 
     def test_get_ids(self):
         dfr = dv.get_ids(DataView.conn, ref_ids=['64867712-23c4-3be5-a50e-3631e74571a6'],
