@@ -1,6 +1,4 @@
-import json
 from unittest import TestCase
-import mola.specification4a as ms
 import mola.output as o
 import mola.dataimport as di
 import mola.dataview as dv
@@ -8,9 +6,7 @@ import mola.utils as mu
 
 
 class Output(TestCase):
-    spec = ms.ScheduleSpecification()
-    with open('test_model_config.json') as fp:
-        config = json.load(fp)
+    config = mu.get_config('test_model_config.json')
     instance = mu.build_instance(config)
     conn = di.get_sqlite_connection()
     lookup = dv.LookupTables(conn)

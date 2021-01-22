@@ -74,3 +74,4 @@ class TestLookupTables(TestCase):
     def test_get_single_column(self):
         pm = self.lookup.get_single_column('P_m')
         self.assertEqual(pm.shape[1], 1)
+

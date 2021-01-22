@@ -6,6 +6,33 @@ import re
 import importlib
 
 
+def get_config(json_file_name):
+    """
+    Returns a well-formed model configuration dictionary from json_file_name.
+    :param json_file_name: path to json configuration file
+    :return: config dict
+    """
+
+    # load json configuration file
+    with open(str(json_file_name)) as jf:
+        config = json.load(jf)
+
+    # get the default sets and parameters from the specification
+    spec = create_specification(config['specification'])
+    sets = spec.get_default_sets()
+    parameters = spec.get_default_parameters(sets)
+
+    # update defaults with saved sets and parameters to ensure consistency
+    sets.update(config['sets'])
+    parameters.update(config['parameters'])
+
+    # copy back to config dict
+    config['sets'] = sets
+    config['parameters'] = parameters
+
+    return config
+
+
 def get_index_value_parameters(parameter_dict):
     """
     Turn dict of dataframes into a dict of lists of index value dicts
@@ -116,7 +143,8 @@ def build_parameters(sets, parameters, spec):
                     if item['index'] == el['index']:
                         v = item['value']
             # new_index = pd.DataFrame([el['index']], columns=spec.user_defined_parameters[p]['index'])
-            new_row = pd.DataFrame({'Index': [el['index']], 'Value': v}, index=[0])  # pd.MultiIndex.from_frame(new_index)
+            # pd.MultiIndex.from_frame(new_index)
+            new_row = pd.DataFrame({'Index': [el['index']], 'Value': v}, index=[0])
             row_list.append(new_row)
         if len(row_list) > 0:
             par[p] = pd.concat(row_list, ignore_index=True)
@@ -124,8 +152,3 @@ def build_parameters(sets, parameters, spec):
             par[p] = pd.DataFrame({'Index': [], 'Value': []})
 
     return par
-
-
-
-
-

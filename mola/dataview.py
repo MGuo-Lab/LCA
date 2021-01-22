@@ -221,7 +221,7 @@ def get_impact_category_ref_ids(conn, method_name=None, category_name=None):
 
 def get_impact_categories(conn, method_name=None, category_name=None,
                           methods_columns=['ID', 'REF_ID', 'NAME'],
-                          categories_columns=['ID', 'REF_ID', 'NAME']):
+                          categories_columns=['ID', 'REF_ID', 'NAME', 'REFERENCE_UNIT']):
     """
     Get impact categories from sqlite openLCA database. Each category is part of a method but it uniquely
     defines the coefficients for elementary flow.
@@ -253,11 +253,12 @@ def get_impact_categories(conn, method_name=None, category_name=None,
     return impact_categories_dfr
 
 
-def get_process_elementary_flow(conn, ref_ids=None, limit_exchanges=None):
+def get_process_elementary_flow(conn, ref_ids=None, units=True, limit_exchanges=None):
     """
     Create a table of processes versus elementary flows from sqlite db sourced from derby.
     :param conn: sqlite database connection
     :param ref_ids: limit the processes in the table to these ref ids
+    :param units: boolean return units of each exchange flow?
     :param limit_exchanges: limit the number of exchanges in the table
     :return: Dataframe
     """
@@ -295,10 +296,17 @@ def get_process_elementary_flow(conn, ref_ids=None, limit_exchanges=None):
 
     # spread table to row column format
     # row ids are the elementary flow ids, columns are process owning exchange containing the flow
+    columns = ['F_OWNER', 'F_UNIT'] if units else 'F_OWNER'
     exchange_process_pivot_dfr = pd.DataFrame.pivot(elementary_exchanges_dfr,
-                                                    index='REF_ID', columns='F_OWNER',
+                                                    index='REF_ID', columns=columns,
                                                     values='RESULTING_AMOUNT_VALUE')
-    exchange_process_pivot_dfr.columns = map(process_dict.get, exchange_process_pivot_dfr.columns)
+
+    # remap the first level of column index to process ref ids if units included
+    if units:
+        exchange_process_pivot_dfr.columns.set_levels(
+            map(process_dict.get, exchange_process_pivot_dfr.columns.levels[0]), level=0, inplace=True)
+    else:
+        exchange_process_pivot_dfr.columns = map(process_dict.get, exchange_process_pivot_dfr.columns)
 
     return exchange_process_pivot_dfr
 
@@ -344,13 +352,13 @@ def get_product_flow_in_process(conn, product_id=None, limit_exchanges=None):
     return process_exchanges_dfr
 
 
-def get_impact_category_elementary_flow(conn, ref_ids=None, limit_factors=None):
+def get_impact_category_elementary_flow(conn, ref_ids=None, units=True):
     """
     Create a table of impact category versus elementary flow from a sqlite openLCA database.
 
     :param conn: database connection
     :param ref_ids: list of impact category reference ids
-    :param limit_factors: limit the number of impact factors
+    :param units: boolean add units to column index?
     :return: Dataframe
     """
 
@@ -375,16 +383,18 @@ def get_impact_category_elementary_flow(conn, ref_ids=None, limit_factors=None):
         .on(impact_factors.F_FLOW == flows.ID)\
         .select(
             ic.REF_ID.as_('IMPACT_CATEGORY_REF_ID'), flows.REF_ID.as_('FLOW_REF_ID'),
-            impact_factors.value
+            impact_factors.VALUE, impact_factors.F_UNIT
         )
 
     print(q)
     impact_factors_dfr = pd.read_sql(str(q), conn)
 
     # pivot the impact factors table, rows are elementary flow REF_IDS,
-    # columns are impact category REF_IDs
+    # columns are impact category REF_IDs with unit
+    columns = ['IMPACT_CATEGORY_REF_ID', 'F_UNIT'] if units else 'IMPACT_CATEGORY_REF_ID'
     flow_impact_pivot_dfr = pd.DataFrame.pivot(impact_factors_dfr,
-                                               index='FLOW_REF_ID', columns='IMPACT_CATEGORY_REF_ID',
+                                               index='FLOW_REF_ID',
+                                               columns=columns,
                                                values='VALUE')
 
     return flow_impact_pivot_dfr

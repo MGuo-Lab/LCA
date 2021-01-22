@@ -329,8 +329,8 @@ class ScheduleSpecification(Specification):
         'Total_Demand': {'index': ['D', 'K'], 'doc': 'Total demand', 'unit': pu.D},
         'L': {'index': ['F_m', 'P_m', 'F_s', 'P_s'], 'doc': 'Binary conversion factor between service flows',
               'within': 'Binary', 'nodes': ['P_m', 'P_t'], 'edges': ['F_m', 'F_t']},
-        'X': {'index': ['K', 'T'], 'doc': 'Longitude', 'unit': pu.km},
-        'Y': {'index': ['K', 'T'], 'doc': 'Latitude', 'unit': pu.km},
+        'X': {'index': ['K', 'T'], 'doc': 'Longitude', 'unit': pu.degree},
+        'Y': {'index': ['K', 'T'], 'doc': 'Latitude', 'unit': pu.degree},
         'd': {'index': ['P', 'F_m', 'K', 'T'], 'doc': 'Distance', 'unit': pu.km},
         'J': {'index': ['F_m', 'P_m', 'F_t', 'P_t'],
               'doc': 'Binary conversion factor between material and transport flows', 'within': 'Binary',
@@ -387,8 +387,8 @@ class ScheduleSpecification(Specification):
         def ei_rule(model, kpi, f, p):
             return sum(model.Ef[kpi, e]*model.EF[e, f, p] for e in model.E)
         abstract_model.EI = pe.Param(abstract_model.KPI, abstract_model.F, abstract_model.P, rule=ei_rule)
-        abstract_model.XI = pe.Param(abstract_model.P_m, abstract_model.F_m, doc="Longitude", units=pu.km)
-        abstract_model.YI = pe.Param(abstract_model.P_m, abstract_model.F_m, doc="Latitude", units=pu.km)
+        abstract_model.XI = pe.Param(abstract_model.P_m, abstract_model.F_m, doc="Longitude", units=pu.degree)
+        abstract_model.YI = pe.Param(abstract_model.P_m, abstract_model.F_m, doc="Latitude", units=pu.degree)
 
         # distances calculated from db
         def distance_rule(model, pm, fm, k, t):
