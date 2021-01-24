@@ -1,5 +1,7 @@
-# module for building a model from a specification
-# adds binary variable for selection problem
+"""
+A Specification object contains a pyomo model and methods to build the model.
+- adds binary variable for selection problem
+"""
 import pygeodesy.formy as pygeo
 import math
 

@@ -1,4 +1,6 @@
-# convert pyomo output to DataFrames
+"""
+Convert pyomo output to DataFrames
+"""
 import pandas as pd
 import pyomo.environ as pe
 from functools import singledispatch

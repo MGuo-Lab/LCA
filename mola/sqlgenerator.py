@@ -1,10 +1,8 @@
-# module for generating SQL queries
-import pandas as pd
-import sqlite3
-from pypika import Query, Table, Criterion
-import mola.dataview as mv
+"""
+Module for generating SQL queries for a pyomo DataPortal
+"""
+from pypika import Query, Table
 import pypika.functions as pf
-from sqlite3 import Error
 
 
 def build_process_elementary_flow(flow_ref_ids, process_ref_ids):

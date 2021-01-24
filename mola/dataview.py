@@ -1,4 +1,8 @@
-# module for views of openLCA data
+"""
+Views of openLCA data
+
+Functions designed to give reasonable looking output on the console or in a Jupyter script.
+"""
 import pandas as pd
 from pypika import Query, Table, Criterion
 import pypika.functions as pf
@@ -345,7 +349,6 @@ def get_product_flow_in_process(conn, product_id=None, limit_exchanges=None):
             flows.NAME.as_('FLOW_NAME'), processes.F_LOCATION.as_('PROCESS_LOCATION')
         )
 
-    # get elementary exchanges using left join with flow table
     print(q)
     process_exchanges_dfr = pd.read_sql(str(q), conn)
 
@@ -496,38 +499,33 @@ def get_process_locations(conn, ref_ids=None):
     return processes_dfr
 
 
-def get_process_product_flow(conn, ref_ids=None):
+def get_process_product_flow(conn, process_ref_ids):
     """
     Get the product flows from a list of process reference ids using a sqlite openLCA database.
 
     Using the process id get its exchanges and from those extract the product flow.
-    :param conn: database connection
-    :param ref_ids: list of process reference ids
+
+    :param sqlite3.Connection conn: database connection
+    :param list[str] process_ref_ids: list of process reference ids
     :return: Dataframe of process ref id and product flow id
     """
-
-    # get the process ids from the ref ids
-    process_dict = get_ids(conn, ref_ids=ref_ids, table_name="TBL_PROCESSES")
-    process_id = list(process_dict.keys())
-
     exchanges = Table('TBL_EXCHANGES')
     flows = Table('TBL_FLOWS')
     processes = Table('TBL_PROCESSES')
     locations = Table('TBL_LOCATIONS')
-    e = Table('e')
 
-    # sub-query exchanges table to limit
+    # get the process ids from the ref ids
+    process_ids = processes.select(processes.ID).where(processes.REF_ID.isin(process_ref_ids))
+
+    # sub-query exchanges table to limit join
     sq = Query\
         .from_(exchanges) \
         .select(exchanges.F_OWNER, exchanges.F_FLOW, exchanges.F_UNIT, exchanges.RESULTING_AMOUNT_VALUE) \
-        .as_('e')
+        .where(exchanges.F_OWNER.isin(process_ids))
 
-    if ref_ids:
-        sq = sq.where(exchanges.F_OWNER.isin(process_id))
-
-    # join exchanges to flows
+    # join exchanges to flows, processes, locations
     q = Query\
-        .from_(sq).as_('e') \
+        .from_(sq) \
         .left_join(flows).on(flows.ID == sq.F_FLOW) \
         .left_join(processes).on(processes.ID == sq.F_OWNER) \
         .left_join(locations).on(pf.Cast(processes.F_LOCATION, 'int') == locations.ID) \
@@ -535,6 +533,55 @@ def get_process_product_flow(conn, ref_ids=None):
             processes.REF_ID.as_('PROCESS_REF_ID'), processes.NAME.as_('PROCESS_NAME'),
             locations.NAME.as_('LOCATION'),
             flows.REF_ID.as_('FLOW_REF_ID'), flows.NAME.as_('FLOW_NAME')
+        )\
+        .where(flows.FlOW_TYPE == 'PRODUCT_FLOW')
+
+    print(q)
+    product_flow_dfr = pd.read_sql(str(q), conn)
+
+    return product_flow_dfr
+
+
+def get_process_product_flow_costs(conn, process_ref_ids):
+    """
+    Get the product flow costs from a list of process reference ids using a sqlite openLCA database.
+
+    Using the process id get its exchanges and from those extract the product flows and their cost.
+
+    :param sqlite3.Connection conn: database connection
+    :param list[str] process_ref_ids: list of process reference ids
+    :return DataFrame of costs
+    """
+    exchanges = Table('TBL_EXCHANGES')
+    flows = Table('TBL_FLOWS')
+    processes = Table('TBL_PROCESSES')
+    locations = Table('TBL_LOCATIONS')
+    units = Table('TBL_UNITS')
+    currencies = Table('TBL_CURRENCIES')
+
+    # get the process ids from the ref ids
+    process_ids = processes.select(processes.ID).where(processes.REF_ID.isin(process_ref_ids))
+
+    # sub-query the exchanges table to limit join
+    sq = Query\
+        .from_(exchanges) \
+        .select(exchanges.F_OWNER, exchanges.COST_VALUE, exchanges.F_CURRENCY, exchanges.F_FLOW,
+                exchanges.F_UNIT, exchanges.RESULTING_AMOUNT_VALUE) \
+        .where(exchanges.F_OWNER.isin(process_ids))
+
+    # join exchanges to flows, processes, locations, units, currencies
+    q = Query\
+        .from_(sq) \
+        .left_join(flows).on(flows.ID == sq.F_FLOW) \
+        .left_join(processes).on(processes.ID == sq.F_OWNER) \
+        .left_join(locations).on(pf.Cast(processes.F_LOCATION, 'int') == locations.ID) \
+        .left_join(units).on(units.ID == sq.F_UNIT) \
+        .left_join(currencies).on(currencies.ID == sq.F_CURRENCY) \
+        .select(
+            processes.REF_ID.as_('PROCESS_REF_ID'), processes.NAME.as_('PROCESS_NAME'),
+            locations.NAME.as_('LOCATION'),
+            flows.REF_ID.as_('FLOW_REF_ID'), flows.NAME.as_('FLOW_NAME'), \
+            sq.COST_VALUE, currencies.NAME.as_('CURRENCY'), units.NAME.as_('UNITS')
         )\
         .where(flows.FlOW_TYPE == 'PRODUCT_FLOW')
 

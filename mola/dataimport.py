@@ -1,3 +1,6 @@
+"""
+Import and export openLCA Derby databases
+"""
 from pathlib import Path
 import jaydebeapi as jdbc
 import pandas as pd

@@ -1,4 +1,6 @@
-# utility functions
+"""
+Utility functions for mola
+"""
 import pandas as pd
 import json
 from tempfile import NamedTemporaryFile

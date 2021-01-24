@@ -62,6 +62,11 @@ class DataView(TestCase):
         lookup = dv.get_lookup_tables(DataView.conn)
         self.assertGreater(len(lookup), 0)
 
+    def test_get_process_product_flow_costs(self):
+        ref_id = ['cd177b7d-e908-3e69-b40c-4827b4abaa4d']
+        costs = dv.get_process_product_flow_costs(DataView.conn, process_ref_ids=ref_id)
+        self.assertGreater(len(costs), 0)
+
 
 class TestLookupTables(TestCase):
     conn = di.get_sqlite_connection()
@@ -74,4 +79,6 @@ class TestLookupTables(TestCase):
     def test_get_single_column(self):
         pm = self.lookup.get_single_column('P_m')
         self.assertEqual(pm.shape[1], 1)
+
+
 

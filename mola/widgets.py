@@ -1,6 +1,7 @@
+"""
+Jupyter Notebook widgets
+"""
 import pandas as pd, IPython.display as d, ipywidgets as widgets
-import mola.utils as mu
-from pathlib import Path
 import qgrid
 import functools
 import json
