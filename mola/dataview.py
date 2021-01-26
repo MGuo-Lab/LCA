@@ -106,16 +106,11 @@ def get_ref_id_dicts(conn, table_dict):
     return d
 
 
-def get_single_column_lookups(lookup):
-
-
-    return lookup
-
-
 def get_lookup_tables(conn, single_column=False):
     """
     Get tables of ref id, name etc. for each relevant table in db
-    :param conn: database connection
+    :param sqlite3.Connection conn: database connection
+    :param boolean single_column: get lookup as single value
     :return: dictionary using keys of table_dict
     """
 
@@ -153,11 +148,11 @@ def get_lookup_tables(conn, single_column=False):
     d['P'] = d['P_m'] = d['P_s'] = d['P_t'] = d['processes']
 
     # product flows
-    tbl = Table('TBL_FLOWS')
+    flows = Table('TBL_FLOWS')
     q = Query \
-        .from_(tbl) \
-        .select(tbl.REF_ID, tbl.NAME) \
-        .where(tbl.FLOW_TYPE == 'PRODUCT_FLOW')
+        .from_(flows) \
+        .select(flows.REF_ID, flows.NAME) \
+        .where(flows.FLOW_TYPE == 'PRODUCT_FLOW')
     print(q)
     d['product_flows'] = pd.read_sql(str(q), conn, index_col='REF_ID')
     d['F'] = d['F_m'] = d['F_s'] = d['F_t'] = d['product_flows']
@@ -591,6 +586,50 @@ def get_process_product_flow_costs(conn, process_ref_ids):
     return product_flow_dfr
 
 
+def get_process_product_flow_units(conn, process_ref_ids, set_name='P'):
+    """
+    Get the product flow units from a list of process reference ids using a sqlite openLCA database.
+
+    Using the process id get its exchanges and from those extract the product flows and their units.
+
+    :param sqlite3.Connection conn: database connection
+    :param list[str] process_ref_ids: list of process reference ids
+    :param list[str] set_name: column name of the index in the returned table
+    :return DataFrame of units indexed by set_name
+    """
+    exchanges = Table('TBL_EXCHANGES')
+    flows = Table('TBL_FLOWS')
+    processes = Table('TBL_PROCESSES')
+    units = Table('TBL_UNITS')
+
+    # get the process ids from the ref ids
+    process_ids = processes.select(processes.ID).where(processes.REF_ID.isin(process_ref_ids))
+
+    # sub-query the exchanges table to limit join
+    sq = Query\
+        .from_(exchanges) \
+        .select(exchanges.F_OWNER, exchanges.F_FLOW,
+                exchanges.F_UNIT, exchanges.RESULTING_AMOUNT_VALUE) \
+        .where(exchanges.F_OWNER.isin(process_ids))
+
+    # join exchanges to flows, processes, units
+    q = Query\
+        .from_(sq) \
+        .left_join(flows).on(flows.ID == sq.F_FLOW) \
+        .left_join(processes).on(processes.ID == sq.F_OWNER) \
+        .left_join(units).on(units.ID == sq.F_UNIT) \
+        .select(
+            processes.REF_ID.as_(set_name), units.NAME.as_('UNITS')
+        )\
+        .where(flows.FlOW_TYPE == 'PRODUCT_FLOW')
+
+    print(q)
+    product_flow_dfr = pd.read_sql(str(q), conn)
+    product_flow_dfr.set_index(set_name, inplace=True)
+
+    return product_flow_dfr
+
+
 def get_product_flow_ref_ids(conn, name=None):
     """
     Get product flow reference ids from openLCA database.
@@ -631,10 +670,12 @@ class LookupTables:
     """
     Caches lookups to a database using a dict of DataFrames.
     Contains tables of ref id, name etc. for each relevant table in db.
+    Dynamic lookups are methods of LookupTables.
     """
 
     def __init__(self, conn):
         self.d = get_lookup_tables(conn)
+        self.conn = conn
 
     def __iter__(self):
         return iter(self.d)
@@ -672,3 +713,12 @@ class LookupTables:
 
     def keys(self):
         return self.d.keys()
+
+    def get_units(self, process_ref_ids, set_name='P_m'):
+        """
+        :param list[str] process_ref_ids: list of process reference ids
+        :param list[str] set_name: column name of process set for index
+        :return: DataFrame
+        """
+        units_dfr = get_process_product_flow_units(self.conn, process_ref_ids, set_name)
+        return units_dfr

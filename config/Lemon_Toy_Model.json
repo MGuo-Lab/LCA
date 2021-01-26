@@ -1,6 +1,7 @@
 {
     "settings": {
-        "distance_calculated": true
+        "distance_calculated": true,
+        "test_setting": false
     },
     "doc_path": "Z:\\work\\code\\Python\\LCA\\molaqt\\doc\\Toy_Problem_A2_Lemon_Fruit.html",
     "specification": "<class 'mola.specification5.ScheduleSpecification'>",
@@ -54,6 +55,29 @@
                     "t1"
                 ],
                 "value": 1
+            }
+        ],
+        "U": [
+            {
+                "index": [
+                    "9891d347-28f8-434d-896a-84a19a4c68a6",
+                    "090f56b8-6a83-48c1-ae26-234d04771e53"
+                ],
+                "value": 0.001
+            },
+            {
+                "index": [
+                    "9891d347-28f8-434d-896a-84a19a4c68a6",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4"
+                ],
+                "value": 0.001
+            },
+            {
+                "index": [
+                    "9891d347-28f8-434d-896a-84a19a4c68a6",
+                    "2741cea8-327f-4e0f-9401-b10858dc68f8"
+                ],
+                "value": 0.001
             }
         ],
         "d": [

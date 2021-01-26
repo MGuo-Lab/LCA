@@ -47,7 +47,6 @@ class ModelRun(QWidget):
     def run_button_clicked(self):
         print('Run button clicked')
         if self.concrete_model is not None:
-            self.concrete_model.dd.pprint()
             self.concrete_model.obj1.deactivate()
             self.concrete_model.obj2.deactivate()
             self.concrete_model.obj.activate()

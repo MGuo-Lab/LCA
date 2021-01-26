@@ -1,6 +1,7 @@
 {
     "settings": {
-        "distance_calculated": false
+        "distance_calculated": false,
+        "test_setting": false
     },
     "doc_path": "Z:\\work\\code\\Python\\LCA\\molaqt\\doc\\Toy_Problem_D2_Fruit_Juice_Selection.html",
     "specification": "<class 'mola.specification5.ScheduleSpecification'>",
@@ -132,6 +133,71 @@
                     "t1"
                 ],
                 "value": 0.0
+            }
+        ],
+        "U": [
+            {
+                "index": [
+                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4"
+                ],
+                "value": 0.001
+            },
+            {
+                "index": [
+                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                    "2741cea8-327f-4e0f-9401-b10858dc68f8"
+                ],
+                "value": 0.001
+            },
+            {
+                "index": [
+                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                    "8ddc8009-4733-49e9-8a4e-a1081d05eb8b"
+                ],
+                "value": 0.001
+            },
+            {
+                "index": [
+                    "1c819f15-1202-4fa9-8ef9-72196c2dfb85",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4"
+                ],
+                "value": 0.001
+            },
+            {
+                "index": [
+                    "1c819f15-1202-4fa9-8ef9-72196c2dfb85",
+                    "2741cea8-327f-4e0f-9401-b10858dc68f8"
+                ],
+                "value": 0.001
+            },
+            {
+                "index": [
+                    "1c819f15-1202-4fa9-8ef9-72196c2dfb85",
+                    "8ddc8009-4733-49e9-8a4e-a1081d05eb8b"
+                ],
+                "value": 0.001
+            },
+            {
+                "index": [
+                    "0b588bb3-b211-420e-80ed-f6f4fba01f8a",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4"
+                ],
+                "value": 0.001
+            },
+            {
+                "index": [
+                    "0b588bb3-b211-420e-80ed-f6f4fba01f8a",
+                    "2741cea8-327f-4e0f-9401-b10858dc68f8"
+                ],
+                "value": 0.001
+            },
+            {
+                "index": [
+                    "0b588bb3-b211-420e-80ed-f6f4fba01f8a",
+                    "8ddc8009-4733-49e9-8a4e-a1081d05eb8b"
+                ],
+                "value": 0.001
             }
         ],
         "d": [

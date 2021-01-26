@@ -67,6 +67,11 @@ class DataView(TestCase):
         costs = dv.get_process_product_flow_costs(DataView.conn, process_ref_ids=ref_id)
         self.assertGreater(len(costs), 0)
 
+    def test_get_process_product_flow_units(self):
+        ref_id = ['cd177b7d-e908-3e69-b40c-4827b4abaa4d']
+        units = dv.get_process_product_flow_units(DataView.conn, process_ref_ids=ref_id)
+        self.assertGreater(len(units), 0)
+
 
 class TestLookupTables(TestCase):
     conn = di.get_sqlite_connection()

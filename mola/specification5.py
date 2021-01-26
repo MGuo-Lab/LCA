@@ -64,6 +64,8 @@ class SelectionSpecification(Specification):
     }
     user_defined_parameters = {
         'C': {'index': ['F_m', 'D'], 'doc': 'Conversion factor for material flows', 'unit': pu.D/pu.F_m},
+        'U': {'index': ['F_m', 'F_t'], 'doc': 'Conversion factor for material flow units in transport flow units',
+              'unit': pu.F_t / pu.F_m},
         'Demand': {'index': ['D'], 'doc': 'Specific demand', 'unit': pu.D},
         'Total_Demand': {'index': ['D'], 'doc': 'Total demand', 'unit': pu.D},
         'd': {'index': ['P', 'F_m'], 'doc': 'Distance', 'unit': pu.km},
@@ -165,7 +167,7 @@ class SelectionSpecification(Specification):
 
         def specific_transport_flow_rule(model, ft, pt):
             return model.Specific_Transport_Flow[ft, pt] == sum(
-                model.J[fm, pm, ft, pt] *
+                model.J[fm, pm, ft, pt] * model.U[fm, ft] *
                 model.Specific_Material_Transport_Flow[fm, pm, ft, pt] *
                 model.d[pm, fm]
                 for fm in model.F_m for pm in model.P_m)
@@ -209,7 +211,7 @@ class SelectionSpecification(Specification):
                          query="SELECT REF_ID FROM TBL_FLOWS WHERE FLOW_TYPE='ELEMENTARY_FLOW'",
                          set=self.abstract_model.E)
             ice_sql = sq.build_impact_category_elementary_flow(ref_ids=olca_dp.data('KPI'))
-            pe_sql = sq.build_process_elementary_flow(flow_ref_ids=flows, process_ref_ids=processes)
+            pe_sql = sq.build_process_elementary_flow(process_ref_ids=processes)
             olca_dp.load(filename=db_file, using='sqlite3', query=ice_sql,
                          param=self.abstract_model.Ef, index=(self.abstract_model.KPI, self.abstract_model.E))
             olca_dp.load(filename=db_file, using='sqlite3', query=pe_sql, param=self.abstract_model.EF,
@@ -245,17 +247,19 @@ class SelectionSpecification(Specification):
 
     def get_default_parameters(self, user_sets):
         user_params = {
-            'C': [{'index': [fm, d], 'value': 1}
-                                for fm in user_sets['F_m'] for d in user_sets['D']],
+            'C': [{'index': [fm, d], 'value': 0}
+                  for fm in user_sets['F_m'] for d in user_sets['D']],
+            'U': [{'index': [fm, ft], 'value': 0}
+                  for fm in user_sets['F_m'] for ft in user_sets['F_t']],
             'd': [{'index': [pm, fm], 'value': 0}
-                            for pm in user_sets['P_m'] for fm in user_sets['F_m']],
+                  for pm in user_sets['P_m'] for fm in user_sets['F_m']],
             'Demand': [{'index': [d], 'value': 0} for d in user_sets['D']],
             'Total_Demand': [{'index': [d], 'value': 0} for d in user_sets['D']],
             'J': [{'index': [fm, pm, ft, pt], 'value': 0} for fm in user_sets['F_m']
                   for pm in user_sets['P_m'] for ft in user_sets['F_t'] for pt in user_sets['P_t']],
         }
-        flows = [f for k in ['F_m', 'F_t'] for f in user_sets[k]]
-        processes = [p for k in ['P_m', 'P_t'] for p in user_sets[k]]
+        # flows = [f for k in ['F_m', 'F_t'] for f in user_sets[k]]
+        # processes = [p for k in ['P_m', 'P_t'] for p in user_sets[k]]
 
         return user_params
 
@@ -273,7 +277,10 @@ class SelectionSpecification(Specification):
         user_sets.update({'F': user_sets['F_m'] + user_sets['F_t']})
         user_sets.update({'P': user_sets['P_m'] + user_sets['P_t']})
         user_params = dict()
-        user_params['C'] = [{'index': [fm, d], 'value': 2} for fm in user_sets['F_m']]
+        user_params['C'] = [{'index': [fm, d], 'value': 2} for fm in user_sets['F_m']
+                            for d in user_sets['D']]
+        user_params['U'] = [{'index': [fm, ft], 'value': 2} for fm in user_sets['F_m']
+                            for ft in user_sets['F_t']]
         user_params['d'] = [{'index': [pm, fm], 'value': 2}
                             for pm in user_sets['P_m'] for fm in user_sets['F_m']]
         user_params['Total_Demand'] = [{'index': [d], 'value': 1} for d in user_sets['D']]
@@ -290,7 +297,7 @@ class SelectionSpecification(Specification):
 
         return {**user_sets, **user_params}
 
-    def get_param_dfr(self, filename, param_list=['C', 'Total_Demand', 'd', 'Demand', 'J', 'L']):
+    def get_param_dfr(self, filename, param_list=['C', 'U', 'Total_Demand', 'd', 'Demand', 'J', 'L']):
         user_dp = pyod.DataPortal()
         user_dp.load(filename=filename)
         config_instance = self.abstract_model.create_instance(user_dp)
@@ -327,6 +334,8 @@ class ScheduleSpecification(Specification):
     }
     user_defined_parameters = {
         'C': {'index': ['F_m', 'K', 'D', 'T'], 'doc': 'Conversion factor for material flows', 'unit': pu.D/pu.F_m},
+        'U': {'index': ['F_m', 'F_t'], 'doc': 'Conversion factor for material flow units in transport flow units',
+              'unit': pu.F_t / pu.F_m},
         'Demand': {'index': ['D', 'K', 'T'], 'doc': 'Specific demand', 'unit': pu.D},
         'Total_Demand': {'index': ['D', 'K'], 'doc': 'Total demand', 'unit': pu.D},
         'L': {'index': ['F_m', 'P_m', 'F_s', 'P_s'], 'doc': 'Binary conversion factor between service flows',
@@ -468,7 +477,7 @@ class ScheduleSpecification(Specification):
 
         def specific_transport_flow_rule(model, ft, pt, k, t):
             return model.Specific_Transport_Flow[ft, pt, k, t] == sum(
-                model.J[fm, pm, ft, pt] *
+                model.J[fm, pm, ft, pt] * model.U[fm, ft] *
                 model.Specific_Material_Transport_Flow[fm, pm, ft, pt, k, t] *
                 model.dd[pm, fm, k, t]
                 for fm in model.F_m for pm in model.P_m)
@@ -596,12 +605,14 @@ class ScheduleSpecification(Specification):
 
     def get_default_parameters(self, user_sets):
         user_params = {
-            'C': [{'index': [fm, k, d, t], 'value': 1}
-                                for fm in user_sets['F_m'] for d in user_sets['D'] for k in user_sets['K']
-                                for t in user_sets['T']],
+            'C': [{'index': [fm, k, d, t], 'value': 0}
+                  for fm in user_sets['F_m'] for d in user_sets['D'] for k in user_sets['K']
+                  for t in user_sets['T']],
+            'U': [{'index': [fm, ft], 'value': 1}
+                  for fm in user_sets['F_m'] for ft in user_sets['F_t']],
             'd': [{'index': [pm, fm, k, t], 'value': 0}
-                            for pm in user_sets['P_m'] for fm in user_sets['F_m'] for k in user_sets['K']
-                            for t in user_sets['T']],
+                  for pm in user_sets['P_m'] for fm in user_sets['F_m'] for k in user_sets['K']
+                  for t in user_sets['T']],
             'X': [{'index': [k, t], 'value': math.inf} for k in user_sets['K'] for t in user_sets['T']],
             'Y': [{'index': [k, t], 'value': math.inf} for k in user_sets['K'] for t in user_sets['T']],
             'Demand': [{'index': [d, k, t], 'value': 0}
@@ -643,6 +654,8 @@ class ScheduleSpecification(Specification):
         user_params['C'] = [{'index': [fm, k, d, t], 'value': 2}
                             for fm in user_sets['F_m'] for d in user_sets['D'] for k in user_sets['K']
                             for t in user_sets['T']]
+        user_params['U'] = [{'index': [fm, ft], 'value': 2}
+                            for fm in user_sets['F_m'] for ft in user_sets['F_t']]
         user_params['d'] = [{'index': [pm, fm, k, t], 'value': 2}
                             for pm in user_sets['P_m'] for fm in user_sets['F_m'] for k in user_sets['K'] for t in user_sets['T']]
         user_params['Total_Demand'] = [{'index': [d, k], 'value': 1}
@@ -667,7 +680,7 @@ class ScheduleSpecification(Specification):
 
         return {**user_sets, **user_params}
 
-    def get_param_dfr(self, filename, param_list=['C', 'Total_Demand', 'd', 'Demand', 'J', 'L']):
+    def get_param_dfr(self, filename, param_list=['C', 'U', 'Total_Demand', 'd', 'Demand', 'J', 'L']):
         user_dp = pyod.DataPortal()
         user_dp.load(filename=filename)
         config_instance = self.abstract_model.create_instance(user_dp)

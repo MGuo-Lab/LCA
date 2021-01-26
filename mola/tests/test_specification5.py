@@ -30,6 +30,7 @@ class TestScheduleSpecification(TestCase):
 
     def test_populate_cost(self):
         # separate set and parameter files for cost
+        self.spec.settings['distance_calculated'] = False
         model_instance = self.spec.populate(['test_cost_set_data.json', 'test_cost_parameters_data.json'])
         self.assertGreater(len(model_instance), 0)
 

@@ -1,7 +1,11 @@
 {
-    "settings": {},
+    "settings": {
+        "distance_calculated": false,
+        "test_setting": false
+    },
     "doc_path": "Z:\\work\\code\\Python\\LCA\\molaqt\\doc\\Toy_Problem_C1_Orange_Juice.html",
     "specification": "<class 'mola.specification5.ScheduleSpecification'>",
+    "controller": "StandardController",
     "db_file": "C:/data/openlca/sqlite/system/CSV_juice_ecoinvent_36_apos_lci_20200206_20201029-102818.sqlite",
     "sets": {
         "F_m": [
@@ -59,6 +63,29 @@
                 "value": 0.5
             }
         ],
+        "U": [
+            {
+                "index": [
+                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4"
+                ],
+                "value": 0.001
+            },
+            {
+                "index": [
+                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                    "4ecf1190-7028-4038-89b0-79adeb3e98cc"
+                ],
+                "value": 0.001
+            },
+            {
+                "index": [
+                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                    "559d5695-102a-4beb-9f7f-3db334c9b51d"
+                ],
+                "value": 0.001
+            }
+        ],
         "d": [
             {
                 "index": [
@@ -86,6 +113,24 @@
                     "t1"
                 ],
                 "value": 400
+            }
+        ],
+        "X": [
+            {
+                "index": [
+                    "k1",
+                    "t1"
+                ],
+                "value": Infinity
+            }
+        ],
+        "Y": [
+            {
+                "index": [
+                    "k1",
+                    "t1"
+                ],
+                "value": Infinity
             }
         ],
         "Demand": [

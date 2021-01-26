@@ -19,8 +19,8 @@ class Output(TestCase):
         c_dfr = o.get_entity(c)
         self.assertGreater(len(c_dfr), 0)
 
-        # with lookups
-        flow_dfr = o.get_entity(flow, self.lookup)
+        # with lookups and units
+        flow_dfr = o.get_entity(flow, self.lookup, units=['P_m'])
         self.assertGreater(len(flow_dfr), 0)
         c_dfr = o.get_entity(c, self.lookup)
         self.assertGreater(len(c_dfr), 0)

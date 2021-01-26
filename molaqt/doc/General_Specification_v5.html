@@ -14323,6 +14323,8 @@ a.anchor-link {
 <ul>
 <li><p>$C_{f_m, k, d, t}$ Conversion factor for material flows to generate per unit of demand product/services $d$ at task $k$, time $t$. If not defined default value is 0.</p>
 </li>
+<li><p>$U_{f_m, f_t}$ Converts the units of material flow $f_m$ in openLCA into the units of the transport flow $f_t$. If not defined default value is 0.</p>
+</li>
 <li><p>$D_{d,k,t}$ Demand for final product/service $d$ for task $k$ at time $t$; If not defined, default value is 0.</p>
 </li>
 <li><p>$D_{d,k}^{total}$ Total demand for final product/service over the whole optimisation time period over multiple tasks.</p>
@@ -14409,7 +14411,7 @@ $$
 \min_D Obj_{cost}
 $$<p>where the decision variables are defined by the set</p>
 $$
-D=\cup_{F,P,K,T}\{SF_{f_s, p, k, t}, f_{f_m,p,f_t,p_t,k,t}, t_{f_t, p_t, k, t}\}
+D=\cup_{F,P,K,T}\{S_{f_s, p, k, t}, f_{f_m,p,f_t,p_t,k,t}, t_{f_t, p_t, k, t}\}
 $$<p>and represent the specific service flows, the specific material flows using a mode of transport, and the specific transport flows.</p>
 
 </div>
@@ -14505,8 +14507,9 @@ $$
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 $$
-t_{f_t, p_t, k, t} = \sum_{f_m, p_m} J_{f_m, p_m, f_t, p_t}f_{f_m, p_m, f_t, p_t, k, t}d_{p, f_m, k, t}
-$$
+t_{f_t, p_t, k, t} = \sum_{f_m, p_m} J_{f_m, p_m, f_t, p_t} U_{f_m, f_t} f_{f_m, p_m, f_t, p_t, k, t}d_{p, f_m, k, t}
+$$<p>where $U_{f_m, f_t}$ is a parameter that converts the units of material flow $f_m$ in openLCA into the units of the transport flow $f_t$.</p>
+
 </div>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
@@ -14532,7 +14535,7 @@ $$
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>The total material flow minus final storage must satisfy the total demand over the time horizon so</p>
+<p>The total material flow must satisfy the total demand over the time horizon so</p>
 $$
 \sum_{f_m,p_m,t} Flow_{f_m, p_m, k, t}C_{f_m, k, d, t}  \geq D_{d,k}^{total}.
 $$
@@ -15180,12 +15183,12 @@ SELECT &#34;TBL_IMPACT_METHODS&#34;.&#34;NAME&#34; &#34;method_NAME&#34;,&#34;TB
 
 
 
-<div id="4c46d611-d3e6-425f-9d0d-233759ab740e" class="jupyter-widgets jp-OutputArea-output ">
+<div id="35182a48-05b2-48d4-91d6-7ea67950a2c3" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('4c46d611-d3e6-425f-9d0d-233759ab740e');
+var element = document.getElementById('35182a48-05b2-48d4-91d6-7ea67950a2c3');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "35a0045b9d59456a98af26fe43203eec", "version_major": 2, "version_minor": 0}
+{"model_id": "325589695a0d4eb1b4e3b58a2b3ad3f8", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -15202,12 +15205,12 @@ var element = document.getElementById('4c46d611-d3e6-425f-9d0d-233759ab740e');
 
 
 
-<div id="c86e70cc-ad7a-4059-ab4e-8d407d4fee55" class="jupyter-widgets jp-OutputArea-output ">
+<div id="2395d3ca-8e30-44c5-ab03-9e8729032d72" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('c86e70cc-ad7a-4059-ab4e-8d407d4fee55');
+var element = document.getElementById('2395d3ca-8e30-44c5-ab03-9e8729032d72');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "0241739679b04f889560742772b8893b", "version_major": 2, "version_minor": 0}
+{"model_id": "cff703f6ea5d434493af33290bb1838f", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -15224,12 +15227,12 @@ var element = document.getElementById('c86e70cc-ad7a-4059-ab4e-8d407d4fee55');
 
 
 
-<div id="5b0a3b93-88b8-4a22-804d-029009600a21" class="jupyter-widgets jp-OutputArea-output ">
+<div id="04097b9d-f2df-4e76-8cfd-3e4f49ffdab9" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('5b0a3b93-88b8-4a22-804d-029009600a21');
+var element = document.getElementById('04097b9d-f2df-4e76-8cfd-3e4f49ffdab9');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "d3f438fe88454c838069dd5a925b2291", "version_major": 2, "version_minor": 0}
+{"model_id": "3e30109fa7594cda9ab949a805ce2799", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -15246,12 +15249,12 @@ var element = document.getElementById('5b0a3b93-88b8-4a22-804d-029009600a21');
 
 
 
-<div id="d4759ecf-aee9-42b0-9e77-e12195e96111" class="jupyter-widgets jp-OutputArea-output ">
+<div id="0d870406-f00b-4bd3-bc46-1af2a4fa50c4" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('d4759ecf-aee9-42b0-9e77-e12195e96111');
+var element = document.getElementById('0d870406-f00b-4bd3-bc46-1af2a4fa50c4');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "5f726629f02d43bc80f21aa982789ecc", "version_major": 2, "version_minor": 0}
+{"model_id": "cd839b23b9e54a1bafb90038919b89f6", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -15344,12 +15347,12 @@ var element = document.getElementById('d4759ecf-aee9-42b0-9e77-e12195e96111');
 
 
 
-<div id="93d99b6c-c3fd-4104-9f43-db074790200d" class="jupyter-widgets jp-OutputArea-output ">
+<div id="b0b285a9-ba9c-4307-b780-9c79a5777899" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('93d99b6c-c3fd-4104-9f43-db074790200d');
+var element = document.getElementById('b0b285a9-ba9c-4307-b780-9c79a5777899');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "684362275c10410fb027e909b41f3667", "version_major": 2, "version_minor": 0}
+{"model_id": "58af885ef5c0488f9786ab3eafec029d", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -15366,12 +15369,12 @@ var element = document.getElementById('93d99b6c-c3fd-4104-9f43-db074790200d');
 
 
 
-<div id="447d3e78-eed8-4038-b620-9b92de38401b" class="jupyter-widgets jp-OutputArea-output ">
+<div id="eb1d4b26-247d-4ea2-8f06-4cc102634f4d" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('447d3e78-eed8-4038-b620-9b92de38401b');
+var element = document.getElementById('eb1d4b26-247d-4ea2-8f06-4cc102634f4d');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "353ca4e7daed43a3a492d6ce4d958ee0", "version_major": 2, "version_minor": 0}
+{"model_id": "874b858b633540fda5065dd9ffe1704f", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -15388,12 +15391,12 @@ var element = document.getElementById('447d3e78-eed8-4038-b620-9b92de38401b');
 
 
 
-<div id="9a055eb5-d88b-4385-a5bc-c5d8d4a06680" class="jupyter-widgets jp-OutputArea-output ">
+<div id="e1817836-8327-41d0-a138-ada3ab502b7e" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('9a055eb5-d88b-4385-a5bc-c5d8d4a06680');
+var element = document.getElementById('e1817836-8327-41d0-a138-ada3ab502b7e');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "118afcb050d1429a9cd548526f2aefed", "version_major": 2, "version_minor": 0}
+{"model_id": "88d621a7582342c2bd04e8925d68480f", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -15410,12 +15413,12 @@ var element = document.getElementById('9a055eb5-d88b-4385-a5bc-c5d8d4a06680');
 
 
 
-<div id="d400df4d-4a23-41ab-a781-ea2d69c841ed" class="jupyter-widgets jp-OutputArea-output ">
+<div id="059d48cf-b494-4e26-bc70-9f557fe661ab" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('d400df4d-4a23-41ab-a781-ea2d69c841ed');
+var element = document.getElementById('059d48cf-b494-4e26-bc70-9f557fe661ab');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "fd815b8ca2bf4548a3c8c715ce98a064", "version_major": 2, "version_minor": 0}
+{"model_id": "32d83a46594b450fa983dae0c6e84b2a", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -15492,7 +15495,7 @@ var element = document.getElementById('d400df4d-4a23-41ab-a781-ea2d69c841ed');
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">json</span>
 <span class="n">user_data</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">get_dummy_data</span><span class="p">({</span><span class="s1">&#39;F_m&#39;</span><span class="p">:</span> <span class="n">F_m</span><span class="p">})</span>
-<span class="n">json_file</span> <span class="o">=</span> <span class="s1">&#39;user_data.json&#39;</span> 
+<span class="n">json_file</span> <span class="o">=</span> <span class="s1">&#39;Configuration/specification_user_data.json&#39;</span> 
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
     <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">user_data</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 <span class="n">user_data</span>
@@ -15535,6 +15538,8 @@ var element = document.getElementById('d400df4d-4a23-41ab-a781-ea2d69c841ed');
   {&#39;index&#39;: [&#39;f1&#39;, &#39;k1&#39;, &#39;d2&#39;, &#39;t1&#39;], &#39;value&#39;: 2},
   {&#39;index&#39;: [&#39;f2&#39;, &#39;k1&#39;, &#39;d1&#39;, &#39;t1&#39;], &#39;value&#39;: 2},
   {&#39;index&#39;: [&#39;f2&#39;, &#39;k1&#39;, &#39;d2&#39;, &#39;t1&#39;], &#39;value&#39;: 2}],
+ &#39;U&#39;: [{&#39;index&#39;: [&#39;f1&#39;, &#39;ft1&#39;], &#39;value&#39;: 2},
+  {&#39;index&#39;: [&#39;f2&#39;, &#39;ft1&#39;], &#39;value&#39;: 2}],
  &#39;d&#39;: [{&#39;index&#39;: [&#39;pm1&#39;, &#39;f1&#39;, &#39;k1&#39;, &#39;t1&#39;], &#39;value&#39;: 2},
   {&#39;index&#39;: [&#39;pm1&#39;, &#39;f2&#39;, &#39;k1&#39;, &#39;t1&#39;], &#39;value&#39;: 2}],
  &#39;Total_Demand&#39;: [{&#39;index&#39;: [&#39;d1&#39;, &#39;k1&#39;], &#39;value&#39;: 1},
@@ -15632,7 +15637,7 @@ var element = document.getElementById('d400df4d-4a23-41ab-a781-ea2d69c841ed');
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">qgrid</span>
 <span class="kn">import</span> <span class="nn">mola.utils</span> <span class="k">as</span> <span class="nn">mu</span>
-<span class="n">param_dfr</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">get_param_dfr</span><span class="p">(</span><span class="s1">&#39;user_data.json&#39;</span><span class="p">)</span>
+<span class="n">param_dfr</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">get_param_dfr</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span>
 <span class="n">unnested_param_dfr</span> <span class="o">=</span> <span class="n">mu</span><span class="o">.</span><span class="n">unnest</span><span class="p">(</span><span class="n">param_dfr</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Index&#39;</span><span class="p">,</span> <span class="s1">&#39;Value&#39;</span><span class="p">])</span>
 <span class="n">param_qg</span> <span class="o">=</span> <span class="n">qgrid</span><span class="o">.</span><span class="n">show_grid</span><span class="p">(</span><span class="n">unnested_param_dfr</span><span class="p">,</span> <span class="n">grid_options</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;maxVisibleRows&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">})</span>
 <span class="n">param_qg</span>
@@ -15680,12 +15685,12 @@ WARNING: DEPRECATED: Providing construction data to SetOperator objects is
 
 
 
-<div id="4225e34e-3331-4b03-a90e-538f7c08fa56" class="jupyter-widgets jp-OutputArea-output ">
+<div id="2f299a3a-8927-44e4-bef9-2f1e286949e3" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('4225e34e-3331-4b03-a90e-538f7c08fa56');
+var element = document.getElementById('2f299a3a-8927-44e4-bef9-2f1e286949e3');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "e56f51faf5a44f4ba2dd7951aefbbceb", "version_major": 2, "version_minor": 0}
+{"model_id": "e90603141d384c549a12cbb4343069bd", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -15740,6 +15745,8 @@ var element = document.getElementById('4225e34e-3331-4b03-a90e-538f7c08fa56');
   {&#39;index&#39;: (&#39;f2&#39;, &#39;pm1&#39;, &#39;fs1&#39;, &#39;ps1&#39;), &#39;value&#39;: 1}],
  &#39;Total_Demand&#39;: [{&#39;index&#39;: (&#39;d1&#39;, &#39;k1&#39;), &#39;value&#39;: 1},
   {&#39;index&#39;: (&#39;d2&#39;, &#39;k1&#39;), &#39;value&#39;: 1}],
+ &#39;U&#39;: [{&#39;index&#39;: (&#39;f1&#39;, &#39;ft1&#39;), &#39;value&#39;: 2},
+  {&#39;index&#39;: (&#39;f2&#39;, &#39;ft1&#39;), &#39;value&#39;: 2}],
  &#39;d&#39;: [{&#39;index&#39;: (&#39;pm1&#39;, &#39;f1&#39;, &#39;k1&#39;, &#39;t1&#39;), &#39;value&#39;: 2},
   {&#39;index&#39;: (&#39;pm1&#39;, &#39;f2&#39;, &#39;k1&#39;, &#39;t1&#39;), &#39;value&#39;: 2}]}</pre>
 </div>
@@ -15807,6 +15814,8 @@ var element = document.getElementById('4225e34e-3331-4b03-a90e-538f7c08fa56');
   {&#39;index&#39;: (&#39;f1&#39;, &#39;k1&#39;, &#39;d2&#39;, &#39;t1&#39;), &#39;value&#39;: 2},
   {&#39;index&#39;: (&#39;f2&#39;, &#39;k1&#39;, &#39;d1&#39;, &#39;t1&#39;), &#39;value&#39;: 2},
   {&#39;index&#39;: (&#39;f2&#39;, &#39;k1&#39;, &#39;d2&#39;, &#39;t1&#39;), &#39;value&#39;: 2}],
+ &#39;U&#39;: [{&#39;index&#39;: (&#39;f1&#39;, &#39;ft1&#39;), &#39;value&#39;: 2},
+  {&#39;index&#39;: (&#39;f2&#39;, &#39;ft1&#39;), &#39;value&#39;: 2}],
  &#39;d&#39;: [{&#39;index&#39;: (&#39;pm1&#39;, &#39;f1&#39;, &#39;k1&#39;, &#39;t1&#39;), &#39;value&#39;: 2},
   {&#39;index&#39;: (&#39;pm1&#39;, &#39;f2&#39;, &#39;k1&#39;, &#39;t1&#39;), &#39;value&#39;: 2}],
  &#39;Total_Demand&#39;: [{&#39;index&#39;: (&#39;d1&#39;, &#39;k1&#39;), &#39;value&#39;: 1},
@@ -16127,144 +16136,156 @@ obj1 : Size=1, Index=KPI, Active=True
     </tr>
     <tr>
       <th>20</th>
-      <td>Demand_index</td>
+      <td>U_index</td>
       <td>None</td>
       <td>2</td>
     </tr>
     <tr>
       <th>21</th>
-      <td>Total_Demand_index</td>
+      <td>Demand_index</td>
       <td>None</td>
       <td>2</td>
     </tr>
     <tr>
       <th>22</th>
-      <td>L_index</td>
+      <td>Total_Demand_index</td>
       <td>None</td>
       <td>2</td>
     </tr>
     <tr>
       <th>23</th>
+      <td>L_index</td>
+      <td>None</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>24</th>
       <td>X_index</td>
       <td>None</td>
       <td>1</td>
     </tr>
     <tr>
-      <th>24</th>
+      <th>25</th>
       <td>Y_index</td>
       <td>None</td>
       <td>1</td>
     </tr>
     <tr>
-      <th>25</th>
+      <th>26</th>
       <td>d_index</td>
       <td>None</td>
       <td>6</td>
     </tr>
     <tr>
-      <th>26</th>
+      <th>27</th>
       <td>J_index</td>
       <td>None</td>
       <td>2</td>
     </tr>
     <tr>
-      <th>27</th>
+      <th>28</th>
       <td>Ef_index</td>
       <td>None</td>
       <td>3</td>
     </tr>
     <tr>
-      <th>28</th>
+      <th>29</th>
       <td>EF_index</td>
       <td>None</td>
       <td>36</td>
     </tr>
     <tr>
-      <th>29</th>
+      <th>30</th>
       <td>phi_index</td>
       <td>None</td>
       <td>12</td>
     </tr>
     <tr>
-      <th>30</th>
+      <th>31</th>
       <td>EI_index</td>
       <td>None</td>
       <td>12</td>
     </tr>
     <tr>
-      <th>31</th>
+      <th>32</th>
       <td>XI_index</td>
       <td>None</td>
-      <td>6</td>
-    </tr>
-    <tr>
-      <th>32</th>
-      <td>YI_index</td>
-      <td>None</td>
-      <td>6</td>
+      <td>2</td>
     </tr>
     <tr>
       <th>33</th>
-      <td>Flow_index</td>
+      <td>YI_index</td>
       <td>None</td>
       <td>2</td>
     </tr>
     <tr>
       <th>34</th>
-      <td>Storage_Service_Flow_index</td>
+      <td>dd_index</td>
       <td>None</td>
-      <td>12</td>
+      <td>2</td>
     </tr>
     <tr>
       <th>35</th>
-      <td>Specific_Material_Transport_Flow_index</td>
+      <td>Flow_index</td>
       <td>None</td>
       <td>2</td>
     </tr>
     <tr>
       <th>36</th>
-      <td>Specific_Transport_Flow_index</td>
+      <td>Storage_Service_Flow_index</td>
       <td>None</td>
-      <td>1</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>37</th>
-      <td>Demand_Selection_index</td>
+      <td>Specific_Material_Transport_Flow_index</td>
       <td>None</td>
       <td>2</td>
     </tr>
     <tr>
       <th>38</th>
-      <td>total_demand_constraint_index</td>
+      <td>Specific_Transport_Flow_index</td>
       <td>None</td>
-      <td>2</td>
+      <td>1</td>
     </tr>
     <tr>
       <th>39</th>
-      <td>material_flow_constraint_index</td>
+      <td>Demand_Selection_index</td>
       <td>None</td>
       <td>2</td>
     </tr>
     <tr>
       <th>40</th>
+      <td>total_demand_constraint_index</td>
+      <td>None</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>material_flow_constraint_index</td>
+      <td>None</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>42</th>
       <td>transport_constraint_index</td>
       <td>None</td>
       <td>1</td>
     </tr>
     <tr>
-      <th>41</th>
+      <th>43</th>
       <td>demand_selection_constraint_index</td>
       <td>None</td>
       <td>1</td>
     </tr>
     <tr>
-      <th>42</th>
+      <th>44</th>
       <td>specific_demand_constraint_index</td>
       <td>None</td>
       <td>2</td>
     </tr>
     <tr>
-      <th>43</th>
+      <th>45</th>
       <td>service_flow_link_constraint_index</td>
       <td>None</td>
       <td>1</td>
@@ -16321,12 +16342,12 @@ obj1 : Size=1, Index=KPI, Active=True
 
 
 
-<div id="3d3f0da5-7573-455d-be0a-3923af6640e2" class="jupyter-widgets jp-OutputArea-output ">
+<div id="e3f091e5-477d-438d-b425-55a8eeed7959" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('3d3f0da5-7573-455d-be0a-3923af6640e2');
+var element = document.getElementById('e3f091e5-477d-438d-b425-55a8eeed7959');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "766ad9479ba841eeac9dd4e0c6c4c9bb", "version_major": 2, "version_minor": 0}
+{"model_id": "4acfd4fe5e444eb58b529df0d9d3c024", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -16377,12 +16398,12 @@ var element = document.getElementById('3d3f0da5-7573-455d-be0a-3923af6640e2');
 
 
 
-<div id="daabcfdf-feea-4f7f-853f-d8a785c94cc6" class="jupyter-widgets jp-OutputArea-output ">
+<div id="0da9377a-e15a-4c04-a7c6-f3dd39838b9a" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('daabcfdf-feea-4f7f-853f-d8a785c94cc6');
+var element = document.getElementById('0da9377a-e15a-4c04-a7c6-f3dd39838b9a');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "7e7e427f2709483ba987d5ef5f7b00ca", "version_major": 2, "version_minor": 0}
+{"model_id": "056fc02aa55e4891a0834e6a1bfc675f", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -16434,12 +16455,12 @@ solution because pyomo only supports a single objective function.</p>
 
 
 
-<div id="d15961e2-2806-49d6-a599-98560aaf8681" class="jupyter-widgets jp-OutputArea-output ">
+<div id="62fc7199-d648-4b89-b6c5-738ac046d906" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('d15961e2-2806-49d6-a599-98560aaf8681');
+var element = document.getElementById('62fc7199-d648-4b89-b6c5-738ac046d906');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "fba43b39c3b540cc866b58b52e955fea", "version_major": 2, "version_minor": 0}
+{"model_id": "d5f1029978f44be1af3d77473908382d", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -16531,7 +16552,7 @@ Solver:
       Number of bounded subproblems: 0
       Number of created subproblems: 0
   Error rc: 0
-  Time: 0.020127296447753906
+  Time: 0.019709110260009766
 </pre>
 </div>
 </div>
@@ -16789,144 +16810,156 @@ Specific_Transport_Flow : Specific Transport Flow
     </tr>
     <tr>
       <th>20</th>
-      <td>Demand_index</td>
+      <td>U_index</td>
       <td>None</td>
       <td>2</td>
     </tr>
     <tr>
       <th>21</th>
-      <td>Total_Demand_index</td>
+      <td>Demand_index</td>
       <td>None</td>
       <td>2</td>
     </tr>
     <tr>
       <th>22</th>
-      <td>L_index</td>
+      <td>Total_Demand_index</td>
       <td>None</td>
       <td>2</td>
     </tr>
     <tr>
       <th>23</th>
+      <td>L_index</td>
+      <td>None</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>24</th>
       <td>X_index</td>
       <td>None</td>
       <td>1</td>
     </tr>
     <tr>
-      <th>24</th>
+      <th>25</th>
       <td>Y_index</td>
       <td>None</td>
       <td>1</td>
     </tr>
     <tr>
-      <th>25</th>
+      <th>26</th>
       <td>d_index</td>
       <td>None</td>
       <td>6</td>
     </tr>
     <tr>
-      <th>26</th>
+      <th>27</th>
       <td>J_index</td>
       <td>None</td>
       <td>2</td>
     </tr>
     <tr>
-      <th>27</th>
+      <th>28</th>
       <td>Ef_index</td>
       <td>None</td>
       <td>3</td>
     </tr>
     <tr>
-      <th>28</th>
+      <th>29</th>
       <td>EF_index</td>
       <td>None</td>
       <td>36</td>
     </tr>
     <tr>
-      <th>29</th>
+      <th>30</th>
       <td>phi_index</td>
       <td>None</td>
       <td>12</td>
     </tr>
     <tr>
-      <th>30</th>
+      <th>31</th>
       <td>EI_index</td>
       <td>None</td>
       <td>12</td>
     </tr>
     <tr>
-      <th>31</th>
+      <th>32</th>
       <td>XI_index</td>
       <td>None</td>
-      <td>6</td>
-    </tr>
-    <tr>
-      <th>32</th>
-      <td>YI_index</td>
-      <td>None</td>
-      <td>6</td>
+      <td>2</td>
     </tr>
     <tr>
       <th>33</th>
-      <td>Flow_index</td>
+      <td>YI_index</td>
       <td>None</td>
       <td>2</td>
     </tr>
     <tr>
       <th>34</th>
-      <td>Storage_Service_Flow_index</td>
+      <td>dd_index</td>
       <td>None</td>
-      <td>12</td>
+      <td>2</td>
     </tr>
     <tr>
       <th>35</th>
-      <td>Specific_Material_Transport_Flow_index</td>
+      <td>Flow_index</td>
       <td>None</td>
       <td>2</td>
     </tr>
     <tr>
       <th>36</th>
-      <td>Specific_Transport_Flow_index</td>
+      <td>Storage_Service_Flow_index</td>
       <td>None</td>
-      <td>1</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>37</th>
-      <td>Demand_Selection_index</td>
+      <td>Specific_Material_Transport_Flow_index</td>
       <td>None</td>
       <td>2</td>
     </tr>
     <tr>
       <th>38</th>
-      <td>total_demand_constraint_index</td>
+      <td>Specific_Transport_Flow_index</td>
       <td>None</td>
-      <td>2</td>
+      <td>1</td>
     </tr>
     <tr>
       <th>39</th>
-      <td>material_flow_constraint_index</td>
+      <td>Demand_Selection_index</td>
       <td>None</td>
       <td>2</td>
     </tr>
     <tr>
       <th>40</th>
+      <td>total_demand_constraint_index</td>
+      <td>None</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>material_flow_constraint_index</td>
+      <td>None</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>42</th>
       <td>transport_constraint_index</td>
       <td>None</td>
       <td>1</td>
     </tr>
     <tr>
-      <th>41</th>
+      <th>43</th>
       <td>demand_selection_constraint_index</td>
       <td>None</td>
       <td>1</td>
     </tr>
     <tr>
-      <th>42</th>
+      <th>44</th>
       <td>specific_demand_constraint_index</td>
       <td>None</td>
       <td>2</td>
     </tr>
     <tr>
-      <th>43</th>
+      <th>45</th>
       <td>service_flow_link_constraint_index</td>
       <td>None</td>
       <td>1</td>

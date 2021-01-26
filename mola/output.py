@@ -3,6 +3,7 @@ Convert pyomo output to DataFrames
 """
 import pandas as pd
 import pyomo.environ as pe
+import mola.dataview as dv
 from functools import singledispatch
 
 
@@ -44,13 +45,13 @@ def get_objectives_frame(model_instance, max_object_size=100):
 
 
 @singledispatch
-def get_entity(cpt, lookup=dict()):
+def get_entity(cpt, lookup=dict(), drop=False):
     print('Type not supported')
 
 
 @get_entity.register(pe.pyomo.core.base.var.IndexedVar)
 @get_entity.register(pe.pyomo.core.base.param.IndexedParam)
-def _(cpt, lookup=dict()):
+def _(cpt, lookup=dict(), drop=False, units=None):
     v = cpt.extract_values()
     idx = cpt._index
 
@@ -64,6 +65,14 @@ def _(cpt, lookup=dict()):
             set_content = lookup.get_single_column(pyo_set.name)
             set_content.index.names = [pyo_set.name]
             df = df.join(set_content)
+
+    if units:
+        process_ref_ids = df.index.get_level_values(units[0]).to_list()
+        units_dfr = lookup.get_units(process_ref_ids, set_name=units[0])
+        df = df.merge(units_dfr, left_index=True, right_index=True)
+
+    if drop:
+        df = df.reset_index(drop=drop)
 
     return df
 
