@@ -10,7 +10,9 @@ import importlib
 
 def get_config(json_file_name):
     """
-    Returns a well-formed model configuration dictionary from json_file_name.
+    Returns a well-formed model configuration dictionary from json_file_name by
+    ensuring that parameters are rebuilt from sets.
+
     :param json_file_name: path to json configuration file
     :return: config dict
     """
@@ -69,11 +71,11 @@ def build_instance(config, settings=None):
     with open(parameters_json.name, 'w') as fp:
         json.dump(config['parameters'], fp)
 
-    # populate sets using DataPortal and temp files
-    concrete_model = spec.populate([sets_json.name, parameters_json.name])
-
     sets_json.close()
     parameters_json.close()
+
+    # populate sets using DataPortal and temp files
+    concrete_model = spec.populate([sets_json.name, parameters_json.name])
 
     return concrete_model
 

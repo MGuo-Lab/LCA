@@ -13,16 +13,24 @@ class TestScheduleSpecification(TestCase):
     def test_populate(self):
         # from a model config file write out sets and parameters to two temporary files
         # for the DataPortal in populate
+        # TODO: put this in a separate function as reuse in build_instance
         sets_json = NamedTemporaryFile(suffix='.json', delete=False)
         parameters_json = NamedTemporaryFile(suffix='.json', delete=False)
         with open(sets_json.name, 'w') as fp:
             json.dump(self.config['sets'], fp)
         with open(parameters_json.name, 'w') as fp:
             json.dump(self.config['parameters'], fp)
+        sets_json.close()
+        parameters_json.close()
         model_instance = self.spec.populate([sets_json.name, parameters_json.name])
         self.assertGreater(len(model_instance), 0)
         model_instance = self.spec.populate([sets_json.name, parameters_json.name],
-                                       elementary_flow_ref_ids=['e1, e2, e3'])
+                                            elementary_flow_ref_ids=['e1, e2, e3'])
+        self.assertGreater(len(model_instance), 0)
+
+    def test_populate_cost(self):
+        # separate set and parameter files for cost
+        model_instance = self.spec.populate(['test_cost_set_data.json', 'test_cost_parameters_data.json'])
         self.assertGreater(len(model_instance), 0)
 
     def test_populate_calculated_distance(self):

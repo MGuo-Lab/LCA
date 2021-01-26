@@ -1,11 +1,9 @@
-# module for creating sets and parameters on a notebook
-# should probably rename this module to input and update the relevant notebooks
+"""
+Module for creating sets and parameters on a notebook.
+"""
 import pandas as pd
-import pyomo.core as pyomo
-import pyomo.environ as pe
 from pathlib import Path
 import json
-import itertools
 
 
 def get_model_user_sets(spec, file_name):
@@ -24,7 +22,7 @@ def get_model_user_sets(spec, file_name):
             set_data.update(user_data)
 
     with open(model_json_path, 'w') as p:
-        json.dump(set_data, p)
+        json.dump(set_data, p, indent=4)
     print("Model sets saved")
 
     return set_data

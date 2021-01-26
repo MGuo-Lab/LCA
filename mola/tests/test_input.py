@@ -1,7 +1,7 @@
 # most of this functionality has moved to the output module
 from unittest import TestCase
 from pathlib import Path
-import mola.pyomoio as mp
+import mola.input as mp
 import pyomo.environ as pe
 import mola.specification4a as ms
 import json

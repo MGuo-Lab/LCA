@@ -1,1 +1,44 @@
-{"F_m": ["1f7bbd3e-fcd1-412d-8608-035b855ea735"], "F_s": [], "F_t": ["0ace02fa-eca5-482d-a829-c18e46a52db4", "4ecf1190-7028-4038-89b0-79adeb3e98cc", "559d5695-102a-4beb-9f7f-3db334c9b51d"], "D": ["d1"], "T": ["t1"], "K": ["k1"], "P_m": ["f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768", "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8", "760f1858-b0ef-3280-930e-88ebe4645061"], "P_t": ["44ad59ca-4fe0-394c-a6d9-5dea68783c23", "f615ae37-fa6d-4a47-958c-23234c986400", "9106bf8d-869d-425f-b8ee-0bf9a78bcf65", "97aa2533-ae98-3f8f-b3e2-3acb9d66a010", "b37252a8-fbb5-47cb-a3aa-1485d090bdfd", "660ba3fe-d7a5-4c43-8777-27d331934edf", "fe7d1840-4341-40fd-ba6d-fbba126ca7d3"], "P_s": [], "KPI": ["061b7db5-4f56-3368-bf50-9ff0fcc8dd1f"], "OBJ": ["environment", "cost"], "F": [], "P": []}
+{
+    "F_m": [
+        "1f7bbd3e-fcd1-412d-8608-035b855ea735"
+    ],
+    "F_s": [],
+    "F_t": [
+        "0ace02fa-eca5-482d-a829-c18e46a52db4",
+        "4ecf1190-7028-4038-89b0-79adeb3e98cc",
+        "559d5695-102a-4beb-9f7f-3db334c9b51d"
+    ],
+    "D": [
+        "d1"
+    ],
+    "T": [
+        "t1"
+    ],
+    "K": [
+        "k1"
+    ],
+    "P_m": [
+        "f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768",
+        "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
+        "760f1858-b0ef-3280-930e-88ebe4645061"
+    ],
+    "P_t": [
+        "44ad59ca-4fe0-394c-a6d9-5dea68783c23",
+        "f615ae37-fa6d-4a47-958c-23234c986400",
+        "9106bf8d-869d-425f-b8ee-0bf9a78bcf65",
+        "97aa2533-ae98-3f8f-b3e2-3acb9d66a010",
+        "b37252a8-fbb5-47cb-a3aa-1485d090bdfd",
+        "660ba3fe-d7a5-4c43-8777-27d331934edf",
+        "fe7d1840-4341-40fd-ba6d-fbba126ca7d3"
+    ],
+    "P_s": [],
+    "KPI": [
+        "061b7db5-4f56-3368-bf50-9ff0fcc8dd1f"
+    ],
+    "OBJ": [
+        "environment",
+        "cost"
+    ],
+    "F": [],
+    "P": []
+}

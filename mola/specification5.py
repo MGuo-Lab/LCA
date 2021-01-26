@@ -534,16 +534,29 @@ class ScheduleSpecification(Specification):
         flows = list(olca_dp.data('F_m')) + list(olca_dp.data('F_s')) + list(olca_dp.data('F_t'))
         processes = list(olca_dp.data('P_m')) + list(olca_dp.data('P_s')) + list(olca_dp.data('P_t'))
         if elementary_flow_ref_ids is None:
+            # elementary flows
             olca_dp.load(filename=db_file, using='sqlite3',
                          query="SELECT REF_ID FROM TBL_FLOWS WHERE FLOW_TYPE='ELEMENTARY_FLOW'",
                          set=self.abstract_model.E)
-            ice_sql = sq.build_impact_category_elementary_flow(ref_ids=olca_dp.data('KPI'))
-            pe_sql = sq.build_process_elementary_flow(flow_ref_ids=flows, process_ref_ids=processes)
-            olca_dp.load(filename=db_file, using='sqlite3', query=ice_sql,
-                         param=self.abstract_model.Ef, index=(self.abstract_model.KPI, self.abstract_model.E))
+
+            # only load KPI if required in optimisation
+            if len(olca_dp.data('KPI')) > 0:
+                ice_sql = sq.build_impact_category_elementary_flow(ref_ids=olca_dp.data('KPI'))
+                olca_dp.load(filename=db_file, using='sqlite3', query=ice_sql,
+                             param=self.abstract_model.Ef, index=(self.abstract_model.KPI, self.abstract_model.E))
+
+            # breakdown of process into elementary flows
+            pe_sql = sq.build_process_elementary_flow(process_ref_ids=processes)
             olca_dp.load(filename=db_file, using='sqlite3', query=pe_sql, param=self.abstract_model.EF,
                          index=(self.abstract_model.KPI, self.abstract_model.F, self.abstract_model.P))
+
+            # cost of product flow from process
+            pfc_sql = sq.build_product_flow_cost(process_ref_ids=processes, time=olca_dp.data('T'))
+            olca_dp.load(filename=db_file, using='sqlite3', query=pfc_sql, param=self.abstract_model.phi,
+                         index=(self.abstract_model.F, self.abstract_model.P, self.abstract_model.T))
+
         else:
+            # for testing
             olca_dp.__setitem__('E', elementary_flow_ref_ids)
             impact_factors = {(kpi, e): 2 for kpi in olca_dp.data('KPI') for e in olca_dp.data('E')}
             process_breakdown = {(e, f, p): 3 for e in olca_dp.data('E') for f in flows for p in processes}
