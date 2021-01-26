@@ -1,0 +1,207 @@
+{
+    "C": [
+        {
+            "index": [
+                "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                "k1",
+                "Blend_1",
+                "t1"
+            ],
+            "value": 1.0
+        },
+        {
+            "index": [
+                "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                "k1",
+                "Blend_2",
+                "t1"
+            ],
+            "value": 1.0
+        },
+        {
+            "index": [
+                "1c819f15-1202-4fa9-8ef9-72196c2dfb85",
+                "k1",
+                "Blend_1",
+                "t1"
+            ],
+            "value": 1.0
+        },
+        {
+            "index": [
+                "1c819f15-1202-4fa9-8ef9-72196c2dfb85",
+                "k1",
+                "Blend_2",
+                "t1"
+            ],
+            "value": 1.0
+        },
+        {
+            "index": [
+                "9c6b672a-661e-40c3-a9a0-902b33cc6871",
+                "k1",
+                "Blend_1",
+                "t1"
+            ],
+            "value": 1.0
+        },
+        {
+            "index": [
+                "9c6b672a-661e-40c3-a9a0-902b33cc6871",
+                "k1",
+                "Blend_2",
+                "t1"
+            ],
+            "value": 1.0
+        }
+    ],
+    "Demand": [
+        {
+            "index": [
+                "Blend_1",
+                "k1",
+                "t1"
+            ],
+            "value": 0.0
+        },
+        {
+            "index": [
+                "Blend_2",
+                "k1",
+                "t1"
+            ],
+            "value": 0.0
+        }
+    ],
+    "Total_Demand": [
+        {
+            "index": [
+                "Blend_1",
+                "k1"
+            ],
+            "value": 0.0
+        },
+        {
+            "index": [
+                "Blend_2",
+                "k1"
+            ],
+            "value": 0.0
+        }
+    ],
+    "X": [
+        {
+            "index": [
+                "k1",
+                "t1"
+            ],
+            "value": Infinity
+        }
+    ],
+    "Y": [
+        {
+            "index": [
+                "k1",
+                "t1"
+            ],
+            "value": Infinity
+        }
+    ],
+    "d": [
+        {
+            "index": [
+                "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
+                "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                "k1",
+                "t1"
+            ],
+            "value": 0.0
+        },
+        {
+            "index": [
+                "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
+                "1c819f15-1202-4fa9-8ef9-72196c2dfb85",
+                "k1",
+                "t1"
+            ],
+            "value": 0.0
+        },
+        {
+            "index": [
+                "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
+                "9c6b672a-661e-40c3-a9a0-902b33cc6871",
+                "k1",
+                "t1"
+            ],
+            "value": 0.0
+        },
+        {
+            "index": [
+                "1ee47b1f-7b9e-4f7e-b2ee-2820ff444c8b",
+                "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                "k1",
+                "t1"
+            ],
+            "value": 0.0
+        },
+        {
+            "index": [
+                "1ee47b1f-7b9e-4f7e-b2ee-2820ff444c8b",
+                "1c819f15-1202-4fa9-8ef9-72196c2dfb85",
+                "k1",
+                "t1"
+            ],
+            "value": 0.0
+        },
+        {
+            "index": [
+                "1ee47b1f-7b9e-4f7e-b2ee-2820ff444c8b",
+                "9c6b672a-661e-40c3-a9a0-902b33cc6871",
+                "k1",
+                "t1"
+            ],
+            "value": 0.0
+        },
+        {
+            "index": [
+                "8977f53b-5bd8-3eaf-8655-664538e40790",
+                "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                "k1",
+                "t1"
+            ],
+            "value": 0.0
+        },
+        {
+            "index": [
+                "8977f53b-5bd8-3eaf-8655-664538e40790",
+                "1c819f15-1202-4fa9-8ef9-72196c2dfb85",
+                "k1",
+                "t1"
+            ],
+            "value": 0.0
+        },
+        {
+            "index": [
+                "8977f53b-5bd8-3eaf-8655-664538e40790",
+                "9c6b672a-661e-40c3-a9a0-902b33cc6871",
+                "k1",
+                "t1"
+            ],
+            "value": 0.0
+        }
+    ],
+    "w": [
+        {
+            "index": [
+                "environment"
+            ],
+            "value": 0.0
+        },
+        {
+            "index": [
+                "cost"
+            ],
+            "value": 0.0
+        }
+    ]
+}
