@@ -1,7 +1,7 @@
 # Mathematical Optimisation of Life-Cycle Assessment Models
 
 General information on the project is contained in the 
-[wiki](https://github.com/paulemms/LCA/wiki). The code repository contains two Python
+[wiki](https://github.com/MGuo-Lab/LCA/wiki). The code repository contains two Python
 packages and a collection of Jupyter Notebooks.
 
 * The `mola` (Mathematical Optimisation for Life-cycle Assessment) package
