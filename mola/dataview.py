@@ -12,7 +12,7 @@ def get_table_names(conn):
     """
     Get table names from sqlite database.
 
-    :param conn: database connection
+    :param sqlite3.Connection conn: database connection
     :return: Dataframe
     """
     sqlite_master = Table('sqlite_master')
