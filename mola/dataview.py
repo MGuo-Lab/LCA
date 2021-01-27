@@ -31,9 +31,9 @@ def get_table(conn, name, chunk_size=None):
     """
     Get table from sqlite database.
 
-    :param conn: database connection
-    :param name: name of table
-    :param chunk_size: if specified, return an iterator where chunk_size
+    :param sqlite3.Connection conn: database connection
+    :param str name: name of table
+    :param int chunk_size: if specified, return an iterator where chunk_size
     is the number of rows to include in each chunk.
     :return: Dataframe or iterator
     """
