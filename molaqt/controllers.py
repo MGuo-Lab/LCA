@@ -57,7 +57,7 @@ class CustomController(Controller):
         self.sets_editor = mw.SetsEditor(user_config['sets'], self.spec, self.lookup)
         self.parameters_editor = mw.ParametersEditor(self.sets_editor.sets, user_config['parameters'],
                                                      self.spec, self.lookup)
-        self.model_run = mr.ModelRun(self.lookup, self.spec)
+        self.model_run = mr.ModelRun(self.lookup)
         self.model_build = mqb.ModelBuild(self)
 
         # initialize tab screen
@@ -105,7 +105,7 @@ class StandardController(Controller):
         self.sets_editor = mw.SetsEditor(user_config['sets'], self.spec, self.lookup)
         self.parameters_editor = mw.ParametersEditor(self.sets_editor.sets, user_config['parameters'],
                                                      self.spec, self.lookup)
-        self.model_run = mr.ModelRun(self.lookup, self.spec)
+        self.model_run = mr.ModelRun(self.lookup)
         self.model_build = mqb.ModelBuild(self)
 
         # initialize tab screen

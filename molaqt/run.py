@@ -1,24 +1,20 @@
-import sys
 import io
-from pathlib import Path
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QTreeWidget, QTableView, QGridLayout, QTextEdit, \
-    QTreeWidgetItem, QLabel, QRadioButton
+from PyQt5.QtWidgets import QWidget, QPushButton, QTreeWidget, QTableView, QGridLayout, QTextEdit, \
+    QTreeWidgetItem, QLabel
 import pyomo.environ as pe
+from pyomo.environ import units as pu
 import mola.output as mo
-import mola.dataimport as di
-import mola.dataview as dv
 import molaqt.datamodel as md
 
 
 class ModelRun(QWidget):
 
-    def __init__(self, lookup, spec):
+    def __init__(self, lookup):
 
         super().__init__()
         self.concrete_model = None
         self.results = None
         self.lookup = lookup
-        self.spec = spec
 
         # button
         self.run_button = QPushButton("Run")
@@ -69,7 +65,7 @@ class ModelRun(QWidget):
             if item.parent().text(0) == 'Variables':
                 cpt = self.concrete_model.find_component(item.text(0))
                 self.cpt_doc.setText(item.text(0) + ': ' + cpt.doc)
-                df = mo.get_entity(cpt, self.lookup).reset_index(drop=True)
+                df = mo.get_entity(cpt, self.lookup, units=True)
                 run_model = md.PandasModel(df)
                 self.run_table.setModel(run_model)
                 # self.run_table.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)

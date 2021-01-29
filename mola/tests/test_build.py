@@ -7,9 +7,9 @@ import mola.specification5 as ms
 class TestBuild(TestCase):
     def test_build_instance(self):
         config_files = [
+            '../../config/Lemon_Toy_Model.json',
             'test_model_config.json',
             '../../config/test_custom_controller.json',
-            '../../config/Lemon_Toy_Model.json'
         ]
         for config_file in config_files:
             config = mb.get_config(config_file)

@@ -7,6 +7,8 @@ import pandas as pd
 from pypika import Query, Table, Criterion
 import pypika.functions as pf
 
+from mola import Package
+
 
 def get_table_names(conn):
     """
@@ -124,7 +126,6 @@ def get_lookup_tables(conn, single_column=False):
         q = Query \
             .from_(tbl) \
             .select(tbl.REF_ID, tbl.NAME)
-        print(q)
         d[k] = pd.read_sql(str(q), conn, index_col='REF_ID')
 
     # flows
@@ -132,7 +133,6 @@ def get_lookup_tables(conn, single_column=False):
     q = Query \
         .from_(flows) \
         .select(flows.REF_ID.as_('FLOW_REF_ID'), flows.NAME)
-    print(q)
     d['flows'] = pd.read_sql(str(q), conn, index_col='FLOW_REF_ID')
 
     # processes
@@ -143,7 +143,6 @@ def get_lookup_tables(conn, single_column=False):
         .left_join(locations).on(pf.Cast(processes.F_LOCATION, 'int') == locations.ID) \
         .select(processes.REF_ID.as_('PROCESS_REF_ID'), processes.NAME.as_('PROCESS_NAME'),
                 locations.NAME.as_('LOCATION_NAME'))  # FIXME
-    print(q)
     d['processes'] = pd.read_sql(str(q), conn, index_col='PROCESS_REF_ID')
     d['P'] = d['P_m'] = d['P_s'] = d['P_t'] = d['processes']
 
@@ -153,7 +152,6 @@ def get_lookup_tables(conn, single_column=False):
         .from_(flows) \
         .select(flows.REF_ID, flows.NAME) \
         .where(flows.FLOW_TYPE == 'PRODUCT_FLOW')
-    print(q)
     d['product_flows'] = pd.read_sql(str(q), conn, index_col='REF_ID')
     d['F'] = d['F_m'] = d['F_s'] = d['F_t'] = d['product_flows']
 
@@ -167,7 +165,6 @@ def get_lookup_tables(conn, single_column=False):
             methods.NAME.as_('method_NAME'),
             categories.REF_ID.as_('REF_ID'), categories.NAME.as_('category_NAME')
         )
-    print(q)
     d['KPI'] = pd.read_sql(str(q), conn, index_col='REF_ID')
 
     # only return a single joined column in data frame
@@ -246,6 +243,7 @@ def get_impact_categories(conn, method_name=None, category_name=None,
         q = q.where(Criterion.any([methods.name.like(p) for p in method_name]))
     if category_name:
         q = q.where(Criterion.any([categories.name.like(p) for p in category_name]))
+    # TODO: use a conditional on all prints
     print(q)
     impact_categories_dfr = pd.read_sql(str(q), conn)
 
@@ -619,11 +617,12 @@ def get_process_product_flow_units(conn, process_ref_ids, set_name='P'):
         .left_join(processes).on(processes.ID == sq.F_OWNER) \
         .left_join(units).on(units.ID == sq.F_UNIT) \
         .select(
-            processes.REF_ID.as_(set_name), units.NAME.as_('UNITS')
+            processes.REF_ID.as_(set_name), units.NAME.as_('Units')
         )\
         .where(flows.FlOW_TYPE == 'PRODUCT_FLOW')
 
-    print(q)
+    if Package.config('show.SQL'):
+        print(q)
     product_flow_dfr = pd.read_sql(str(q), conn)
     product_flow_dfr.set_index(set_name, inplace=True)
 

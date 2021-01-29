@@ -45,19 +45,29 @@ def get_objectives_frame(model_instance, max_object_size=100):
 
 
 @singledispatch
-def get_entity(cpt, lookup=dict(), drop=False):
+def get_entity(cpt, lookup=dict(), drop_index=False):
     print('Type not supported')
 
 
 @get_entity.register(pe.pyomo.core.base.var.IndexedVar)
 @get_entity.register(pe.pyomo.core.base.param.IndexedParam)
-def _(cpt, lookup=dict(), drop=False, units=None):
+def _(cpt, lookup=dict(), drop_index=True, units=None):
     v = cpt.extract_values()
     idx = cpt._index
 
     s = pd.Series(v)
     s.index.names = [j.name for j in idx.subsets()]
     df = pd.DataFrame(s, columns=[cpt.name])
+
+    if units:
+        if type(units) == bool:
+            u = str(cpt.get_units())
+        else:
+            u = units[0]
+        if u in df.index.names:
+            process_ref_ids = df.index.get_level_values(u).to_list()
+            units_dfr = lookup.get_units(process_ref_ids, set_name=u)
+            df = df.merge(units_dfr, left_index=True, right_index=True)
 
     # join text onto table from lookup
     for pyo_set in idx.subsets():
@@ -66,13 +76,8 @@ def _(cpt, lookup=dict(), drop=False, units=None):
             set_content.index.names = [pyo_set.name]
             df = df.join(set_content)
 
-    if units:
-        process_ref_ids = df.index.get_level_values(units[0]).to_list()
-        units_dfr = lookup.get_units(process_ref_ids, set_name=units[0])
-        df = df.merge(units_dfr, left_index=True, right_index=True)
-
-    if drop:
-        df = df.reset_index(drop=drop)
+    if drop_index:
+        df = df.reset_index(drop=drop_index)
 
     return df
 

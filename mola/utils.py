@@ -38,3 +38,25 @@ def make_config(sets_json, parameters_json, config_json='config/model_config.jso
         json.dump(config, fp)
 
     return config
+
+
+class Package:
+    """
+    Package settings
+    """
+
+    __conf = {
+        'show.SQL': True,
+    }
+    __setters = ["show.SQL"]
+
+    @staticmethod
+    def config(name):
+        return Package.__conf[name]
+
+    @staticmethod
+    def set(name, value):
+        if name in Package.__setters:
+            Package.__conf[name] = value
+        else:
+            raise NameError("Name not accepted in set() method")

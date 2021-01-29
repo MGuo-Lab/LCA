@@ -14,10 +14,10 @@ import pandas as pd
 
 # units
 pu.load_definitions_from_strings([
-    'F = [Flow]',
-    'F_m = [Material Flow]',
-    'F_s = [Service Flow]',
-    'F_t = [Transport Flow]',
+    'P = [Product Flow]',
+    'P_m = [Material Product Flow]',
+    'P = [Service Product Flow]',
+    'P_t = [Transport Product Flow]',
     'D = [Demand]'
 ])
 
@@ -63,9 +63,9 @@ class SelectionSpecification(Specification):
         'E': 'Elementary Flows in OpenLCA database',
     }
     user_defined_parameters = {
-        'C': {'index': ['F_m', 'D'], 'doc': 'Conversion factor for material flows', 'unit': pu.D/pu.F_m},
+        'C': {'index': ['F_m', 'D'], 'doc': 'Conversion factor for material flows', 'unit': pu.D/pu.P_m},
         'U': {'index': ['F_m', 'F_t'], 'doc': 'Conversion factor for material flow units in transport flow units',
-              'unit': pu.F_t / pu.F_m},
+              'unit': pu.P_t / pu.P_m},
         'Demand': {'index': ['D'], 'doc': 'Specific demand', 'unit': pu.D},
         'Total_Demand': {'index': ['D'], 'doc': 'Total demand', 'unit': pu.D},
         'd': {'index': ['P', 'F_m'], 'doc': 'Distance', 'unit': pu.km},
@@ -120,16 +120,16 @@ class SelectionSpecification(Specification):
 
         # Variables
         abstract_model.Flow = pe.Var(abstract_model.F_m, abstract_model.P_m,
-                                     within=pe.NonNegativeReals, doc='Material flow', units=pu.F_m)
+                                     within=pe.NonNegativeReals, doc='Material flow', units=pu.P_m)
         abstract_model.Specific_Material_Transport_Flow = pe.Var(abstract_model.F_m, abstract_model.P_m,
                                                                  abstract_model.F_t, abstract_model.P_t,
                                                                  within=pe.NonNegativeReals,
                                                                  doc='Specific Material Transport Flow',
-                                                                 units=pu.F_m)
+                                                                 units=pu.P_m)
         abstract_model.Specific_Transport_Flow = pe.Var(abstract_model.F_t, abstract_model.P_t,
                                                         within=pe.NonNegativeReals,
                                                         doc='Specific Transport Flow',
-                                                        units=pu.F_m * pu.F_t)
+                                                        units=pu.P_t)
         abstract_model.Demand_Selection = pe.Var(abstract_model.D,
                                                  within=pe.Binary,
                                                  doc='Selection of Demand Product')
@@ -333,9 +333,9 @@ class ScheduleSpecification(Specification):
         'AKPI': 'All key performance indicators in an openLCA database',
     }
     user_defined_parameters = {
-        'C': {'index': ['F_m', 'K', 'D', 'T'], 'doc': 'Conversion factor for material flows', 'unit': pu.D/pu.F_m},
+        'C': {'index': ['F_m', 'K', 'D', 'T'], 'doc': 'Conversion factor for material flows', 'unit': pu.D/pu.P_m},
         'U': {'index': ['F_m', 'F_t'], 'doc': 'Conversion factor for material flow units in transport flow units',
-              'unit': pu.F_t / pu.F_m},
+              'unit': pu.P_t / pu.P_m},
         'Demand': {'index': ['D', 'K', 'T'], 'doc': 'Specific demand', 'unit': pu.D},
         'Total_Demand': {'index': ['D', 'K'], 'doc': 'Total demand', 'unit': pu.D},
         'L': {'index': ['F_m', 'P_m', 'F_s', 'P_s'], 'doc': 'Binary conversion factor between service flows',
@@ -405,7 +405,9 @@ class ScheduleSpecification(Specification):
         def distance_rule(model, pm, fm, k, t):
             if self.settings['distance_calculated']:
                 # need to strip units for call to pygeo.haversine
-                return pygeo.haversine(model.Y[k, t].value, model.X[k, t].value, model.YI[pm, fm].value, model.XI[pm, fm].value) / 1000 * pu.km
+                return pygeo.haversine(
+                    model.Y[k, t].value, model.X[k, t].value,
+                    model.YI[pm, fm].value, model.XI[pm, fm].value) / 1000 * pu.km
             else:
                 return model.d[pm, fm, k, t]
         self.abstract_model.dd = pe.Param(abstract_model.P_m, abstract_model.F_m, abstract_model.K,
@@ -414,21 +416,21 @@ class ScheduleSpecification(Specification):
 
         # Variables
         abstract_model.Flow = pe.Var(abstract_model.F_m, abstract_model.P_m, abstract_model.K, abstract_model.T,
-                                     within=pe.NonNegativeReals, doc='Material flow', units=pu.F_m)
+                                     within=pe.NonNegativeReals, doc='Material flow', units=pu.P_m)
         abstract_model.Storage_Service_Flow = pe.Var(abstract_model.F, abstract_model.P, abstract_model.K,
                                                      abstract_model.T, within=pe.NonNegativeReals,
-                                                     doc='Storage Service Flow', units=pu.F_s)
+                                                     doc='Storage Service Flow', units=pu.P)
         abstract_model.Specific_Material_Transport_Flow = pe.Var(abstract_model.F_m, abstract_model.P_m,
                                                                  abstract_model.F_t, abstract_model.P_t,
                                                                  abstract_model.K, abstract_model.T,
                                                                  within=pe.NonNegativeReals,
                                                                  doc='Specific Material Transport Flow',
-                                                                 units=pu.F_m)
+                                                                 units=pu.P_m)
         abstract_model.Specific_Transport_Flow = pe.Var(abstract_model.F_t, abstract_model.P_t,
                                                         abstract_model.K, abstract_model.T,
                                                         within=pe.NonNegativeReals,
                                                         doc='Specific Transport Flow',
-                                                        units=pu.F_m * pu.F_t)
+                                                        units=pu.P_t)
         abstract_model.Demand_Selection = pe.Var(abstract_model.D, abstract_model.K, abstract_model.T,
                                                  within=pe.Binary,
                                                  doc='Selection of Demand Product')
@@ -608,7 +610,8 @@ class ScheduleSpecification(Specification):
             'C': [{'index': [fm, k, d, t], 'value': 0}
                   for fm in user_sets['F_m'] for d in user_sets['D'] for k in user_sets['K']
                   for t in user_sets['T']],
-            'U': [{'index': [fm, ft], 'value': 1}
+            # kg to tonnes
+            'U': [{'index': [fm, ft], 'value': 0.001}
                   for fm in user_sets['F_m'] for ft in user_sets['F_t']],
             'd': [{'index': [pm, fm, k, t], 'value': 0}
                   for pm in user_sets['P_m'] for fm in user_sets['F_m'] for k in user_sets['K']

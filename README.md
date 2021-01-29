@@ -12,8 +12,9 @@ of life-cycle assessment in a Python script or a Jupyter notebook.
 a user to configure an optimisation problem using a GUI and
 then obtain the results using a solver.
 
-* The `notebooks` directory contains a collection of Jupyter notebooks that describe
-Toy optimisation problems that illustrate the use of the `mola` package.
+* The `notebooks` directory contains Jupyter notebooks that describe the optimisation model and 
+its Python implementation. There are also notebooks containing Toy optimisation problems that demonstrate the use of the
+`mola` package. Specific links are provided on the [wiki](https://github.com/MGuo-Lab/LCA/wiki).
  
  
  

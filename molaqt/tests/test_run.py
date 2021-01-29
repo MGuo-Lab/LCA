@@ -1,6 +1,8 @@
 import sys
 import os
 from unittest import TestCase
+
+from pyomo.environ import units as pu
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtTest import QTest
 from PyQt5.Qt import Qt
@@ -19,8 +21,8 @@ class ModelRunTest(TestCase):
     def test_model_run(self):
 
         setting = mqu.system_settings(testing=True)
-        config_path = setting['config_path'].joinpath('Orange_Toy_Model.json')
-        config = mqu.build_config(config_path)
+        config_path = setting['config_path'].joinpath('Lemon_Toy_Model.json')
+        config = mb.get_config(config_path)
         instance = mb.build_instance(config)
 
         # get lookups from db
@@ -28,8 +30,7 @@ class ModelRunTest(TestCase):
         lookup = dv.LookupTables(conn)
 
         # setup a model run
-        spec = mb.create_specification(config['specification'])
-        model_run = mr.ModelRun(lookup, spec)
+        model_run = mr.ModelRun(lookup)
         model_run.concrete_model = instance
         model_run.show()
 
