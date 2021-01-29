@@ -7,7 +7,7 @@ from PyQt5.Qt import Qt
 
 import mola.dataimport as di
 import mola.dataview as dv
-import mola.utils as mu
+import mola.build as mb
 
 import molaqt.run as mr
 import molaqt.utils as mqu
@@ -21,14 +21,14 @@ class ModelRunTest(TestCase):
         setting = mqu.system_settings(testing=True)
         config_path = setting['config_path'].joinpath('Orange_Toy_Model.json')
         config = mqu.build_config(config_path)
-        instance = mu.build_instance(config)
+        instance = mb.build_instance(config)
 
         # get lookups from db
         conn = di.get_sqlite_connection()
         lookup = dv.LookupTables(conn)
 
         # setup a model run
-        spec = mu.create_specification(config['specification'])
+        spec = mb.create_specification(config['specification'])
         model_run = mr.ModelRun(lookup, spec)
         model_run.concrete_model = instance
         model_run.show()

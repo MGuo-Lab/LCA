@@ -1,7 +1,7 @@
 from pathlib import Path
 import json
 
-import mola.utils as mu
+import mola.build as mb
 
 
 def get_new_config(specification_class, database_path, doc_file):
@@ -24,7 +24,7 @@ def get_config(json_file_name, testing=True):
     with open(str(config_path)) as jf:
         model_config = json.load(jf)
 
-    spec = mu.create_specification(model_config['specification'])
+    spec = mb.create_specification(model_config['specification'])
 
     return model_config, spec
 
@@ -67,7 +67,7 @@ def build_config(config_path):
         config = json.load(fp)
 
     # load specification from config file
-    spec = mu.create_specification(config['specification'])
+    spec = mb.create_specification(config['specification'])
 
     sets = spec.get_default_sets()
     sets.update(config['sets'])

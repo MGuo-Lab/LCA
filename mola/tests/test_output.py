@@ -1,13 +1,14 @@
+# Unit tests for output functions
 from unittest import TestCase
 import mola.output as o
 import mola.dataimport as di
 import mola.dataview as dv
-import mola.utils as mu
+import mola.build as mb
 
 
 class Output(TestCase):
-    config = mu.get_config('test_model_config.json')
-    instance = mu.build_instance(config)
+    config = mb.get_config('test_model_config.json')
+    instance = mb.build_instance(config)
     conn = di.get_sqlite_connection()
     lookup = dv.LookupTables(conn)
 

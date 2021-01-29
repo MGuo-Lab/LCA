@@ -531,7 +531,7 @@ class ScheduleSpecification(Specification):
             if json_file:
                 olca_dp.load(filename=json_file)
 
-        # db data
+        # simple set data from db (this data is not currently using in the model)
         olca_dp.load(filename=db_file, using='sqlite3', query="SELECT REF_ID FROM TBL_FLOWS",
                      set=self.abstract_model.AF)
         olca_dp.load(filename=db_file, using='sqlite3', query="SELECT REF_ID FROM TBL_PROCESSES",

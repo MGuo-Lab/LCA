@@ -1,7 +1,7 @@
 import pandas as pd
 from PyQt5.QtWidgets import QWidget, QPushButton, QListWidget, QTableView, QGridLayout, QMessageBox
 import mola.output as mo
-import mola.utils as mu
+import mola.build as mb
 import molaqt.datamodel as dm
 
 
@@ -38,7 +38,7 @@ class ModelBuild(QWidget):
         print('Build started')
         try:
             config = self.controller.get_config()
-            self.concrete_model = mu.build_instance(config, self.controller.spec.settings)
+            self.concrete_model = mb.build_instance(config, self.controller.spec.settings)
             if self.controller.model_run is not None:
                 self.controller.model_run.concrete_model = self.concrete_model
             self.build_list.clear()

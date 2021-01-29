@@ -1,5 +1,5 @@
 """
-Module for generating SQL queries for a pyomo DataPortal
+Module for generating SQL queries for a abstract model in a Specification
 """
 from pypika import Query, Table
 from pypika.terms import PseudoColumn
@@ -122,10 +122,77 @@ def build_location(process_ref_ids=None):
     return str(q)
 
 
+def build_flow_reference_unit(flow_ref_ids=None):
+    """
+    Build a query to get flows and reference units from an openLCA database.
+
+    :param list[str] flow_ref_ids: list of flow reference IDs
+    :return: SQL string
+    """
+
+    flows = Table('TBL_FLOWS')
+    flow_properties = Table('TBL_FLOW_PROPERTIES')
+    unit_groups = Table('TBL_UNIT_GROUPS')
+    units = Table('TBL_UNITS')
+
+    # convert reference ids to openLCA flow ids
+    if flow_ref_ids:
+        flow_id = flows.select(flows.ID).where(flows.REF_ID.isin(flow_ref_ids))
+    else:
+        flow_id = flows.select(flows.ID)
+
+    # join flows to properties and units
+    q = Query\
+        .from_(flows) \
+        .left_join(flow_properties).on(flows.F_REFERENCE_FLOW_PROPERTY == flow_properties.ID) \
+        .left_join(unit_groups).on(flow_properties.F_UNIT_GROUP == unit_groups.ID) \
+        .left_join(units).on(unit_groups.F_REFERENCE_UNIT == units.ID) \
+        .select(flows.ID, flows.NAME, flows.F_REFERENCE_FLOW_PROPERTY, unit_groups.F_REFERENCE_UNIT,
+                units.NAME.as_('UNITS_NAME')) \
+        .where(flows.ID.isin(flow_id))
+
+    return str(q)
+
+
+def build_product_flow_unit(flow_ref_ids=None):
+    """
+    Build a query to get product flows and units from the exchanges table in an openLCA database.
+
+    :param list[str] flow_ref_ids: list of flow reference IDs
+    :return: SQL string
+    """
+
+    flows = Table('TBL_FLOWS')
+    exchanges = Table('TBL_EXCHANGES')
+    flow_properties = Table('TBL_FLOW_PROPERTIES')
+    # flow_property_factors = Table('TBL_FLOW_PROPERTY_FACTORS')
+    unit_groups = Table('TBL_UNIT_GROUPS')
+    units = Table('TBL_UNITS')
+
+    # convert reference ids to openLCA product flow ids
+    flow_id = flows.select(flows.ID).where(flows.FLOW_TYPE == 'PRODUCT_FLOW')
+    if flow_ref_ids:
+        flow_id = flow_id.where(flows.REF_ID.isin(flow_ref_ids))
+
+    # sub-query to restrict to exchanges to product flows
+    sq = Query \
+        .from_(exchanges) \
+        .select(exchanges.ID, exchanges.F_FLOW, exchanges.F_UNIT) \
+        .where(exchanges.F_FLOW.isin(flow_id))
+
+    q = Query \
+        .from_(sq) \
+        .left_join(flows).on(sq.F_FLOW == flows.ID) \
+        .left_join(units).on(sq.F_UNIT == units.ID) \
+        .select(flows.NAME, units.NAME.as_('UNITS_NAME'))
+
+    return str(q)
+
+
 def build_product_flow(process_ref_ids=None):
     """
     Build a query to get processes and their product flows
-    :param list[str] process_ref_ids:
+    :param list[str] process_ref_ids: list of process reference ids
     :return: SQL string
     """
 

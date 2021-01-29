@@ -9,9 +9,8 @@ from PyQt5.QtWidgets import QApplication
 
 import mola.dataimport as di
 import mola.dataview as dv
-import mola.specification5 as ms
 import molaqt.utils as mqu
-import mola.utils as mu
+import mola.build as mb
 import molaqt.widgets as mw
 
 app = QApplication(sys.argv)
@@ -114,14 +113,12 @@ class TestLinkParameterDiagram(TestCase):
     model_config, spec = mqu.get_config('Orange_Toy_Model.json', testing=True)
 
     # rebuild parameters
-    pars = mu.build_parameters(model_config['sets'], model_config['parameters'], spec)
+    pars = mb.build_parameters(model_config['sets'], model_config['parameters'], spec)
 
     def test_init(self):
         # convert parameter json to DataFrame
         df = pd.DataFrame(self.pars['J'])
         index_sets = self.spec.user_defined_parameters['J']['index']
-        # df[index_sets] = pd.DataFrame(df["index"].to_list(), columns=index_sets)
-        # df = df.drop('index', axis=1)
 
         link_diagram = mw.LinkParameterDiagram(df, index_sets, self.lookup)
         html_path = link_diagram.get_html_path()
@@ -131,4 +128,4 @@ class TestLinkParameterDiagram(TestCase):
 
         if 'IGNORE_EXEC' not in os.environ:
             app.exec()
-        pass
+        self.assertIsInstance(html_path, Path)

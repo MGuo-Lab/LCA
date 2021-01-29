@@ -1,10 +1,10 @@
 from pathlib import Path
-from PyQt5.QtWidgets import QTextEdit, QTabWidget, QWidget, QHBoxLayout
+from PyQt5.QtWidgets import QTabWidget, QWidget, QHBoxLayout
 
 import mola.dataimport as di
 import mola.dataview as dv
-import mola.utils as mu
-import molaqt.build as mb
+import mola.build as mb
+import molaqt.build as mqb
 import molaqt.run as mr
 import molaqt.widgets as mw
 
@@ -19,7 +19,7 @@ class Controller(QWidget):
         super().__init__()
         self.saved = False
         self.user_config = user_config
-        self.spec = mu.create_specification(user_config['specification'], user_config['settings'])
+        self.spec = mb.create_specification(user_config['specification'], user_config['settings'])
         print("*** Specification settings:", user_config['settings'])
 
     def get_config(self):
@@ -58,7 +58,7 @@ class CustomController(Controller):
         self.parameters_editor = mw.ParametersEditor(self.sets_editor.sets, user_config['parameters'],
                                                      self.spec, self.lookup)
         self.model_run = mr.ModelRun(self.lookup, self.spec)
-        self.model_build = mb.ModelBuild(self)
+        self.model_build = mqb.ModelBuild(self)
 
         # initialize tab screen
         self.tabs = QTabWidget()
@@ -104,9 +104,9 @@ class StandardController(Controller):
         # add widgets for sets, parameters, build, run
         self.sets_editor = mw.SetsEditor(user_config['sets'], self.spec, self.lookup)
         self.parameters_editor = mw.ParametersEditor(self.sets_editor.sets, user_config['parameters'],
-                                                  self.spec, self.lookup)
+                                                     self.spec, self.lookup)
         self.model_run = mr.ModelRun(self.lookup, self.spec)
-        self.model_build = mb.ModelBuild(self)
+        self.model_build = mqb.ModelBuild(self)
 
         # initialize tab screen
         self.tabs = QTabWidget()

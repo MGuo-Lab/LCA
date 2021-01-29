@@ -7,12 +7,13 @@ from PyQt5.QtCore import Qt, QUrl, pyqtSlot
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QGridLayout, QTableView, QHeaderView, QLineEdit, QDialog, \
     QAbstractItemView, QComboBox, QDialogButtonBox, QPushButton, QWidget, QListWidget, QAction, QLabel, QInputDialog,\
-    QVBoxLayout, QSlider, QCheckBox, QApplication, QHBoxLayout, QMessageBox, QTabWidget
+    QVBoxLayout, QSlider, QCheckBox, QApplication, QHBoxLayout, QMessageBox
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from pyvis.network import Network
 from tempfile import NamedTemporaryFile
 
 import molaqt.datamodel as md
+import mola.build as mb
 import mola.utils as mu
 import mola.dataview as mdv
 import molaqt.utils as mqu
@@ -335,7 +336,7 @@ class ParametersEditor(QWidget):
         self.lookup = lookup
 
         # build a dictionary of DataFrames of default parameters from sets
-        self.par = mu.build_parameters(sets, parameters, spec)
+        self.par = mb.build_parameters(sets, parameters, spec)
 
         # list widget for user-defined parameters
         self.parameters_list = QListWidget()
@@ -385,7 +386,7 @@ class ParametersEditor(QWidget):
 
     def rebuild_clicked(self):
         print("Clicked rebuild button")
-        self.par = mu.build_parameters(self.sets, self.get_parameters(), self.spec)
+        self.par = mb.build_parameters(self.sets, self.get_parameters(), self.spec)
         self.parameter_clicked(self.parameters_list.selectedItems()[0])
 
     def get_parameters(self):
@@ -960,7 +961,7 @@ class ProcessFlow(QWidget):
             product_flow_df = mdv.get_process_product_flow(self.conn, ref_ids)
             if product_flow_df.shape[0] > 0:
                 self.sets['F_m'] += [product_flow_df.FLOW_REF_ID.iloc[0]]
-            params = mu.build_parameters(self.sets, self.get_parameters(), self.spec)
+            params = mb.build_parameters(self.sets, self.get_parameters(), self.spec)
             self.parameters = mu.get_index_value_parameters(params)
             print(self.parameters)
             df = self.lookup.get('P_m', ref_ids)

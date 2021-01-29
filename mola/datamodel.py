@@ -1,4 +1,6 @@
-# module for optimisation data model
+"""
+Potential objects for holding network model structure.
+"""
 
 class Task:
     """A mola optimisation task"""
@@ -37,3 +39,15 @@ class ServiceFlow(Flow):
 class TransportFlow(Flow):
     """A mola service flow"""
 
+
+# turn openLCA processes and flows into objects to avoid querying attributes in code?
+class Process:
+
+    def __init__(self, ref_id):
+        self.ref_id = ref_id
+
+
+class Flow:
+
+    def __init__(self, ref_id):
+        self.ref_id = ref_id
