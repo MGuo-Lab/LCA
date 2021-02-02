@@ -50,9 +50,12 @@ class DataView(TestCase):
         self.assertGreater(len(process_dfr), 0)
 
     def test_get_process_product_flow(self):
-        process_flow_dfr = dv.get_process_product_flow(
+        process_flow1_dfr = dv.get_process_product_flow(
+            DataView.conn, process_ref_ids='64867712-23c4-3be5-a50e-3631e74571a6')
+        self.assertEqual(process_flow1_dfr.shape, (1, 5))
+        process_flow2_dfr = dv.get_process_product_flow(
             DataView.conn, process_ref_ids=['64867712-23c4-3be5-a50e-3631e74571a6'])
-        self.assertGreater(len(process_flow_dfr), 0)
+        self.assertEqual(process_flow1_dfr.shape, process_flow2_dfr.shape)
 
     def test_get_ref_id_dicts(self):
         d = dv.get_ref_id_dicts(DataView.conn, {'flows': 'TBL_FLOWS', 'processes': 'TBL_PROCESSES'})

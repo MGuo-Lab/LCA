@@ -5,7 +5,7 @@
     },
     "doc_path": "",
     "specification": "<class 'mola.specification5.SelectionSpecification'>",
-    "controller": "StandardController",
+    "controller": "CustomController",
     "db_file": "C:/data/openlca/sqlite/system/CSV_juice_ecoinvent_36_apos_lci_20200206_20201029-102818.sqlite",
     "sets": {
         "F_m": [

@@ -122,76 +122,49 @@ def build_location(process_ref_ids=None):
     return str(q)
 
 
-def build_flow_reference_unit(flow_ref_ids=None):
+# def build_product_flow(process_ref_ids=None):
+#     """
+#     Build a query to get processes and their product flows
+#     :param list[str] process_ref_ids: list of process reference ids
+#     :return: SQL string
+#     """
+#
+#     exchanges = Table('TBL_EXCHANGES')
+#     flows = Table('TBL_FLOWS')
+#     processes = Table('TBL_PROCESSES')
+#     locations = Table('TBL_LOCATIONS')
+#     e = Table('e')
+#
+#     # convert reference ids to openLCA process ids
+#     process_id = processes.select(processes.ID).where(processes.REF_ID.isin(process_ref_ids))
+#
+#     # sub-query exchanges table to limit
+#     sq = Query\
+#         .from_(exchanges) \
+#         .select(exchanges.F_OWNER, exchanges.F_FLOW, exchanges.F_UNIT, exchanges.RESULTING_AMOUNT_VALUE) \
+#         .where(exchanges.F_OWNER.isin(process_id)) \
+#         .as_('e')
+#
+#     # join exchanges to flows
+#     q = Query\
+#         .from_(sq).as_('e') \
+#         .left_join(flows).on(flows.ID == sq.F_FLOW) \
+#         .left_join(processes).on(processes.ID == sq.F_OWNER) \
+#         .left_join(locations).on(pf.Cast(processes.F_LOCATION, 'int') == locations.ID) \
+#         .select(
+#             processes.REF_ID.as_('PROCESS_REF_ID'), processes.NAME.as_('PROCESS_NAME'),
+#             locations.NAME.as_('LOCATION'),
+#             flows.REF_ID.as_('FLOW_REF_ID'), flows.NAME.as_('FLOW_NAME')
+#         )\
+#         .where(flows.FlOW_TYPE == 'PRODUCT_FLOW')
+#
+#     return str(q)
+
+
+def build_product_flow_units(process_ref_ids):
     """
-    Build a query to get flows and reference units from an openLCA database.
+    Build a query to get processes and their product flow units.
 
-    :param list[str] flow_ref_ids: list of flow reference IDs
-    :return: SQL string
-    """
-
-    flows = Table('TBL_FLOWS')
-    flow_properties = Table('TBL_FLOW_PROPERTIES')
-    unit_groups = Table('TBL_UNIT_GROUPS')
-    units = Table('TBL_UNITS')
-
-    # convert reference ids to openLCA flow ids
-    if flow_ref_ids:
-        flow_id = flows.select(flows.ID).where(flows.REF_ID.isin(flow_ref_ids))
-    else:
-        flow_id = flows.select(flows.ID)
-
-    # join flows to properties and units
-    q = Query\
-        .from_(flows) \
-        .left_join(flow_properties).on(flows.F_REFERENCE_FLOW_PROPERTY == flow_properties.ID) \
-        .left_join(unit_groups).on(flow_properties.F_UNIT_GROUP == unit_groups.ID) \
-        .left_join(units).on(unit_groups.F_REFERENCE_UNIT == units.ID) \
-        .select(flows.ID, flows.NAME, flows.F_REFERENCE_FLOW_PROPERTY, unit_groups.F_REFERENCE_UNIT,
-                units.NAME.as_('UNITS_NAME')) \
-        .where(flows.ID.isin(flow_id))
-
-    return str(q)
-
-
-def build_product_flow_unit(flow_ref_ids=None):
-    """
-    Build a query to get product flows and units from the exchanges table in an openLCA database.
-
-    :param list[str] flow_ref_ids: list of flow reference IDs
-    :return: SQL string
-    """
-
-    flows = Table('TBL_FLOWS')
-    exchanges = Table('TBL_EXCHANGES')
-    flow_properties = Table('TBL_FLOW_PROPERTIES')
-    # flow_property_factors = Table('TBL_FLOW_PROPERTY_FACTORS')
-    unit_groups = Table('TBL_UNIT_GROUPS')
-    units = Table('TBL_UNITS')
-
-    # convert reference ids to openLCA product flow ids
-    flow_id = flows.select(flows.ID).where(flows.FLOW_TYPE == 'PRODUCT_FLOW')
-    if flow_ref_ids:
-        flow_id = flow_id.where(flows.REF_ID.isin(flow_ref_ids))
-
-    # sub-query to restrict to exchanges to product flows
-    sq = Query \
-        .from_(exchanges) \
-        .select(exchanges.ID, exchanges.F_FLOW, exchanges.F_UNIT) \
-        .where(exchanges.F_FLOW.isin(flow_id))
-
-    q = Query \
-        .from_(sq) \
-        .left_join(flows).on(sq.F_FLOW == flows.ID) \
-        .left_join(units).on(sq.F_UNIT == units.ID) \
-        .select(flows.NAME, units.NAME.as_('UNITS_NAME'))
-
-    return str(q)
-
-
-def build_product_flow(process_ref_ids=None):
-    """
-    Build a query to get processes and their product flows
     :param list[str] process_ref_ids: list of process reference ids
     :return: SQL string
     """
@@ -199,29 +172,26 @@ def build_product_flow(process_ref_ids=None):
     exchanges = Table('TBL_EXCHANGES')
     flows = Table('TBL_FLOWS')
     processes = Table('TBL_PROCESSES')
-    locations = Table('TBL_LOCATIONS')
-    e = Table('e')
+    units = Table('TBL_UNITS')
 
     # convert reference ids to openLCA process ids
-    process_id = processes.select(processes.ID).where(processes.REF_ID.isin(process_ref_ids))
+    process_ids = processes.select(processes.ID).where(processes.REF_ID.isin(process_ref_ids))
 
-    # sub-query exchanges table to limit
-    sq = Query\
+    # sub-query the exchanges table to limit join
+    sq = Query \
         .from_(exchanges) \
-        .select(exchanges.F_OWNER, exchanges.F_FLOW, exchanges.F_UNIT, exchanges.RESULTING_AMOUNT_VALUE) \
-        .where(exchanges.F_OWNER.isin(process_id)) \
-        .as_('e')
+        .select(exchanges.F_OWNER, exchanges.F_FLOW,
+                exchanges.F_UNIT, exchanges.RESULTING_AMOUNT_VALUE) \
+        .where(exchanges.F_OWNER.isin(process_ids))
 
-    # join exchanges to flows
+    # join exchanges to flows, processes, units
     q = Query\
-        .from_(sq).as_('e') \
+        .from_(sq) \
         .left_join(flows).on(flows.ID == sq.F_FLOW) \
         .left_join(processes).on(processes.ID == sq.F_OWNER) \
-        .left_join(locations).on(pf.Cast(processes.F_LOCATION, 'int') == locations.ID) \
+        .left_join(units).on(units.ID == sq.F_UNIT) \
         .select(
-            processes.REF_ID.as_('PROCESS_REF_ID'), processes.NAME.as_('PROCESS_NAME'),
-            locations.NAME.as_('LOCATION'),
-            flows.REF_ID.as_('FLOW_REF_ID'), flows.NAME.as_('FLOW_NAME')
+            flows.REF_ID.as_('F'), processes.REF_ID.as_('P'), units.NAME.as_('Units')
         )\
         .where(flows.FlOW_TYPE == 'PRODUCT_FLOW')
 

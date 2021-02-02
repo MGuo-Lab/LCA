@@ -5,19 +5,21 @@ A Specification object contains a pyomo model and methods to build the model.
 import pygeodesy.formy as pygeo
 import math
 
+import pandas as pd
 import pyomo.environ as pe
 from pyomo.environ import units as pu
 import pyomo.dataportal as pyod
+
 import mola.sqlgenerator as sq
 import mola.dataimport as di
-import pandas as pd
+import mola.build as mb
 
 # units
 pu.load_definitions_from_strings([
-    'P = [Product Flow]',
-    'P_m = [Material Product Flow]',
-    'P = [Service Product Flow]',
-    'P_t = [Transport Product Flow]',
+    'P = [Product_Flow]',
+    'P_m = [Material_Product_Flow]',
+    'P = [Service_Product_Flow]',
+    'P_t = [Transport_Product_Flow]',
     'D = [Demand]'
 ])
 
@@ -118,6 +120,10 @@ class SelectionSpecification(Specification):
             return sum(model.Ef[kpi, e]*model.EF[e, f, p] for e in model.E)
         abstract_model.EI = pe.Param(abstract_model.KPI, abstract_model.F, abstract_model.P, rule=ei_rule)
 
+        # Unit conversion factors
+        abstract_model.UM = pe.Param(abstract_model.F_m, abstract_model.P_m, within=pe.Reals)
+        abstract_model.UT = pe.Param(abstract_model.F_t, abstract_model.P_t, within=pe.Reals)
+
         # Variables
         abstract_model.Flow = pe.Var(abstract_model.F_m, abstract_model.P_m,
                                      within=pe.NonNegativeReals, doc='Material flow', units=pu.P_m)
@@ -193,6 +199,8 @@ class SelectionSpecification(Specification):
             return model.Storage_Service_Flow[fs, ps] == \
                    sum(model.L[fm, pm, fs, ps] * model.Storage_Service_Flow[fm, pm]
                        for fm in model.F_m for pm in model.P_m)
+
+        # TODO: service_flow_constraint
 
     def populate(self, json_files=None, elementary_flow_ref_ids=None, db_file=di.get_default_db_file()):
 
@@ -334,7 +342,7 @@ class ScheduleSpecification(Specification):
     }
     user_defined_parameters = {
         'C': {'index': ['F_m', 'K', 'D', 'T'], 'doc': 'Conversion factor for material flows', 'unit': pu.D/pu.P_m},
-        'U': {'index': ['F_m', 'F_t'], 'doc': 'Conversion factor for material flow units in transport flow units',
+        'U': {'index': ['F_m', 'F_t'], 'doc': '(NOT USED) Conversion factor for material flow units in transport flow units',
               'unit': pu.P_t / pu.P_m},
         'Demand': {'index': ['D', 'K', 'T'], 'doc': 'Specific demand', 'unit': pu.D},
         'Total_Demand': {'index': ['D', 'K'], 'doc': 'Total demand', 'unit': pu.D},
@@ -400,6 +408,9 @@ class ScheduleSpecification(Specification):
         abstract_model.EI = pe.Param(abstract_model.KPI, abstract_model.F, abstract_model.P, rule=ei_rule)
         abstract_model.XI = pe.Param(abstract_model.P_m, abstract_model.F_m, doc="Longitude", units=pu.degree)
         abstract_model.YI = pe.Param(abstract_model.P_m, abstract_model.F_m, doc="Latitude", units=pu.degree)
+
+        # Unit conversion factors
+        abstract_model.UU = pe.Param(abstract_model.F, abstract_model.P, within=pe.Any)
 
         # distances calculated from db
         def distance_rule(model, pm, fm, k, t):
@@ -478,11 +489,21 @@ class ScheduleSpecification(Specification):
                           self.abstract_model.K, self.abstract_model.T, rule=material_flow_rule)
 
         def specific_transport_flow_rule(model, ft, pt, k, t):
-            return model.Specific_Transport_Flow[ft, pt, k, t] == sum(
-                model.J[fm, pm, ft, pt] * model.U[fm, ft] *
-                model.Specific_Material_Transport_Flow[fm, pm, ft, pt, k, t] *
-                model.dd[pm, fm, k, t]
-                for fm in model.F_m for pm in model.P_m)
+            rhs = 0
+            # sum over connected processes
+            for fm in model.F_m:
+                for pm in model.P_m:
+                    if model.J[fm, pm, ft, pt]:
+                        unit_conversion = pu.convert_value(1,
+                            from_units=mb.map_units(model.UU[fm, pm]) * pu.km,
+                            to_units=mb.map_units(model.UU[ft, pt])
+                        )
+                        rhs += model.J[fm, pm, ft, pt] * \
+                               unit_conversion * \
+                               model.Specific_Material_Transport_Flow[fm, pm, ft, pt, k, t] * \
+                               model.dd[pm, fm, k, t]
+
+            return model.Specific_Transport_Flow[ft, pt, k, t] == rhs
 
         self.abstract_model.transport_constraint = pe.Constraint(self.abstract_model.F_t,
                                                                  self.abstract_model.P_t,
@@ -573,6 +594,12 @@ class ScheduleSpecification(Specification):
             process_breakdown = {(e, f, p): 3 for e in olca_dp.data('E') for f in flows for p in processes}
             olca_dp.__setitem__('Ef', impact_factors)
             olca_dp.__setitem__('EF', process_breakdown)
+
+        # db units
+        olca_dp.load(filename=db_file, using='sqlite3',
+                     query=sq.build_product_flow_units(process_ref_ids=processes),
+                     param=self.abstract_model.UU, index=(self.abstract_model.F, self.abstract_model.P))
+
 
         # load locations
         p_m = list(olca_dp.data('P_m'))

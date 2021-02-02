@@ -4,6 +4,8 @@ from tempfile import NamedTemporaryFile
 import mola.specification5 as sp
 import json
 
+# TODO add a SelectionSpecification test
+
 
 class TestScheduleSpecification(TestCase):
     spec = sp.ScheduleSpecification()

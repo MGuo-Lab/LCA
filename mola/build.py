@@ -125,19 +125,25 @@ def build_parameters(sets, parameters, spec):
     return par
 
 
-def map_reference_units():
+def map_units(unit=None):
     """
-    A dictionary that maps openLCA reference database units for product flows to pyomo units.
+    A dictionary that maps openLCA database units for product flows to pyomo units.
 
-    :return: dict
+    :return: dict or pyomo unit object
     """
-
     d = {
-       'kg': pu.kg,
+        'h': pu.hour,
+        'ha': pu.ha,
+        'kg': pu.kg,
+        'kg*d': pu.kg*pu.day,
+        'kg*km': pu.kg*pu.km,
+        'KWh': pu.kWh,
         'm3': pu.m**3,
         'MJ': pu.MJ,
         'kBq': pu.kiloBq,
+        'l': pu.l,
         'm2': pu.m,
+        'm*a': pu.m*pu.year,
         'm2*a': pu.m**2*pu.year,
         'm3*a': pu.m**3*pu.year,
         'Item(s)': pu.count,
@@ -145,11 +151,16 @@ def map_reference_units():
         'kg*a': pu.kg*pu.year,
         't*km': pu.tonne*pu.km,
         'm': pu.meter,
+        'km': pu.km,
+        'km2*a': pu.km**2*pu.year,
         'p*km': pu.count*pu.km,
         'm*a': pu.m*pu.year,
     }
 
-    return d
+    if unit is None:
+        return d
+    else:
+        return d[unit]
 
 
 

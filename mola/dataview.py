@@ -10,6 +10,13 @@ import pypika.functions as pf
 from mola import Package
 
 
+def get_df(conn, q, chunk_size=None):
+    if Package.config('show.SQL'):
+        print(q)
+    df = pd.read_sql(str(q), conn, chunksize=chunk_size)
+    return df
+
+
 def get_table_names(conn):
     """
     Get table names from sqlite database.
@@ -24,8 +31,7 @@ def get_table_names(conn):
         .where(sqlite_master.type == 'table')\
         .where(sqlite_master.name.not_like('sqlite_'))
 
-    print(q)
-    dfr = pd.read_sql(str(q), conn)
+    dfr = get_df(conn, q)
     return dfr.iloc[:, 0].to_list()
 
 
@@ -39,14 +45,11 @@ def get_table(conn, name, chunk_size=None):
     is the number of rows to include in each chunk.
     :return: Dataframe or iterator
     """
-
     tbl = Table(name)
     q = Query \
         .from_(tbl) \
         .select('*')
-    print(q)
-    dfr = pd.read_sql(str(q), conn, chunksize=chunk_size)
-
+    dfr = get_df(conn, q, chunk_size)
     return dfr
 
 
@@ -60,6 +63,7 @@ def get_ref_ids(conn, ids, table_name):
     """
     tbl = Table(table_name)
     q = tbl.select(tbl.REF_ID).where(tbl.ID.isin(ids))
+    # TODO: update these calls to use get_df
     dfr = pd.read_sql(str(q), conn).to_dict('list')
     return dfr
 
@@ -288,7 +292,7 @@ def get_process_elementary_flow(conn, ref_ids=None, units=True, limit_exchanges=
         .where(flows.FlOW_TYPE == 'ELEMENTARY_FLOW')
 
     # get elementary exchanges using left join with flow table
-    print(str(q))
+    print(q)
     elementary_exchanges_dfr = pd.read_sql(str(q), conn)
 
     # spread table to row column format
@@ -486,10 +490,75 @@ def get_process_locations(conn, ref_ids=None):
         .select(processes.REF_ID, processes.NAME, locations.LATITUDE, locations.LONGITUDE)\
         .where(processes.REF_ID.isin(ref_ids)) # FIXME
 
-    print(q)
-    processes_dfr = pd.read_sql(str(q), conn)
+    return get_df(conn, q)
 
-    return processes_dfr
+
+def get_flow_reference_units(conn, flow_ref_ids=None):
+    """
+    Build a query to get flows and reference units from an openLCA database.
+
+    :param sqlite3.Connection conn: database connection
+    :param list[str] | str flow_ref_ids: flow reference id or list of flow reference IDs
+    :return: DataFrame
+    """
+
+    flows = Table('TBL_FLOWS')
+    flow_properties = Table('TBL_FLOW_PROPERTIES')
+    unit_groups = Table('TBL_UNIT_GROUPS')
+    units = Table('TBL_UNITS')
+
+    # convert reference ids to openLCA flow ids
+    if flow_ref_ids:
+        if isinstance(flow_ref_ids, str):
+            flow_ref_ids = [flow_ref_ids]
+        flow_id = flows.select(flows.ID).where(flows.REF_ID.isin(flow_ref_ids))
+    else:
+        flow_id = flows.select(flows.ID)
+
+    # join flows to properties and units
+    q = Query\
+        .from_(flows) \
+        .left_join(flow_properties).on(flows.F_REFERENCE_FLOW_PROPERTY == flow_properties.ID) \
+        .left_join(unit_groups).on(flow_properties.F_UNIT_GROUP == unit_groups.ID) \
+        .left_join(units).on(unit_groups.F_REFERENCE_UNIT == units.ID) \
+        .select(flows.ID, flows.NAME, flows.F_REFERENCE_FLOW_PROPERTY, unit_groups.F_REFERENCE_UNIT,
+                units.NAME.as_('UNITS_NAME')) \
+        .where(flows.ID.isin(flow_id))
+
+    return get_df(conn, q)
+
+
+def get_product_flow_units(conn, flow_ref_ids=None):
+    """
+    Get product flows and units from the exchanges table in an openLCA database.
+
+    :param sqlite3.Connection conn: database connection
+    :param list[str] flow_ref_ids: list of flow reference IDs
+    :return: SQL string
+    """
+
+    flows = Table('TBL_FLOWS')
+    exchanges = Table('TBL_EXCHANGES')
+    units = Table('TBL_UNITS')
+
+    # convert reference ids to openLCA product flow ids
+    flow_id = flows.select(flows.ID).where(flows.FLOW_TYPE == 'PRODUCT_FLOW')
+    if flow_ref_ids:
+        flow_id = flow_id.where(flows.REF_ID.isin(flow_ref_ids))
+
+    # sub-query to restrict to exchanges to product flows
+    sq = Query \
+        .from_(exchanges) \
+        .select(exchanges.ID, exchanges.F_FLOW, exchanges.F_UNIT) \
+        .where(exchanges.F_FLOW.isin(flow_id))
+
+    q = Query \
+        .from_(sq) \
+        .left_join(flows).on(sq.F_FLOW == flows.ID) \
+        .left_join(units).on(sq.F_UNIT == units.ID) \
+        .select(flows.NAME, units.NAME.as_('UNITS_NAME'))
+
+    return get_df(conn, q)
 
 
 def get_process_product_flow(conn, process_ref_ids):
@@ -499,7 +568,7 @@ def get_process_product_flow(conn, process_ref_ids):
     Using the process id get its exchanges and from those extract the product flow.
 
     :param sqlite3.Connection conn: database connection
-    :param list[str] process_ref_ids: list of process reference ids
+    :param list[str] | str process_ref_ids: list of process reference ids
     :return: Dataframe of process ref id and product flow id
     """
     exchanges = Table('TBL_EXCHANGES')
@@ -508,6 +577,8 @@ def get_process_product_flow(conn, process_ref_ids):
     locations = Table('TBL_LOCATIONS')
 
     # get the process ids from the ref ids
+    if isinstance(process_ref_ids, str):
+        process_ref_ids = [process_ref_ids]
     process_ids = processes.select(processes.ID).where(processes.REF_ID.isin(process_ref_ids))
 
     # sub-query exchanges table to limit join
@@ -529,10 +600,7 @@ def get_process_product_flow(conn, process_ref_ids):
         )\
         .where(flows.FlOW_TYPE == 'PRODUCT_FLOW')
 
-    print(q)
-    product_flow_dfr = pd.read_sql(str(q), conn)
-
-    return product_flow_dfr
+    return get_df(conn, q)
 
 
 def get_process_product_flow_costs(conn, process_ref_ids):
@@ -542,7 +610,7 @@ def get_process_product_flow_costs(conn, process_ref_ids):
     Using the process id get its exchanges and from those extract the product flows and their cost.
 
     :param sqlite3.Connection conn: database connection
-    :param list[str] process_ref_ids: list of process reference ids
+    :param list[str] | str process_ref_ids: list of process reference ids
     :return DataFrame of costs
     """
     exchanges = Table('TBL_EXCHANGES')
@@ -553,6 +621,8 @@ def get_process_product_flow_costs(conn, process_ref_ids):
     currencies = Table('TBL_CURRENCIES')
 
     # get the process ids from the ref ids
+    if isinstance(process_ref_ids, str):
+        process_ref_ids = [process_ref_ids]
     process_ids = processes.select(processes.ID).where(processes.REF_ID.isin(process_ref_ids))
 
     # sub-query the exchanges table to limit join
@@ -578,10 +648,7 @@ def get_process_product_flow_costs(conn, process_ref_ids):
         )\
         .where(flows.FlOW_TYPE == 'PRODUCT_FLOW')
 
-    print(q)
-    product_flow_dfr = pd.read_sql(str(q), conn)
-
-    return product_flow_dfr
+    return get_df(conn, q)
 
 
 def get_process_product_flow_units(conn, process_ref_ids, set_name='P'):
@@ -592,7 +659,7 @@ def get_process_product_flow_units(conn, process_ref_ids, set_name='P'):
 
     :param sqlite3.Connection conn: database connection
     :param list[str] process_ref_ids: list of process reference ids
-    :param list[str] set_name: column name of the index in the returned table
+    :param list[str] | str set_name: column name of the index in the returned table
     :return DataFrame of units indexed by set_name
     """
     exchanges = Table('TBL_EXCHANGES')
@@ -601,17 +668,19 @@ def get_process_product_flow_units(conn, process_ref_ids, set_name='P'):
     units = Table('TBL_UNITS')
 
     # get the process ids from the ref ids
+    if isinstance(process_ref_ids, str):
+        process_ref_ids = [process_ref_ids]
     process_ids = processes.select(processes.ID).where(processes.REF_ID.isin(process_ref_ids))
 
     # sub-query the exchanges table to limit join
-    sq = Query\
+    sq = Query \
         .from_(exchanges) \
         .select(exchanges.F_OWNER, exchanges.F_FLOW,
                 exchanges.F_UNIT, exchanges.RESULTING_AMOUNT_VALUE) \
         .where(exchanges.F_OWNER.isin(process_ids))
 
     # join exchanges to flows, processes, units
-    q = Query\
+    q = Query \
         .from_(sq) \
         .left_join(flows).on(flows.ID == sq.F_FLOW) \
         .left_join(processes).on(processes.ID == sq.F_OWNER) \
@@ -621,9 +690,7 @@ def get_process_product_flow_units(conn, process_ref_ids, set_name='P'):
         )\
         .where(flows.FlOW_TYPE == 'PRODUCT_FLOW')
 
-    if Package.config('show.SQL'):
-        print(q)
-    product_flow_dfr = pd.read_sql(str(q), conn)
+    product_flow_dfr = get_df(conn, q)
     product_flow_dfr.set_index(set_name, inplace=True)
 
     return product_flow_dfr
@@ -659,10 +726,7 @@ def get_product_flows(conn, name=None, fields=['ID', 'REF_ID', 'NAME']):
     if name:
         q = q.where(Criterion.any([flows.name.like(p) for p in name]))
 
-    print(q)
-    flows_dfr = pd.read_sql(str(q), conn)
-
-    return flows_dfr
+    return get_df(conn, q)
 
 
 class LookupTables:

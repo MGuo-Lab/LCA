@@ -20,11 +20,11 @@ class TestSQLGenerator(TestCase):
         z = pd.read_sql(loc_sql, self.conn)
         self.assertGreater(len(z), 0)
 
-    def test_build_product_flow(self):
-        p_m = ['f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768']
-        bp_sql = sq.build_product_flow(process_ref_ids=p_m)
-        z = pd.read_sql(bp_sql, self.conn)
-        self.assertGreater(len(z), 0)
+    # def test_build_product_flow(self):
+    #     p_m = ['f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768']
+    #     bp_sql = sq.build_product_flow(process_ref_ids=p_m)
+    #     z = pd.read_sql(bp_sql, self.conn)
+    #     self.assertGreater(len(z), 0)
 
     def test_build_product_flow_cost(self):
         p_m = ['f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768']
@@ -44,20 +44,26 @@ class TestSQLGenerator(TestCase):
         z = pd.read_sql(ice_sql, self.conn)
         self.assertEqual(len(z), 0)
 
-    def test_build_flow_reference_unit(self):
-        f = ['e6aad2de-0b1b-49c3-a0c4-797ba34d87e5', '774bc814-70cf-4389-8bf8-e6435174c72e']
-        fc_sql = sq.build_flow_reference_unit(flow_ref_ids=f)
-        x = pd.read_sql(fc_sql, self.conn)
-        fc_sql = sq.build_flow_reference_unit()
-        y = pd.read_sql(fc_sql, self.conn)
-        unique_units = y.UNITS_NAME.unique()
-        self.assertEqual(len(unique_units), 15)
+    # def test_build_flow_reference_unit(self):
+    #     f = ['e6aad2de-0b1b-49c3-a0c4-797ba34d87e5', '774bc814-70cf-4389-8bf8-e6435174c72e']
+    #     fc_sql = sq.build_flow_reference_unit(flow_ref_ids=f)
+    #     x = pd.read_sql(fc_sql, self.conn)
+    #     fc_sql = sq.build_flow_reference_unit()
+    #     y = pd.read_sql(fc_sql, self.conn)
+    #     unique_units = y.UNITS_NAME.unique()
+    #     self.assertEqual(len(unique_units), 15)
 
-    def test_build_product_flow_unit(self):
-        f = ['e6aad2de-0b1b-49c3-a0c4-797ba34d87e5', '774bc814-70cf-4389-8bf8-e6435174c72e']
-        fc_sql = sq.build_product_flow_unit(flow_ref_ids=f)
-        x = pd.read_sql(fc_sql, self.conn)
-        fc_sql = sq.build_product_flow_unit()
-        y = pd.read_sql(fc_sql, self.conn)
-        unique_units = y.UNITS_NAME.unique()
-        self.assertEqual(len(unique_units), 19)
+    # def test_build_product_flow_unit(self):
+    #     f = ['e6aad2de-0b1b-49c3-a0c4-797ba34d87e5', '774bc814-70cf-4389-8bf8-e6435174c72e']
+    #     fc_sql = sq.build_product_flow_unit(flow_ref_ids=f)
+    #     x = pd.read_sql(fc_sql, self.conn)
+    #     fc_sql = sq.build_product_flow_unit()
+    #     y = pd.read_sql(fc_sql, self.conn)
+    #     unique_units = y.UNITS_NAME.unique()
+    #     self.assertEqual(len(unique_units), 19)
+
+    def test_build_product_flow_units(self):
+        p = ['f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768']
+        pfu_sql = sq.build_product_flow_units(process_ref_ids=p)
+        z = pd.read_sql(pfu_sql, self.conn)
+        self.assertGreater(len(z), 0)
