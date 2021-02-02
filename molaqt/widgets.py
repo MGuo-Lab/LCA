@@ -1,5 +1,6 @@
 import webbrowser
 from pathlib import Path
+from functools import partial
 
 import pandas as pd
 
@@ -889,11 +890,11 @@ class ProcessFlow(QWidget):
         self.add_transport_process_button = QPushButton("Add Transport Process")
         self.link_processes_button = QPushButton("Link Processes")
         self.unlink_processes_button = QPushButton("Unlink Processes")
-        self.visualise_button = QPushButton('Visualise')
+        self.visualise_button = QPushButton("Visualise")
         self.add_material_process_button.clicked.connect(self.add_material_process_clicked)
         self.add_transport_process_button.clicked.connect(self.add_transport_process_clicked)
-        self.link_processes_button.clicked.connect(self.link_processes_clicked)
-        self.unlink_processes_button.clicked.connect(self.unlink_processes_clicked)
+        self.link_processes_button.clicked.connect(partial(self.material_transport_link, 1))
+        self.unlink_processes_button.clicked.connect(partial(self.material_transport_link, 0))
         self.visualise_button.clicked.connect(self.visualise_material_transport_clicked)
 
         # labels
@@ -924,8 +925,8 @@ class ProcessFlow(QWidget):
         url = html_path.resolve().as_uri()
         webbrowser.open(url, new=2)  # new tab
 
-    @pyqtSlot(QTreeWidgetItem, int)
-    def process_tree_clicked(self, item, col):
+    @pyqtSlot(QTreeWidgetItem)
+    def process_tree_clicked(self, item):
         if item.parent() is None:
             return
         ref_id = item.text(0)
@@ -942,9 +943,9 @@ class ProcessFlow(QWidget):
                                       columns=['F_m', 'P_m', 'F_t', 'P_t'])
                 df = j_link[(j_link.P_t == ref_id) & (j_link.F_t == product_flow_df.iloc[0, 0])]
                 if df.shape[0] > 0:
-                    fm_ref_id = df['F_m'].iloc[0]
+                    # fm_ref_id = df['F_m'].iloc[0]
                     pm_ref_id = df['P_m'].iloc[0]
-                    fm_lookup = self.lookup.get('F_m', fm_ref_id)
+                    # fm_lookup = self.lookup.get('F_m', fm_ref_id)
                     pm_lookup = self.lookup.get('P_m', pm_ref_id)
                     product_flow_df.insert(0, 'Input Process Name', pm_lookup.iloc[0] + pm_lookup.iloc[1])
                     product_flow_df.insert(0, 'Input Process ID', pm_ref_id)
@@ -1003,23 +1004,14 @@ class ProcessFlow(QWidget):
             self.dirty = True
             print('Added transport process', ref_ids)
 
-    def link_processes_clicked(self):
-        self.set_material_transport_link(1)
-
-    def unlink_processes_clicked(self, items):
-        self.set_material_transport_link(0)
-
-    def set_material_transport_link(self, link: bool):
+    def material_transport_link(self, link: bool):
         item = self.process_tree.selectedItems()
         if len(item) != 2 or item[0].parent() is None or item[1].parent() is None or \
                 item[0].parent().text(0) == item[1].parent().text(0):
             return
-        if item[0].parent().text(0) == "Material":
-            pm = item[0].text(0)
-            pt = item[1].text(0)
-        else:
-            pm = item[1].text(0)
-            pt = item[0].text(0)
+        m = int(item[0].parent().text(0) == "Transport")  # the material item
+        pm = item[m].text(0)
+        pt = item[1-m].text(0)
 
         # get the product flows for the processes
         product_flow_df = mdv.get_process_product_flow(self.conn, pm)
@@ -1038,6 +1030,9 @@ class ProcessFlow(QWidget):
             if j['index'] == [fm, pm, ft, pt]:
                 print(i, j['index'])
                 self.parameters['J'][i] = {'index': j['index'], 'value': link}
+
+        # update display
+        self.process_tree_clicked(item[1-m])
 
     def get_new_j(self, ref_ids, parameter_j):
         # create a new link table for every F_t, P_t combination for each ref_id
