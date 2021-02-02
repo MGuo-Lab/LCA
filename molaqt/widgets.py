@@ -549,8 +549,7 @@ class LinkingParameterWidget(QWidget):
         parameter_diagram = LinkParameterDiagram(self.table, index_sets, self.lookup)
         html_path = parameter_diagram.get_html_path()
         url = html_path.resolve().as_uri()
-        new = 2  # new tab
-        webbrowser.open(url, new=new)
+        webbrowser.open(url, new=2) # new tab
 
 # class ProcessFlow(QWidget):
 #
@@ -890,10 +889,12 @@ class ProcessFlow(QWidget):
         self.add_transport_process_button = QPushButton("Add Transport Process")
         self.link_processes_button = QPushButton("Link Processes")
         self.unlink_processes_button = QPushButton("Unlink Processes")
+        self.visualise_button = QPushButton('Visualise')
         self.add_material_process_button.clicked.connect(self.add_material_process_clicked)
         self.add_transport_process_button.clicked.connect(self.add_transport_process_clicked)
         self.link_processes_button.clicked.connect(self.link_processes_clicked)
         self.unlink_processes_button.clicked.connect(self.unlink_processes_clicked)
+        self.visualise_button.clicked.connect(self.visualise_material_transport_clicked)
 
         # labels
         self.flows_label = QLabel("Flows")
@@ -905,12 +906,23 @@ class ProcessFlow(QWidget):
         grid_layout.addWidget(self.add_transport_process_button, 0, 2)
         grid_layout.addWidget(self.link_processes_button, 0, 3)
         grid_layout.addWidget(self.unlink_processes_button, 0, 4)
-        grid_layout.addWidget(self.process_tree, 1, 0, 1, 5)
-        grid_layout.addWidget(self.flows_label, 2, 0, 1, 5)
-        grid_layout.addWidget(self.flows_table, 3, 0, 1, 5)
+        grid_layout.addWidget(self.visualise_button, 0, 5)
+        grid_layout.addWidget(self.process_tree, 1, 0, 1, 6)
+        grid_layout.addWidget(self.flows_label, 2, 0, 1, 6)
+        grid_layout.addWidget(self.flows_table, 3, 0, 1, 6)
         grid_layout.setColumnStretch(0, 1)
 
         self.setLayout(grid_layout)
+
+    def visualise_material_transport_clicked(self):
+        param_name = 'J'
+        index_sets = self.spec.user_defined_parameters[param_name]['index']
+        params = mb.build_parameters(self.sets, self.get_parameters(), self.spec)
+        df = pd.DataFrame(params[param_name])
+        parameter_diagram = LinkParameterDiagram(df, index_sets, self.lookup)
+        html_path = parameter_diagram.get_html_path()
+        url = html_path.resolve().as_uri()
+        webbrowser.open(url, new=2)  # new tab
 
     @pyqtSlot(QTreeWidgetItem, int)
     def process_tree_clicked(self, item, col):
@@ -949,6 +961,7 @@ class ProcessFlow(QWidget):
 
         flows_model = md.PandasModel(product_flow_df, is_indexed=False)
         self.flows_table.setModel(flows_model)
+        self.flows_table.resizeRowsToContents()
 
     def add_material_process_clicked(self):
         print('Add material process button clicked')
