@@ -1,8 +1,7 @@
 import io
 from PyQt5.QtWidgets import QWidget, QPushButton, QTreeWidget, QTableView, QGridLayout, QTextEdit, \
-    QTreeWidgetItem, QLabel
+    QTreeWidgetItem, QLabel, QHeaderView
 import pyomo.environ as pe
-from pyomo.environ import units as pu
 import mola.output as mo
 import molaqt.datamodel as md
 
@@ -27,6 +26,7 @@ class ModelRun(QWidget):
 
         # add table for run content
         self.run_table = QTableView()
+        self.run_table.setSelectionBehavior(QTableView.SelectRows);
 
         # component documentation
         self.cpt_doc = QLabel()
@@ -68,9 +68,8 @@ class ModelRun(QWidget):
                 df = mo.get_entity(cpt, self.lookup, units=True)
                 run_model = md.PandasModel(df)
                 self.run_table.setModel(run_model)
-                # self.run_table.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
-                self.run_table.resizeColumnsToContents()
-                # self.run_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
+                self.run_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+                self.run_table.resizeRowsToContents()
 
         if item.text(0) == 'Log':
             self.results.write(ostream=output)
