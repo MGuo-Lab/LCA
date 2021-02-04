@@ -1,6 +1,6 @@
 import io
 from PyQt5.QtWidgets import QWidget, QPushButton, QTreeWidget, QTableView, QGridLayout, QTextEdit, \
-    QTreeWidgetItem, QLabel, QHeaderView
+    QTreeWidgetItem, QLabel, QHeaderView, QCheckBox
 import pyomo.environ as pe
 import mola.output as mo
 import molaqt.datamodel as md
@@ -19,6 +19,11 @@ class ModelRun(QWidget):
         self.run_button = QPushButton("Run")
         self.run_button.clicked.connect(self.run_button_clicked)
 
+        # checkbox to show zero values only
+        self.nonzero_checkbox = QCheckBox('Non-zero flows')
+        self.nonzero_checkbox.toggle()
+        self.nonzero_checkbox.clicked.connect(self.nonzero_checkbox_clicked)
+
         # add list widget for output
         self.run_tree = QTreeWidget()
         self.run_tree.setHeaderLabels(['Component'])
@@ -36,9 +41,15 @@ class ModelRun(QWidget):
         grid_layout.addWidget(self.run_button, 0, 0)
         grid_layout.addWidget(self.run_tree, 1, 0)
         grid_layout.addWidget(self.cpt_doc, 0, 1)
-        grid_layout.addWidget(self.run_table, 1, 1)
+        grid_layout.addWidget(self.nonzero_checkbox, 0, 2)
+        grid_layout.addWidget(self.run_table, 1, 1, 1, 2)
         grid_layout.setColumnStretch(1, 2)
         self.setLayout(grid_layout)
+
+    def nonzero_checkbox_clicked(self):
+        if self.run_tree:
+            item = self.run_tree.selectedItems()
+            self.run_item_clicked(item[0])
 
     def run_button_clicked(self):
         print('Run button clicked')
@@ -66,6 +77,9 @@ class ModelRun(QWidget):
                 cpt = self.concrete_model.find_component(item.text(0))
                 self.cpt_doc.setText(item.text(0) + ': ' + cpt.doc)
                 df = mo.get_entity(cpt, self.lookup, units=True)
+                if self.nonzero_checkbox.isChecked():
+                    numeric_cols = df.select_dtypes('number').columns
+                    df = df[(df[numeric_cols] > 0).any(axis=1)]
                 run_model = md.PandasModel(df)
                 self.run_table.setModel(run_model)
                 self.run_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)

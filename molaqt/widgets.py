@@ -8,7 +8,7 @@ from PyQt5.QtCore import Qt, QUrl, pyqtSlot
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QGridLayout, QTableView, QHeaderView, QLineEdit, QDialog, \
     QAbstractItemView, QComboBox, QDialogButtonBox, QPushButton, QWidget, QListWidget, QAction, QLabel, QInputDialog,\
-    QVBoxLayout, QSlider, QCheckBox, QApplication, QHBoxLayout, QMessageBox
+    QVBoxLayout, QSlider, QCheckBox, QApplication, QHBoxLayout, QMessageBox, QSplitter, QTableWidgetItem
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from pyvis.network import Network
 from tempfile import NamedTemporaryFile
@@ -552,243 +552,6 @@ class LinkingParameterWidget(QWidget):
         url = html_path.resolve().as_uri()
         webbrowser.open(url, new=2) # new tab
 
-# class ProcessFlow(QWidget):
-#
-#     def __init__(self, user_sets, user_parameters, spec, lookup, conn):
-#
-#         super().__init__()
-#         self.spec = spec
-#         self.lookup = lookup
-#         self.conn = conn
-#         self.is_indexed = False
-#
-#         # merge user sets and parameters into spec defaults
-#         self.sets = spec.get_default_sets()
-#         self.sets.update(user_sets)
-#         self.parameters = spec.get_default_parameters(self.sets)
-#         self.parameters.update(user_parameters)
-#         # process_df = self.get_process_table(self.sets, self.parameters)
-#
-#         # flag to indicate data changes
-#         self.dirty = False
-#
-#         # add table for processes
-#         # self.process_table = QTableView()
-#         # process_model = md.PandasModel(process_df)
-#         # self.process_table.setModel(process_model)
-#         # self.process_table.setContextMenuPolicy(Qt.ActionsContextMenu)
-#         # self.remove_action = QAction("Remove process", None)
-#         # self.remove_action.triggered.connect(self.remove_process)
-#         # self.process_table.addAction(self.remove_action)
-#         # self.process_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-#
-#         # add table for material processes
-#         self.material_process_table = QTableView()
-#         material_set_df = self.lookup['P_m'].loc[self.sets['P_m'], :]
-#         material_process_model = md.PandasModel(material_set_df, is_indexed=self.is_indexed)
-#         self.material_process_table.setModel(material_process_model)
-#         self.material_process_table.clicked.connect(self.material_process_table_clicked)
-#         self.material_process_table.setSelectionMode(QTableView.SingleSelection)
-#         self.material_process_table.setSelectionBehavior(QTableView.SelectRows)
-#
-#         # context menu for material process table
-#         self.material_process_table.setContextMenuPolicy(Qt.ActionsContextMenu)
-#         self.remove_material_action = QAction("Remove process", None)
-#         self.remove_material_action.triggered.connect(self.remove_material_process)
-#         self.material_process_table.addAction(self.remove_material_action)
-#         self.material_process_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-#
-#         # add table for material linking flows
-#         self.material_link_table = QTableView()
-#         material_link_model = md.PandasModel(pd.DataFrame(columns=['Output Flows']))
-#         self.material_link_table.setModel(material_link_model)
-#         self.material_link_table.setContextMenuPolicy(Qt.ActionsContextMenu)
-#         self.remove_material_link_action = QAction("Remove link", None)
-#         self.remove_material_link_action.triggered.connect(self.remove_material_link)
-#         self.material_link_table.addAction(self.remove_material_link_action)
-#         self.material_link_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-#
-#         # add table for transport processes
-#         self.transport_process_table = QTableView()
-#         transport_set_df = self.lookup['P_t'].loc[self.sets['P_t'], :]
-#         transport_process_model = md.PandasModel(transport_set_df, is_indexed=self.is_indexed)
-#         self.transport_process_table.setModel(transport_process_model)
-#         self.transport_process_table.clicked.connect(self.transport_process_table_clicked)
-#         self.transport_process_table.setSelectionMode(QTableView.SingleSelection)
-#         self.transport_process_table.setSelectionBehavior(QTableView.SelectRows)
-#
-#         # context menu for transport process table
-#         self.transport_process_table.setContextMenuPolicy(Qt.ActionsContextMenu)
-#         self.remove_transport_action = QAction("Remove process", None)
-#         self.remove_transport_action.triggered.connect(self.remove_transport_process)
-#         self.transport_process_table.addAction(self.remove_transport_action)
-#         self.transport_process_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-#
-#         # add table for transport linking flows
-#         self.transport_link_table = QTableView()
-#         transport_link_model = md.PandasModel(pd.DataFrame(columns=['Input Flows', 'Output Flows']))
-#         self.transport_link_table.setModel(transport_link_model)
-#         self.transport_link_table.setContextMenuPolicy(Qt.ActionsContextMenu)
-#         self.remove_transport_link_action = QAction("Remove link", None)
-#         self.remove_transport_link_action.triggered.connect(self.remove_transport_link)
-#         self.transport_link_table.addAction(self.remove_transport_link_action)
-#         self.transport_link_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-#
-#         # buttons
-#         self.add_material_process_button = QPushButton("Add")
-#         self.add_transport_process_button = QPushButton("Add")
-#         self.add_material_process_button.clicked.connect(self.add_material_process_clicked)
-#         self.add_transport_process_button.clicked.connect(self.add_transport_process_clicked)
-#
-#         # labels
-#         self.material_link_label = QLabel("Material links")
-#         self.transport_link_label = QLabel("Transport links")
-#
-#         # arrange widgets in grid
-#         grid_layout = QGridLayout()
-#         grid_layout.addWidget(QLabel("Material Processes"), 0, 0)
-#         grid_layout.addWidget(self.add_material_process_button, 0, 1)
-#         grid_layout.addWidget(self.material_process_table, 1, 0, 1, 2)
-#         grid_layout.addWidget(self.material_link_label, 2, 0, 1, 2)
-#         grid_layout.addWidget(self.material_link_table, 3, 0, 1, 2)
-#         grid_layout.addWidget(QLabel("Transport Processes"), 0, 2)
-#         grid_layout.addWidget(self.add_transport_process_button, 0, 3)
-#         grid_layout.addWidget(self.transport_process_table, 1, 2, 1, 2)
-#         grid_layout.addWidget(self.transport_link_label, 2, 2, 1, 2)
-#         grid_layout.addWidget(self.transport_link_table, 3, 2, 1, 2)
-#         grid_layout.setColumnStretch(0, 2)
-#         grid_layout.setColumnStretch(2, 2)
-#         self.setLayout(grid_layout)
-#
-#     def material_process_table_clicked(self):
-#         selection_model = self.material_process_table.selectionModel()
-#         row = selection_model.currentIndex().row()
-#         data = selection_model.model()._data
-#         pm_index = data.index[row]
-#         print("Selected material process index", pm_index)
-#         self.material_link_label.setText('Material flows for ' + data.iloc[row, 0] + ' | ' + data.iloc[row, 1])
-#
-#         # get product flow for selected process
-#         product_flow_df = mdv.get_process_product_flow(self.conn, pm_index)
-#         product_flow_df = product_flow_df[['FLOW_REF_ID', 'FLOW_NAME']].set_index('FLOW_REF_ID')
-#         product_flow_df.columns = ['Output Flow']
-#
-#         material_link_model = md.PandasModel(product_flow_df, is_indexed=self.is_indexed)
-#         self.material_link_table.setModel(material_link_model)
-#
-#     def transport_process_table_clicked(self):
-#         selection_model = self.transport_process_table.selectionModel()
-#         row = selection_model.currentIndex().row()
-#         data = selection_model.model()._data
-#         pt_index = data.index[row]
-#         j_link = pd.DataFrame([j['index'] for j in self.parameters['J'] if j['value'] == 1],
-#                               columns=['F_m', 'P_m', 'F_t', 'P_t'])
-#         print("Selected transport process row", pt_index)
-#         self.transport_link_label.setText('Transport flows for ' + data.iloc[row, 0] + ' | ' + data.iloc[row, 1])
-#
-#         # get product flow for selected process
-#         product_flow_df = mdv.get_process_product_flow(self.conn, pt_index)
-#         product_flow_df = product_flow_df[['FLOW_REF_ID', 'FLOW_NAME']].set_index('FLOW_REF_ID')
-#         product_flow_df.columns = ['Output Flow']
-#
-#         # find any linking material flow for transport process and transport flow
-#         if product_flow_df.shape[0] > 0:
-#             df = j_link[(j_link.P_t == pt_index) & (j_link.F_t == product_flow_df.index[0])]
-#             if df.shape[0] > 0:
-#                 fm_ref_id = df['F_m'].iloc[0]
-#                 fm_lookup = self.lookup['F_m'].loc[fm_ref_id, 'NAME']
-#                 product_flow_df.insert(0, 'Input Flow', fm_lookup)
-#             else:
-#                 product_flow_df.insert(0, 'Input Flow', 'No link')
-#         else:
-#             product_flow_df = pd.DataFrame({'Input Flow': 'Not Found', 'Output Flow': 'Not Found'})
-#         transport_link_model = md.PandasModel(product_flow_df)
-#         self.transport_link_table.setModel(transport_link_model)
-#
-#     def add_material_process_clicked(self):
-#         print('Add material process button clicked')
-#         lookup_widget = LookupWidget(self.lookup, 'P_m')
-#         ok = lookup_widget.exec()
-#         if ok:
-#             ref_ids = lookup_widget.get_elements()
-#             self.sets['P_m'] += ref_ids
-#             self.parameters['J'] += self.get_new_j(ref_ids, self.parameters['J'])
-#             # df = self.get_process_table(self.sets, self.parameters)
-#             df = self.lookup['P_m'].loc[self.sets['P_m'], :]
-#             self.material_process_table.setModel(md.PandasModel(df))
-#             self.dirty = True
-#             print('Added material process', ref_ids)
-#
-#     def add_transport_process_clicked(self):
-#         print('Add transport process button clicked')
-#         pass
-#         lookup_widget = LookupWidget(self.lookup, 'P_t')
-#         ok = lookup_widget.exec()
-#         if ok:
-#             ref_ids = lookup_widget.get_elements()
-#             self.sets['P_t'] += ref_ids
-#             self.parameters['J'] += self.get_new_j(ref_ids, self.parameters['J'])
-#             # df = self.get_process_table(self.sets, self.parameters)
-#             df = self.lookup['P_t'].loc[self.sets['P_t'], :]
-#             self.transport_process_table.setModel(md.PandasModel(df))
-#             self.dirty = True
-#             print('Added transport process', ref_ids)
-#
-#     def get_new_j(self, ref_ids, parameter_j):
-#         # create a new link table for every F_t, P_t combination for each ref_id
-#         link = pd.DataFrame([j['index'] for j in parameter_j if j['value'] == 1],
-#                             columns=['F_m', 'P_m', 'F_t', 'P_t'])
-#         transport_df = link[['F_t', 'P_t']].drop_duplicates()
-#         new_link = pd.concat([transport_df] * len(ref_ids))
-#         new_link.insert(0, 'P_m', [ref_ids] * new_link.shape[1])
-#         new_link.insert(0, 'F_m', '')
-#         new_link['value'] = 1
-#
-#         # put sets into one column
-#         new_link['index'] = new_link[['F_m', 'P_m', 'F_t', 'P_t']].values.tolist()
-#         df = new_link[['index', 'value']]
-#
-#         # turn table into json format
-#         def f(g): return {'index': g[0], 'value': g[1]}
-#         new_j = list(df.apply(f, axis=1))
-#
-#         return new_j
-#
-#     def remove_material_process(self):
-#         pass
-#
-#     def remove_transport_process(self):
-#         pass
-#
-#     def remove_material_link(self):
-#         pass
-#
-#     def remove_transport_link(self):
-#         pass
-#
-#     def get_parameters(self):
-#         return dict()
-#
-#     # def get_process_table(self, sets, parameters):
-#     #     """
-#     #     Construct a process table using binary linking parameter, which defines the product flow of each process and
-#     #     its input flow for transport processes.
-#     #     :return:
-#     #     """
-#     #
-#     #     # find the linked processes and flows
-#     #     link = pd.DataFrame([j['index'] for j in parameters['J'] if j['value'] == 1],
-#     #                         columns=['F_m', 'P_m', 'F_t', 'P_t'])
-#     #
-#     #     df_m = pd.DataFrame(columns=['Input Flow', 'Process', 'Type', 'Output Flow'])
-#     #     df_t = pd.DataFrame(columns=['Input Flow', 'Process', 'Type', 'Output Flow'])
-#     #     for i, row in link.iterrows():
-#     #         df_m.loc[i] = ['', row['P_m'], 'Material', row['F_m']]
-#     #         df_t.loc[i] = [row['F_m'], row['P_t'], 'Transport', row['F_t']]
-#     #
-#     #     df = df_m.append(df_t, ignore_index=True)
-#     #     return df
-
 
 class AboutWidget(QWidget):
 
@@ -1093,7 +856,7 @@ class ConfigurationWidget(QWidget):
         self.spec.settings[setting] = bw.isChecked()
 
 
-class LinkParameterDiagram():
+class LinkParameterDiagram:
     """
     Assumes product flows are odd sets and processes are even sets in the ordering of the
     linking parameter.
@@ -1178,3 +941,45 @@ class LinkParameterDiagram():
         # self.viewer.setZoomFactor(1.0)
 
         return Path(temp_html.name)
+
+
+class ObjectiveWidget(QWidget):
+
+    def __init__(self, lookup):
+        super().__init__()
+        self.setWindowTitle("Select Objective")
+
+        # method tree
+        method_tree = QTreeWidget()
+        method_tree.setHeaderLabels(['Environmental Impact Method'])
+        method_tree.setMinimumWidth(250)
+        method_tree.itemClicked.connect(self.method_clicked)
+
+        # add method to tree
+        self.lookup_df = lookup.get('KPI')
+        for method in self.lookup_df['method_NAME'].unique():
+            if '(obsolete)' not in method:
+                QTreeWidgetItem(method_tree, [method])
+
+        # tables for possible and selected categories
+        self.set_table = QTableView()
+        self.category_table = QTableView()
+
+        # layout
+        box = QHBoxLayout()
+        self.splitter = QSplitter()
+        self.splitter.addWidget(method_tree)
+        self.splitter.addWidget(self.category_table)
+        self.splitter.setStretchFactor(1, 2)
+        box.addWidget(self.splitter)
+        self.setLayout(box)
+        
+    def method_clicked(self, item):
+        print("Impact method", item, "clicked")
+        df = self.lookup_df[item.text(0) == self.lookup_df.method_NAME][['category_NAME']]
+        df.columns = ['Impact Categories']
+        df['Weight'] = 0
+        model = md.PandasModel(df)
+        self.category_table.setModel(model)
+        self.category_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+

@@ -10,23 +10,30 @@ import mola.dataview as dv
 import molaqt.controllers as mc
 import molaqt.utils as mqu
 
-
 app = QApplication(sys.argv)
-setting = mqu.system_settings(testing=True)
-config_path = setting['config_path'].joinpath('Orange_Toy_Model.json')
 
-# get lookups from db - FIXME mock this
+# get lookups from db - FIXME mock this using hand built sqlite db
 conn = di.get_sqlite_connection()
 lookup = dv.LookupTables(conn)
 
-# load test configuration file
-with open(str(config_path)) as jf:
-    model_config = json.load(jf)
+# json config dicts for testing
+orange_config = mqu.get_config('Orange_Toy_Model.json')[0]
+custom_config = mqu.get_config('test_custom_controller.json')[0]
+
+
+class TestCustomController(TestCase):
+    def test_init(self):
+        custom_controller = mc.CustomController(custom_config)
+        custom_controller.show()
+
+        if 'IGNORE_EXEC' not in os.environ:
+            app.exec()
+        self.assertIsInstance(custom_controller, mc.CustomController)
 
 
 class TestStandardController(TestCase):
     def test_init(self):
-        standard_controller = mc.StandardController(model_config)
+        standard_controller = mc.StandardController(orange_config)
         standard_controller.show()
 
         if 'IGNORE_EXEC' not in os.environ:

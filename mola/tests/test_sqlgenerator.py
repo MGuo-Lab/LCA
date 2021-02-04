@@ -6,6 +6,7 @@ import pandas as pd
 
 class TestSQLGenerator(TestCase):
     conn = di.get_sqlite_connection()
+    # conn1 = di.get_sqlite_connection('C:/data/openlca/sqlite/system/CSV_juice_ecoinvent_36_apos_lci_20200206_20201029-102818.sqlite')
 
     def test_build_process_elementary_flow(self):
         p_m = ['f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768']
@@ -66,4 +67,5 @@ class TestSQLGenerator(TestCase):
         p = ['f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768']
         pfu_sql = sq.build_product_flow_units(process_ref_ids=p)
         z = pd.read_sql(pfu_sql, self.conn)
-        self.assertGreater(len(z), 0)
+        self.assertEqual(len(z), 1)
+

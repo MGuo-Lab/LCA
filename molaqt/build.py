@@ -1,5 +1,5 @@
 import pandas as pd
-from PyQt5.QtWidgets import QWidget, QPushButton, QListWidget, QTableView, QGridLayout, QMessageBox
+from PyQt5.QtWidgets import QWidget, QPushButton, QListWidget, QTableView, QGridLayout, QMessageBox, QHeaderView
 import mola.output as mo
 import mola.build as mb
 import molaqt.datamodel as dm
@@ -44,9 +44,12 @@ class ModelBuild(QWidget):
             self.build_list.clear()
             self.build_list.addItems(self.build_items)
             print('Build completed')
+        except ValueError as e:
+            print(e)
+            self.dialog_critical("Unable to find data in database", str(e))
         except Exception as e:
             print(e)
-            self.dialog_critical(str(e))
+            self.dialog_critical("Uncaught exception", str(e))
 
     def build_item_clicked(self, item):
         print('Build item', item.text(), 'clicked')
@@ -63,11 +66,14 @@ class ModelBuild(QWidget):
                 df = pd.DataFrame({'a': [1]})
             self.build_table.setModel(dm.PandasModel(df))
             self.build_table.resizeColumnsToContents()
-            #self.build_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
+            # self.build_table.resizeRowsToContents()
+            self.build_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
-    def dialog_critical(self, s):
+
+    def dialog_critical(self, text, detailed_text=None):
         dlg = QMessageBox(self)
-        dlg.setText(s)
+        dlg.setText(text)
+        dlg.setDetailedText(detailed_text)
         dlg.setIcon(QMessageBox.Critical)
         dlg.show()
 

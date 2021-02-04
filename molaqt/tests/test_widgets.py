@@ -15,6 +15,10 @@ import molaqt.widgets as mw
 
 app = QApplication(sys.argv)
 
+# get lookups from db - TODO: mock this db
+conn = di.get_sqlite_connection()
+lookup = dv.LookupTables(conn)
+
 
 class Widgets(TestCase):
     # get lookups from db
@@ -60,17 +64,6 @@ class Widgets(TestCase):
             app.exec()
         self.assertIsInstance(doc_widget, mw.DocWidget)
 
-    # def test_parameters_editor2(self):
-    #     spec = ms.ScheduleSpecification()
-    #     parameters_editor2 = mw.ParametersEditor2(self.model_config['sets'], self.model_config['parameters'], spec,
-    #                                               self.lookup)
-    #     parameters_editor2.show()
-    #     parameters_editor2.resize(800, 600)
-    #
-    #     if 'IGNORE_EXEC' not in os.environ:
-    #         app.exec()
-    #     self.assertIsInstance(parameters_editor2, mw.ParametersEditor2)
-
     def test_configuration_widget(self):
         config_widget = mw.ConfigurationWidget(self.spec)
         config_widget.show()
@@ -107,9 +100,6 @@ class TestProcessFlow(TestCase):
 
 class TestLinkParameterDiagram(TestCase):
 
-    # get lookups from db
-    conn = di.get_sqlite_connection()
-    lookup = dv.LookupTables(conn)
     model_config, spec = mqu.get_config('Orange_Toy_Model.json', testing=True)
 
     # rebuild parameters
@@ -120,7 +110,7 @@ class TestLinkParameterDiagram(TestCase):
         df = pd.DataFrame(self.pars['J'])
         index_sets = self.spec.user_defined_parameters['J']['index']
 
-        link_diagram = mw.LinkParameterDiagram(df, index_sets, self.lookup)
+        link_diagram = mw.LinkParameterDiagram(df, index_sets, lookup)
         html_path = link_diagram.get_html_path()
         url = html_path.resolve().as_uri()
         new = 2  # new tab
@@ -129,3 +119,17 @@ class TestLinkParameterDiagram(TestCase):
         if 'IGNORE_EXEC' not in os.environ:
             app.exec()
         self.assertIsInstance(html_path, Path)
+
+
+class TestObjectiveWidget(TestCase):
+
+    model_config = mqu.get_config('test_custom_controller.json', testing=True)[0]
+
+    def test_init(self):
+        obj_widget = mw.ObjectiveWidget(lookup)
+        obj_widget.show()
+        obj_widget.resize(640, 480)
+
+        if 'IGNORE_EXEC' not in os.environ:
+            app.exec()
+        pass

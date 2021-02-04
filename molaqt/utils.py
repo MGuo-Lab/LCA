@@ -16,9 +16,9 @@ def get_new_config(specification_class, database_path, doc_file):
     return new_config
 
 
-# TODO: remove this and use mola version
+# TODO: remove this and use mola version?
 def get_config(json_file_name, testing=True):
-    setting = system_settings(testing=True)
+    setting = system_settings(testing=testing)
     config_path = setting['config_path'].joinpath(json_file_name)
 
     # load configuration file

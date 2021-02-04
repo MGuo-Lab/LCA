@@ -25,7 +25,6 @@ class ModelManager(QWidget):
         self.controller = QLabel()
 
         # db tree
-        # db_name = 'ecoinvent_36_apos_lci_20200206'
         self.db_tree = QTreeWidget()
         self.db_tree.setHeaderLabels(['Database'])
         self.db_tree.setMinimumWidth(250)

@@ -74,9 +74,13 @@ class CustomController(Controller):
         self.process_flow = mw.ProcessFlow(user_config['sets'], user_config['parameters'],
                                            self.spec, self.lookup, self.conn)
 
+        # key performance indicators
+        self.obj = mw.ObjectiveWidget(self.lookup)
+
         # Add tabs
         # self.tabs.addTab(self.sets_editor, "Sets")
         self.tabs.addTab(self.documentation, "Documentation")
+        self.tabs.addTab(self.obj, "Objective")
         self.tabs.addTab(self.process_flow, "Processes and Flows")
         self.tabs.addTab(self.parameters_editor, "Parameters")
         self.tabs.addTab(self.model_build, "Build")
