@@ -1,3 +1,4 @@
+# unit tests of small widgets
 import webbrowser
 import os
 import sys
@@ -21,13 +22,10 @@ lookup = dv.LookupTables(conn)
 
 
 class Widgets(TestCase):
-    # get lookups from db
-    conn = di.get_sqlite_connection()
-    lookup = dv.LookupTables(conn)
     model_config, spec = mqu.get_config('Orange_Toy_Model.json')
 
     def test_lookup_widget(self):
-        lookup_widget = mw.LookupWidget(self.lookup, 'P_m')
+        lookup_widget = mw.LookupWidget(lookup, 'P_m')
 
         if 'IGNORE_EXEC' not in os.environ:
             ok = lookup_widget.exec()
@@ -37,7 +35,7 @@ class Widgets(TestCase):
         self.assertIsInstance(lookup_widget, mw.LookupWidget)
 
     def test_sets_editor(self):
-        sets_editor = mw.SetsEditor(self.model_config['sets'], self.spec, self.lookup)
+        sets_editor = mw.SetsEditor(self.model_config['sets'], self.spec, lookup)
         sets_editor.show()
 
         if 'IGNORE_EXEC' not in os.environ:
@@ -46,7 +44,7 @@ class Widgets(TestCase):
 
     def test_parameters_editor(self):
         parameters_editor = mw.ParametersEditor(self.model_config['sets'], self.model_config['parameters'], self.spec,
-                                                self.lookup)
+                                                lookup)
         parameters_editor.resize(800, 600)
         parameters_editor.show()
 
@@ -82,14 +80,11 @@ class Widgets(TestCase):
 
 
 class TestProcessFlow(TestCase):
-    # get lookups from db
-    conn = di.get_sqlite_connection()
-    lookup = dv.LookupTables(conn)
     model_config, spec = mqu.get_config('test_custom_controller.json', testing=True)
 
     def test_init(self):
         process_flow = mw.ProcessFlow(self.model_config['sets'], self.model_config['parameters'],
-                                      self.spec, self.lookup, self.conn)
+                                      self.spec, lookup, conn)
         process_flow.show()
         process_flow.resize(1200, 600)
 

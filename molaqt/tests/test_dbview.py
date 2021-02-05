@@ -1,3 +1,4 @@
+# test for database viewer
 import os
 import sys
 from unittest import TestCase

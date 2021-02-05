@@ -1,6 +1,5 @@
 # units tests on the dataview module
 from unittest import TestCase
-import pandas as pd
 
 import mola.dataview as dv
 import mola.dataimport as di

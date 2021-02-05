@@ -1,4 +1,4 @@
-import json
+# unit tests of ProcessFlows widget
 import os
 import sys
 from unittest import TestCase

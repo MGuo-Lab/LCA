@@ -1,8 +1,8 @@
+# test of Run widget
 import sys
 import os
 from unittest import TestCase
 
-from pyomo.environ import units as pu
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtTest import QTest
 from PyQt5.Qt import Qt

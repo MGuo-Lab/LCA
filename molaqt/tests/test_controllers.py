@@ -1,4 +1,4 @@
-import json
+# tests for controller widgets
 import os
 import sys
 from unittest import TestCase
