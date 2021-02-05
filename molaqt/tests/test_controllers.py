@@ -12,7 +12,7 @@ import molaqt.utils as mqu
 
 app = QApplication(sys.argv)
 
-# get lookups from db - FIXME mock this using hand built sqlite db
+# get lookups from db - FIXME mock this using hand-built sqlite db
 conn = di.get_sqlite_connection()
 lookup = dv.LookupTables(conn)
 

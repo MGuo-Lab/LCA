@@ -4,8 +4,8 @@
         "test_setting": false
     },
     "doc_path": "",
-    "specification": "<class 'mola.specification5.SelectionSpecification'>",
-    "controller": "CustomController",
+    "specification": "<class 'mola.specification5.SimpleSpecification'>",
+    "controller": "<class 'molaqt.controllers.CustomController'>",
     "db_file": "C:/data/openlca/sqlite/system/CSV_juice_ecoinvent_36_apos_lci_20200206_20201029-102818.sqlite",
     "sets": {
         "F_m": [
@@ -28,7 +28,7 @@
             "c742d973-9033-307f-8382-b996a1982056"
         ],
         "KPI": [
-            "ad74382a-add4-35c8-b373-7f8dedc80733"
+            "7bcbe2c5-0817-34b8-b6fa-d41ab6e192ac"
         ],
         "OBJ": [
             "environment",

@@ -31,7 +31,7 @@ class Controller(QWidget):
             'settings': self.spec.settings,
             'doc_path': self.user_config['doc_path'],
             'specification': str(self.spec.__class__),
-            'controller': 'StandardController',
+            'controller': self.user_config['controller'],
             'db_file': self.db_file,
             'sets': self.sets_editor.sets,
             'parameters': self.parameters_editor.get_parameters(),
@@ -53,8 +53,12 @@ class CustomController(Controller):
         # get lookups from db
         self.lookup = dv.LookupTables(self.conn)
 
-        # add widgets for sets, parameters, build, run
+        # add widgets for objective, network, build, run
+        # TODO put sets and parameters in Controller and remove SetsEditor from here?
         self.sets_editor = mw.SetsEditor(user_config['sets'], self.spec, self.lookup)
+        self.obj = mw.ObjectiveWidget(self.lookup, self.sets_editor.sets['KPI'])
+        self.process_flow = mw.ProcessFlow(user_config['sets'], user_config['parameters'],
+                                           self.spec, self.lookup, self.conn)
         self.parameters_editor = mw.ParametersEditor(self.sets_editor.sets, user_config['parameters'],
                                                      self.spec, self.lookup)
         self.model_run = mr.ModelRun(self.lookup)
@@ -70,15 +74,7 @@ class CustomController(Controller):
             if doc_path.exists():
                 self.documentation = mw.DocWidget(doc_path)
 
-        # processes and flows
-        self.process_flow = mw.ProcessFlow(user_config['sets'], user_config['parameters'],
-                                           self.spec, self.lookup, self.conn)
-
-        # key performance indicators
-        self.obj = mw.ObjectiveWidget(self.lookup)
-
         # Add tabs
-        # self.tabs.addTab(self.sets_editor, "Sets")
         self.tabs.addTab(self.documentation, "Documentation")
         self.tabs.addTab(self.obj, "Objective")
         self.tabs.addTab(self.process_flow, "Processes and Flows")

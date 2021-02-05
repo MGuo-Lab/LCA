@@ -121,7 +121,7 @@ class TestObjectiveWidget(TestCase):
     model_config = mqu.get_config('test_custom_controller.json', testing=True)[0]
 
     def test_init(self):
-        obj_widget = mw.ObjectiveWidget(lookup)
+        obj_widget = mw.ObjectiveWidget(lookup, self.model_config['sets']['KPI'])
         obj_widget.show()
         obj_widget.resize(640, 480)
 

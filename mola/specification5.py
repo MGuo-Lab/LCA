@@ -49,7 +49,7 @@ class Specification:
         raise NotImplementedError()
 
 
-class SelectionSpecification(Specification):
+class SimpleSpecification(Specification):
     """
     Alex pyomo specification
     """
@@ -266,8 +266,6 @@ class SelectionSpecification(Specification):
             'J': [{'index': [fm, pm, ft, pt], 'value': 0} for fm in user_sets['F_m']
                   for pm in user_sets['P_m'] for ft in user_sets['F_t'] for pt in user_sets['P_t']],
         }
-        # flows = [f for k in ['F_m', 'F_t'] for f in user_sets[k]]
-        # processes = [p for k in ['P_m', 'P_t'] for p in user_sets[k]]
 
         return user_params
 

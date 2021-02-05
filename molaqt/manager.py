@@ -1,4 +1,5 @@
 import sys
+import re
 import json
 from pathlib import Path
 from PyQt5.QtWidgets import QWidget, QTreeWidget, QLabel, QTreeWidgetItem, QAction, \
@@ -76,7 +77,7 @@ class ModelManager(QWidget):
         self.controller_config_file = config_file
 
         # get a new config dict
-        new_config = mqu.get_new_config(specification_class, database, doc_file)
+        new_config = mqu.get_new_config(specification_class, database, doc_file, controller_class)
 
         # instantiate controller using config
         new_controller = controller_class(new_config)
@@ -143,7 +144,9 @@ class ModelManager(QWidget):
 
         # instantiate controller using config if available otherwise default to StandardController
         if 'controller' in user_config:
-            class_ = getattr(mc, user_config['controller'])
+            search = re.search("<class '(.*?)\.(.*?)\.(.*?)'>", user_config['controller'])
+            class_name = search.group(3)
+            class_ = getattr(mc, class_name)
             new_controller = class_(user_config)
         else:
             new_controller = mc.StandardController(user_config)

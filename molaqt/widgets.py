@@ -8,7 +8,7 @@ from PyQt5.QtCore import Qt, QUrl, pyqtSlot
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QGridLayout, QTableView, QHeaderView, QLineEdit, QDialog, \
     QAbstractItemView, QComboBox, QDialogButtonBox, QPushButton, QWidget, QListWidget, QAction, QLabel, QInputDialog,\
-    QVBoxLayout, QSlider, QCheckBox, QApplication, QHBoxLayout, QMessageBox, QSplitter, QTableWidgetItem
+    QVBoxLayout, QSlider, QCheckBox, QApplication, QHBoxLayout, QMessageBox, QSplitter, QTableWidgetItem, QSizePolicy
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from pyvis.network import Network
 from tempfile import NamedTemporaryFile
@@ -229,72 +229,6 @@ class SetsEditor(QWidget):
         return model
 
 
-# class ParametersEditor(QWidget):
-#
-#     def __init__(self, sets, parameters, spec, lookup):
-#
-#         super().__init__()
-#         self.spec = spec
-#         self.sets = sets
-#         self.lookup = lookup
-#
-#         # build a dictionary of DataFrames of default parameters from sets
-#         self.par = mu.build_parameters(sets, parameters, spec)
-#
-#         # list widget for user-defined parameters
-#         self.parameters_list = QListWidget()
-#         self.parameter_names = spec.user_defined_parameters.keys()
-#         self.parameters_list.addItems(self.parameter_names)
-#         self.parameters_list.itemClicked.connect(self.parameter_clicked)
-#         self.parameters_list.setCurrentItem(self.parameters_list.item(0))
-#
-#         # table of parameters
-#         self.parameter_table = QTableView()
-#         first_parameter = next(iter(self.par))
-#         index_sets = spec.user_defined_parameters[first_parameter]['index']
-#         self.parameter_model = md.ParameterModel(self.par[first_parameter], index_sets, self.lookup)
-#         self.parameter_table.setModel(self.parameter_model)
-#         self.parameter_table.setColumnHidden(0, True)
-#         self.parameter_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
-#
-#         # rebuild button
-#         self.rebuild_button = QPushButton("Rebuild")
-#         self.rebuild_button.clicked.connect(self.rebuild_clicked)
-#
-#         # arrange widgets in grid
-#         grid_layout = QGridLayout()
-#         grid_layout.addWidget(QLabel("Parameters"), 0, 0)
-#         grid_layout.addWidget(self.parameters_list, 1, 0)
-#         self.doc_label = QLabel(first_parameter + ': ' + spec.user_defined_parameters[first_parameter]['doc'])
-#         grid_layout.addWidget(self.doc_label, 0, 1)
-#         grid_layout.addWidget(self.rebuild_button, 0, 2)
-#         grid_layout.addWidget(self.parameter_table, 1, 1, 1, 2)
-#         grid_layout.setColumnStretch(1, 20)
-#         self.setLayout(grid_layout)
-#
-#     def parameter_clicked(self, item):
-#         param = item.text()
-#         print("Clicked parameter list with", param)
-#         if param in self.par:
-#             self.doc_label.setText(param + ': ' + self.spec.user_defined_parameters[param]['doc'])
-#             index_sets = self.spec.user_defined_parameters[param]['index']
-#             self.parameter_table.setModel(md.ParameterModel(self.par[param], index_sets, self.lookup))
-#             self.parameter_table.setColumnHidden(0, True)
-#             self.parameter_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
-#         else:
-#             self.doc_label.setText('Not available')
-#             self.parameter_table.setModel(md.PandasModel(pd.DataFrame()))
-#
-#     def rebuild_clicked(self):
-#         print("Clicked rebuild button")
-#         self.par = mu.build_parameters(self.sets, self.get_parameters(), self.spec)
-#         self.parameter_clicked(self.parameters_list.selectedItems()[0])
-#
-#     def get_parameters(self):
-#         param = mu.get_index_value_parameters(self.par)
-#         return param
-
-
 class DocWidget(QWidget):
 
     def __init__(self, doc_path):
@@ -348,9 +282,7 @@ class ParametersEditor(QWidget):
 
         # parameter widget
         parameter_name = next(iter(self.par))
-        # parameter_name = 'J'
         self.parameter_widget = QLabel()
-        # self.parameter_widget.set_parameter(parameter_name, self.par[parameter_name])
 
         # rebuild button
         self.rebuild_button = QPushButton("Rebuild")
@@ -857,12 +789,19 @@ class ConfigurationWidget(QWidget):
 
 
 class LinkParameterDiagram:
-    """
-    Assumes product flows are odd sets and processes are even sets in the ordering of the
-    linking parameter.
-    """
 
     def __init__(self, table, index_sets, lookup, node_lookup='P'):
+        """
+        Generates HTML pyvis charts that visualise the connections represented by a linking parameter.
+
+        Assumes product flows are odd sets and processes are even sets in the ordering of the
+        linking parameter.
+
+        :param DataFrame table: the link parameter enumeration table
+        :param list index_sets: names of set that index the parameter
+        :param LookupTables lookup: cache of lookup tables
+        :param str node_lookup: name of set which denotes nodes
+        """
 
         self.table = table
         self.index_sets = index_sets
@@ -945,41 +884,82 @@ class LinkParameterDiagram:
 
 class ObjectiveWidget(QWidget):
 
-    def __init__(self, lookup):
+    def __init__(self, lookup, kpi_set):
+        """
+        QWidget to choose the environmental impact category.
+
+        :param LookupTables lookup: cache of tables
+        :param list kpi_set: kpi references modified in place by this object
+        """
         super().__init__()
+        self.kpi_set = kpi_set
+        self.dirty = False
+
         self.setWindowTitle("Select Objective")
 
         # method tree
-        method_tree = QTreeWidget()
-        method_tree.setHeaderLabels(['Environmental Impact Method'])
-        method_tree.setMinimumWidth(250)
-        method_tree.itemClicked.connect(self.method_clicked)
+        self.method_tree = QTreeWidget()
+        self.method_tree.setHeaderLabels(['Impact Category', 'Reference Unit', 'ID'])
+        self.method_tree.header().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.method_tree.itemDoubleClicked.connect(self.add_category)
 
-        # add method to tree
+        # add methods and categories to method tree
         self.lookup_df = lookup.get('KPI')
-        for method in self.lookup_df['method_NAME'].unique():
+        methods = {}
+        for method in self.lookup_df['Method'].unique():
             if '(obsolete)' not in method:
-                QTreeWidgetItem(method_tree, [method])
+                methods[method] = QTreeWidgetItem(self.method_tree, [method])
+        for index, row in self.lookup_df.iterrows():
+            if row['Method'] in methods.keys():
+                QTreeWidgetItem(methods[row['Method']], [row['Category'], row['Unit'], index])
 
-        # tables for possible and selected categories
-        self.set_table = QTableView()
-        self.category_table = QTableView()
+        # objective tree
+        self.objective_tree = QTreeWidget()
+        self.objective_tree.setHeaderLabels(['Impact Category', 'Reference Unit', 'ID'])
+        self.objective_tree.header().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.objective_tree.itemDoubleClicked.connect(self.remove_category)
+        self.refresh_objective_tree(kpi_set)
 
         # layout
-        box = QHBoxLayout()
-        self.splitter = QSplitter()
-        self.splitter.addWidget(method_tree)
-        self.splitter.addWidget(self.category_table)
-        self.splitter.setStretchFactor(1, 2)
-        box.addWidget(self.splitter)
-        self.setLayout(box)
-        
-    def method_clicked(self, item):
-        print("Impact method", item, "clicked")
-        df = self.lookup_df[item.text(0) == self.lookup_df.method_NAME][['category_NAME']]
-        df.columns = ['Impact Categories']
-        df['Weight'] = 0
-        model = md.PandasModel(df)
-        self.category_table.setModel(model)
-        self.category_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.splitter = QSplitter(Qt.Horizontal)
+        self.splitter.addWidget(self.method_tree)
+        self.splitter.addWidget(self.objective_tree)
+        method_label = QLabel('Database')
+        method_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        objective_label = QLabel('Minimise')
+        objective_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        layout = QGridLayout()
+        layout.addWidget(method_label, 0, 0)
+        layout.addWidget(objective_label, 0, 1)
+        layout.addWidget(self.splitter, 1, 0, 1, 2)
+        self.setLayout(layout)
+
+    def add_category(self, item):
+        if self.method_tree.indexOfTopLevelItem(item) == -1:
+            ref_id = item.text(2)
+            if ref_id not in self.kpi_set:
+                if len(self.kpi_set) > 0:
+                    self.kpi_set.pop()
+                self.kpi_set.append(ref_id)  # in place replace
+                # self.kpi_set.append(ref_id) TODO: only allow one kpi for now
+                self.refresh_objective_tree(self.kpi_set)
+                print('Added to set', ref_id)
+
+    def remove_category(self, item):
+        if self.objective_tree.indexOfTopLevelItem(item) == -1:
+            ref_id = item.text(2)
+            self.kpi_set.remove(ref_id)
+            self.refresh_objective_tree(self.kpi_set)
+            print('Removed from set', ref_id)
+
+    def refresh_objective_tree(self, kpi_set):
+        self.objective_tree.clear()
+        objective_df = self.lookup_df.loc[kpi_set]
+        objective_methods = {}
+        for method in objective_df['Method'].unique():
+            objective_methods[method] = QTreeWidgetItem(self.objective_tree, [method])
+            objective_methods[method].setExpanded(True)
+        for index, row in objective_df.iterrows():
+            if row['Method'] in objective_methods.keys():
+                QTreeWidgetItem(objective_methods[row['Method']], [row['Category'], row['Unit'], index])
 

@@ -4,11 +4,12 @@ import json
 import mola.build as mb
 
 
-def get_new_config(specification_class, database_path, doc_file):
+def get_new_config(specification_class, database_path, doc_file, controller_class):
     new_config = {
         'settings': {},
         'doc_path': doc_file,
         'specification': str(specification_class),
+        'controller': str(controller_class),
         'db_file': str(database_path),
         'sets': [],
         'parameters': [],

@@ -166,8 +166,9 @@ def get_lookup_tables(conn, single_column=False):
         .from_(categories) \
         .left_join(methods).on(categories.F_IMPACT_METHOD == methods.ID) \
         .select(
-            methods.NAME.as_('method_NAME'),
-            categories.REF_ID.as_('REF_ID'), categories.NAME.as_('category_NAME')
+            methods.NAME.as_('Method'),
+            categories.REF_ID.as_('REF_ID'), categories.NAME.as_('Category'),
+            categories.REFERENCE_UNIT.as_('Unit')
         )
     d['KPI'] = pd.read_sql(str(q), conn, index_col='REF_ID')
 
@@ -224,17 +225,15 @@ def get_impact_categories(conn, method_name=None, category_name=None,
                           categories_columns=['ID', 'REF_ID', 'NAME', 'REFERENCE_UNIT']):
     """
     Get impact categories from sqlite openLCA database. Each category is part of a method but it uniquely
-    defines the coefficients for elementary flow.
+    defines the coefficients for each elementary flow.
 
-    :param conn: database connection
-    :param method_name: list of partial method names on which to filter
-    :param category_name: list of partial category names on which to filter
-    :param methods_columns: list of table columns to return
-    :param categories_columns: list of table columns to return
+    :param sqlite3.Connection conn: database connection
+    :param list method_name: partial method names on which to filter
+    :param list category_name: partial category names on which to filter
+    :param list methods_columns: table columns to return
+    :param list categories_columns: table columns to return
     :return: Dataframe
     """
-    # SELECT m.ID, m.REF_ID, m.NAME, c.ID, c.REF_ID, c.NAME FROM TBL_IMPACT_METHODS AS m LEFT JOIN TBL_IMPACT_CATEGORIES as c
-    # ON c.F_IMPACT_METHOD=m.ID
     categories = Table('TBL_IMPACT_CATEGORIES')
     methods = Table('TBL_IMPACT_METHODS')
     methods_fields = [methods.field(c).as_('methods_' + c) for c in methods_columns]
@@ -247,11 +246,8 @@ def get_impact_categories(conn, method_name=None, category_name=None,
         q = q.where(Criterion.any([methods.name.like(p) for p in method_name]))
     if category_name:
         q = q.where(Criterion.any([categories.name.like(p) for p in category_name]))
-    # TODO: use a conditional on all prints
-    print(q)
-    impact_categories_dfr = pd.read_sql(str(q), conn)
 
-    return impact_categories_dfr
+    return get_df(conn, q)
 
 
 def get_process_elementary_flow(conn, ref_ids=None, units=True, limit_exchanges=None):
