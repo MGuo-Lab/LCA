@@ -66,7 +66,8 @@ class SimpleSpecification(Specification):
     }
     user_defined_parameters = {
         'C': {'index': ['F_m', 'D'], 'doc': 'Conversion factor for material flows', 'unit': pu.D/pu.P_m},
-        'U': {'index': ['F_m', 'F_t'], 'doc': 'Conversion factor for material flow units in transport flow units',
+        'U': {'index': ['F_m', 'F_t'],
+              'doc': '(NOT USED) Conversion factor for material flow units in transport flow units',
               'unit': pu.P_t / pu.P_m},
         'Demand': {'index': ['D'], 'doc': 'Specific demand', 'unit': pu.D},
         'Total_Demand': {'index': ['D'], 'doc': 'Total demand', 'unit': pu.D},
@@ -121,6 +122,9 @@ class SimpleSpecification(Specification):
         abstract_model.EI = pe.Param(abstract_model.KPI, abstract_model.F, abstract_model.P, rule=ei_rule)
 
         # Unit conversion factors
+        abstract_model.UU = pe.Param(abstract_model.F, abstract_model.P, within=pe.Any)
+
+        # Unit conversion factors
         abstract_model.UM = pe.Param(abstract_model.F_m, abstract_model.P_m, within=pe.Reals)
         abstract_model.UT = pe.Param(abstract_model.F_t, abstract_model.P_t, within=pe.Reals)
 
@@ -172,11 +176,21 @@ class SimpleSpecification(Specification):
             pe.Constraint(self.abstract_model.F_m, self.abstract_model.P_m, rule=material_flow_rule)
 
         def specific_transport_flow_rule(model, ft, pt):
-            return model.Specific_Transport_Flow[ft, pt] == sum(
-                model.J[fm, pm, ft, pt] * model.U[fm, ft] *
-                model.Specific_Material_Transport_Flow[fm, pm, ft, pt] *
-                model.d[pm, fm]
-                for fm in model.F_m for pm in model.P_m)
+            rhs = 0
+            # sum over connected processes
+            for fm in model.F_m:
+                for pm in model.P_m:
+                    if model.J[fm, pm, ft, pt]:
+                        unit_conversion = pu.convert_value(
+                            1,
+                            from_units=mb.map_units(model.UU[fm, pm]) * pu.km,
+                            to_units=mb.map_units(model.UU[ft, pt])
+                        )
+                        rhs += model.J[fm, pm, ft, pt] * \
+                               unit_conversion * \
+                               model.Specific_Material_Transport_Flow[fm, pm, ft, pt] * \
+                               model.d[pm, fm]
+            return model.Specific_Transport_Flow[ft, pt] == rhs
 
         self.abstract_model.transport_constraint = pe.Constraint(self.abstract_model.F_t,
                                                                  self.abstract_model.P_t,
@@ -230,6 +244,12 @@ class SimpleSpecification(Specification):
             process_breakdown = {(e, f, p): 3 for e in olca_dp.data('E') for f in flows for p in processes}
             olca_dp.__setitem__('Ef', impact_factors)
             olca_dp.__setitem__('EF', process_breakdown)
+
+        # db units
+        olca_dp.load(filename=db_file, using='sqlite3',
+                     query=sq.build_product_flow_units(process_ref_ids=processes),
+                     param=self.abstract_model.UU, index=(self.abstract_model.F, self.abstract_model.P))
+
 
         # use DataPortal to build concrete instance
         model_instance = self.abstract_model.create_instance(olca_dp)
@@ -492,7 +512,8 @@ class ScheduleSpecification(Specification):
             for fm in model.F_m:
                 for pm in model.P_m:
                     if model.J[fm, pm, ft, pt]:
-                        unit_conversion = pu.convert_value(1,
+                        unit_conversion = pu.convert_value(
+                            1,
                             from_units=mb.map_units(model.UU[fm, pm]) * pu.km,
                             to_units=mb.map_units(model.UU[ft, pt])
                         )

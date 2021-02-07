@@ -8,7 +8,8 @@ from PyQt5.QtCore import Qt, QUrl, pyqtSlot
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QGridLayout, QTableView, QHeaderView, QLineEdit, QDialog, \
     QAbstractItemView, QComboBox, QDialogButtonBox, QPushButton, QWidget, QListWidget, QAction, QLabel, QInputDialog,\
-    QVBoxLayout, QSlider, QCheckBox, QApplication, QHBoxLayout, QMessageBox, QSplitter, QTableWidgetItem, QSizePolicy
+    QVBoxLayout, QSlider, QCheckBox, QApplication, QHBoxLayout, QMessageBox, QSplitter, QTreeWidgetItemIterator, \
+    QSizePolicy
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from pyvis.network import Network
 from tempfile import NamedTemporaryFile
@@ -119,6 +120,13 @@ class LookupWidget(QDialog):
 class SetsEditor(QWidget):
 
     def __init__(self, user_sets, spec, lookup):
+        """
+        Widget to edit optimisation sets.
+
+        :param list user_sets: sets modified in place by this widget
+        :param Specification spec: object
+        :param LookupTables lookup: object
+        """
 
         super().__init__()
         self.spec = spec
@@ -264,6 +272,15 @@ class DocWidget(QWidget):
 class ParametersEditor(QWidget):
 
     def __init__(self, sets, parameters, spec, lookup):
+        """
+        Widget to modify a copy of the parameters list. Use the get_parameters method to obtain an
+        up-to-date copy.
+
+        :param list sets: optimisation sets
+        :param list parameters: optimisation parameters
+        :param Specification spec: object
+        :param LookupTables lookup: object
+        """
 
         super().__init__()
         self.spec = spec
@@ -271,11 +288,11 @@ class ParametersEditor(QWidget):
         self.lookup = lookup
 
         # build a dictionary of DataFrames of default parameters from sets
-        self.par = mb.build_parameters(sets, parameters, spec)
+        self.par = {k: v for k, v in mb.build_parameters(sets, parameters, spec).items() if k in parameters}
 
         # list widget for user-defined parameters
         self.parameters_list = QListWidget()
-        self.parameter_names = spec.user_defined_parameters.keys()
+        self.parameter_names = parameters.keys()
         self.parameters_list.addItems(self.parameter_names)
         self.parameters_list.itemClicked.connect(self.parameter_clicked)
         self.parameters_list.setCurrentItem(self.parameters_list.item(0))
@@ -319,7 +336,8 @@ class ParametersEditor(QWidget):
 
     def rebuild_clicked(self):
         print("Clicked rebuild button")
-        self.par = mb.build_parameters(self.sets, self.get_parameters(), self.spec)
+        p = self.get_parameters()
+        self.par = {k: v for k, v in mb.build_parameters(self.sets, p, self.spec).items() if k in p}
         self.parameter_clicked(self.parameters_list.selectedItems()[0])
 
     def get_parameters(self):
@@ -528,13 +546,8 @@ class ProcessFlow(QWidget):
         self.lookup = lookup
         self.conn = conn
         self.is_indexed = True
-
-        # merge user sets and parameters into spec defaults
-        self.sets = spec.get_default_sets()
-        self.sets.update(user_sets)
-        self.parameters = spec.get_default_parameters(self.sets)
-        self.parameters.update(user_parameters)
-        # process_df = self.get_process_table(self.sets, self.parameters)
+        self.sets = user_sets
+        self.parameters = user_parameters  # in index, value form
 
         # flag to indicate data changes
         self.dirty = False
@@ -552,15 +565,15 @@ class ProcessFlow(QWidget):
         # add tree widget items for material processes
         material_set_df = self.lookup.get('P_m', self.sets['P_m'])
         material_process = []
-        for pm in material_set_df.iterrows():
-            qwi = QTreeWidgetItem(self.material_tree, [pm[0], pm[1].PROCESS_NAME, pm[1].LOCATION_NAME])
+        for index, row in material_set_df.iterrows():
+            qwi = QTreeWidgetItem(self.material_tree, [index, row.PROCESS_NAME, row.LOCATION_NAME])
             material_process.append(qwi)
 
         # add tree widget items for transport processes
         transport_set_df = self.lookup.get('P_t', self.sets['P_t'])
         transport_process = []
-        for pt in transport_set_df.iterrows():
-            qwi = QTreeWidgetItem(self.transport_tree, [pt[0], pt[1].PROCESS_NAME, pt[1].LOCATION_NAME])
+        for index, row in transport_set_df.iterrows():
+            qwi = QTreeWidgetItem(self.transport_tree, [index, row.PROCESS_NAME, row.LOCATION_NAME])
             transport_process.append(qwi)
         self.process_tree.resizeColumnToContents(1)
 
@@ -575,10 +588,11 @@ class ProcessFlow(QWidget):
         flows_model = md.PandasModel(pd.DataFrame(columns=['Input Process ID', 'Input Process Name',
                                                            'Output Flow ID', 'Output Flow Name']))
         self.flows_table.setModel(flows_model)
-        self.flows_table.setContextMenuPolicy(Qt.ActionsContextMenu)
-        self.remove_flow_action = QAction("Remove flow", None)
-        self.remove_flow_action.triggered.connect(self.remove_flow)
+        # self.flows_table.setContextMenuPolicy(Qt.ActionsContextMenu)
+        # self.remove_flow_action = QAction("Remove flow", None)
+        # self.remove_flow_action.triggered.connect(self.remove_flow)
         self.flows_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.flows_table.resizeRowsToContents()
 
         # buttons
         self.add_material_process_button = QPushButton("Add Material Process")
@@ -664,40 +678,90 @@ class ProcessFlow(QWidget):
         lookup_widget = LookupWidget(self.lookup, 'P_m', "Material Process")
         ok = lookup_widget.exec()
         if ok:
-            ref_ids = lookup_widget.get_elements()
-            self.sets['P_m'] += ref_ids
-            # self.parameters['J'] += self.get_new_j(ref_ids, self.parameters['J'])
-            product_flow_df = mdv.get_process_product_flow(self.conn, ref_ids)
-            if product_flow_df.shape[0] > 0:
-                self.sets['F_m'] += [product_flow_df.FLOW_REF_ID.iloc[0]]
-            params = mb.build_parameters(self.sets, self.get_parameters(), self.spec)
-            self.parameters = mu.get_index_value_parameters(params)
-            print(self.parameters)
-            df = self.lookup.get('P_m', ref_ids)
-            self.material_tree.addChild(QTreeWidgetItem(self.material_tree, [df.index[0], df.PROCESS_NAME[0],
-                                                                             df.LOCATION_NAME[0]]))
-            self.dirty = True
-            print('Added material process', ref_ids)
+            process_ids = lookup_widget.get_elements()
+            new_processes = [pid for pid in process_ids if pid not in self.sets['P_m']]
+            if len(new_processes) > 0:
+                # add the new process ref ids to the material set and update tree
+                self.sets['P_m'].extend(new_processes)
+                df = self.lookup.get('P_m', new_processes)
+                for index, row in df.iterrows():
+                    self.material_tree.addChild(
+                        QTreeWidgetItem(self.material_tree, [index, row['PROCESS_NAME'], row['LOCATION_NAME']])
+                    )
+                self.dirty = True
+                print('Added material process', new_processes)
+
+                # add new product flows to set and update parameters
+                product_flow_df = mdv.get_process_product_flow(self.conn, new_processes)
+                flow_ids = product_flow_df.FLOW_REF_ID.to_list()
+                if len(flow_ids) > 0:
+                    self.sets['F_m'].extend([fid for fid in flow_ids if fid not in self.sets['F_m']])
+                params = mb.build_parameters(self.sets, self.get_parameters(), self.spec)
+                self.parameters = mu.get_index_value_parameters(params)
+
+    def remove_process(self):
+        items = self.process_tree.selectedItems()
+        for item in items:
+            parent = item.parent()
+            if parent is None:
+                continue
+            ref_id = item.text(0)
+            if parent.text(0) == 'Material':
+                self.sets['P_m'].remove(ref_id)
+                for i in range(self.material_tree.childCount()):
+                    if self.material_tree.child(i).text(0) == ref_id:
+                        self.material_tree.takeChild(i)
+                        break
+                print('Removed ', ref_id)
+                # ensure only relevant product flows are in F_m
+                product_flow_df = mdv.get_process_product_flow(self.conn, self.sets['P_m'])
+                flow_ids = product_flow_df.FLOW_REF_ID.to_list()
+                for fid in self.sets['F_m']:
+                    if fid not in flow_ids:
+                        self.sets['F_m'].remove(fid)
+            elif parent.text(0) == 'Transport':
+                self.sets['P_t'].remove(ref_id)
+                for i in range(self.transport_tree.childCount()):
+                    if self.transport_tree.child(i).text(0) == ref_id:
+                        self.transport_tree.takeChild(i)
+                        break
+                print('Removed ', ref_id)
+                # ensure only relevant product flows are in F_t
+                product_flow_df = mdv.get_process_product_flow(self.conn, self.sets['P_t'])
+                flow_ids = product_flow_df.FLOW_REF_ID.to_list()
+                for fid in self.sets['F_t']:
+                    if fid not in flow_ids:
+                        self.sets['F_t'].remove(fid)
+
+        # rebuild sets and parameters
+        params = mb.build_parameters(self.sets, self.get_parameters(), self.spec)
+        self.parameters = mu.get_index_value_parameters(params)
 
     def add_transport_process_clicked(self):
         print('Add transport process button clicked')
         lookup_widget = LookupWidget(self.lookup, 'P_t', "Transport Process")
         ok = lookup_widget.exec()
         if ok:
-            ref_ids = lookup_widget.get_elements()
-            self.sets['P_t'] += ref_ids
-            product_flow_df = mdv.get_process_product_flow(self.conn, ref_ids)
-            if product_flow_df.shape[0] > 0:
-                self.sets['F_t'] += [product_flow_df.FLOW_REF_ID.iloc[0]]
-            # self.parameters['J'] += self.get_new_j(ref_ids, self.parameters['J'])
-            params = mu.build_parameters(self.sets, self.get_parameters(), self.spec)
-            self.parameters = mu.get_index_value_parameters(params)
-            print(self.parameters)
-            df = self.lookup.get('P_t', ref_ids)
-            self.transport_tree.addChild(QTreeWidgetItem(self.transport_tree, [df.index[0], df.PROCESS_NAME[0],
-                                                                               df.LOCATION_NAME[0]]))
-            self.dirty = True
-            print('Added transport process', ref_ids)
+            process_ids = lookup_widget.get_elements()
+            new_processes = [pid for pid in process_ids if pid not in self.sets['P_t']]
+            if len(new_processes) > 0:
+                # add the new process ref ids to the material set and update tree
+                self.sets['P_t'].extend(new_processes)
+                df = self.lookup.get('P_t', new_processes)
+                for index, row in df.iterrows():
+                    self.material_tree.addChild(
+                        QTreeWidgetItem(self.transport_tree, [index, row['PROCESS_NAME'], row['LOCATION_NAME']])
+                    )
+                self.dirty = True
+                print('Added transport process', new_processes)
+
+                # add new product flows to set and update parameters
+                product_flow_df = mdv.get_process_product_flow(self.conn, new_processes)
+                flow_ids = product_flow_df.FLOW_REF_ID.to_list()
+                if len(flow_ids) > 0:
+                    self.sets['F_t'].extend([fid for fid in flow_ids if fid not in self.sets['F_t']])
+                params = mb.build_parameters(self.sets, self.get_parameters(), self.spec)
+                self.parameters = mu.get_index_value_parameters(params)
 
     def material_transport_link(self, link: bool):
         item = self.process_tree.selectedItems()
@@ -729,34 +793,31 @@ class ProcessFlow(QWidget):
         # update display
         self.process_tree_clicked(item[1-m])
 
-    def get_new_j(self, ref_ids, parameter_j):
-        # create a new link table for every F_t, P_t combination for each ref_id
-        link = pd.DataFrame([j['index'] for j in parameter_j if j['value'] == 1],
-                            columns=['F_m', 'P_m', 'F_t', 'P_t'])
-        transport_df = link[['F_t', 'P_t']].drop_duplicates()
-        new_link = pd.concat([transport_df] * len(ref_ids))
-        new_link.insert(0, 'P_m', [ref_ids] * new_link.shape[0])
-        new_link.insert(0, 'F_m', '')
-        new_link['value'] = 1
+    # def get_new_j(self, ref_ids, parameter_j):
+    #     # create a new link table for every F_t, P_t combination for each ref_id
+    #     link = pd.DataFrame([j['index'] for j in parameter_j if j['value'] == 1],
+    #                         columns=['F_m', 'P_m', 'F_t', 'P_t'])
+    #     transport_df = link[['F_t', 'P_t']].drop_duplicates()
+    #     new_link = pd.concat([transport_df] * len(ref_ids))
+    #     new_link.insert(0, 'P_m', [ref_ids] * new_link.shape[0])
+    #     new_link.insert(0, 'F_m', '')
+    #     new_link['value'] = 1
+    #
+    #     # put sets into one column
+    #     new_link['index'] = new_link[['F_m', 'P_m', 'F_t', 'P_t']].values.tolist()
+    #     df = new_link[['index', 'value']]
+    #
+    #     # turn table into json format
+    #     def f(g): return {'index': g[0], 'value': g[1]}
+    #     new_j = list(df.apply(f, axis=1))
+    #
+    #     return new_j
 
-        # put sets into one column
-        new_link['index'] = new_link[['F_m', 'P_m', 'F_t', 'P_t']].values.tolist()
-        df = new_link[['index', 'value']]
+    # def remove_flow(self):
+    #     pass
 
-        # turn table into json format
-        def f(g): return {'index': g[0], 'value': g[1]}
-        new_j = list(df.apply(f, axis=1))
-
-        return new_j
-
-    def remove_flow(self):
-        pass
-
-    def remove_process(self, item):
-        pass
-
-    def remove_link(self):
-        pass
+    # def remove_link(self):
+    #     pass
 
     def get_parameters(self):
         return self.parameters

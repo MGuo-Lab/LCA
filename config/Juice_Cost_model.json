@@ -8,9 +8,13 @@
     "controller": "<class 'molaqt.controllers.StandardController'>",
     "db_file": "C:\\data\\openlca\\sqlite\\system\\CSV_juice_ecoinvent_36_apos_lci_20200206_20201029-102818.sqlite",
     "sets": {
-        "F_m": [],
+        "F_m": [
+            "1f7bbd3e-fcd1-412d-8608-035b855ea735"
+        ],
         "F_s": [],
-        "F_t": [],
+        "F_t": [
+            "1f7bbd3e-fcd1-412d-8608-035b855ea735"
+        ],
         "D": [
             "d1"
         ],
@@ -20,8 +24,12 @@
         "K": [
             "k1"
         ],
-        "P_m": [],
-        "P_t": [],
+        "P_m": [
+            "59e8d600-0acc-465d-8e6f-e092f03b1e52"
+        ],
+        "P_t": [
+            "5bab02e2-687e-4b8a-96be-1bb00eb29521"
+        ],
         "P_s": [],
         "KPI": [],
         "OBJ": [
@@ -32,6 +40,37 @@
         "P": []
     },
     "parameters": {
+        "C": [
+            {
+                "index": [
+                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                    "k1",
+                    "d1",
+                    "t1"
+                ],
+                "value": 1.0
+            }
+        ],
+        "U": [
+            {
+                "index": [
+                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                    "1f7bbd3e-fcd1-412d-8608-035b855ea735"
+                ],
+                "value": 0.001
+            }
+        ],
+        "d": [
+            {
+                "index": [
+                    "59e8d600-0acc-465d-8e6f-e092f03b1e52",
+                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                    "k1",
+                    "t1"
+                ],
+                "value": 0
+            }
+        ],
         "X": [
             {
                 "index": [
@@ -67,6 +106,17 @@
                     "k1"
                 ],
                 "value": 0
+            }
+        ],
+        "J": [
+            {
+                "index": [
+                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                    "59e8d600-0acc-465d-8e6f-e092f03b1e52",
+                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                    "5bab02e2-687e-4b8a-96be-1bb00eb29521"
+                ],
+                "value": 1
             }
         ],
         "w": [

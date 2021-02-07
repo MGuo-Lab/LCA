@@ -100,7 +100,7 @@ def build_parameters(sets, parameters, spec):
     :param sets: dict of sets
     :param spec: Specification object
     :param parameters: dict of parameters
-    :return: dict
+    :return: dict of DataFrames
     """
     par = {}
     for p, element_list in spec.get_default_parameters(sets).items():

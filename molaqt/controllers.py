@@ -12,7 +12,7 @@ import molaqt.widgets as mw
 class Controller(QWidget):
     """
     A Controller is a collection of widgets with which to construct an optimisation problem from a specification.
-    Concrete implementations are derived from this class.
+    Implementations are derived from this class.
     """
 
     def __init__(self, user_config):
@@ -20,7 +20,12 @@ class Controller(QWidget):
         self.saved = False
         self.user_config = user_config
         self.spec = mb.create_specification(user_config['specification'], user_config['settings'])
-        print("*** Specification settings:", user_config['settings'])
+
+        # merge user sets and parameters into spec defaults
+        self.sets = self.spec.get_default_sets()
+        self.sets.update(user_config['sets'])
+        self.parameters = self.spec.get_default_parameters(self.sets)
+        self.parameters.update(user_config['parameters'])
 
     def get_config(self):
         """
@@ -33,11 +38,14 @@ class Controller(QWidget):
             'specification': str(self.spec.__class__),
             'controller': self.user_config['controller'],
             'db_file': self.db_file,
-            'sets': self.sets_editor.sets,
-            'parameters': self.parameters_editor.get_parameters(),
+            'sets': self.sets,
+            'parameters': self.get_parameters(),
         }
 
         return config
+
+    def get_parameters(self):
+        return super.get_parameters()
 
 
 class CustomController(Controller):
@@ -54,13 +62,11 @@ class CustomController(Controller):
         self.lookup = dv.LookupTables(self.conn)
 
         # add widgets for objective, network, build, run
-        # TODO put sets and parameters in Controller and remove SetsEditor from here?
-        self.sets_editor = mw.SetsEditor(user_config['sets'], self.spec, self.lookup)
-        self.obj = mw.ObjectiveWidget(self.lookup, self.sets_editor.sets['KPI'])
-        self.process_flow = mw.ProcessFlow(user_config['sets'], user_config['parameters'],
+        self.obj = mw.ObjectiveWidget(self.lookup, self.sets['KPI'])
+        self.process_flow = mw.ProcessFlow(self.sets, self.parameters,
                                            self.spec, self.lookup, self.conn)
-        self.parameters_editor = mw.ParametersEditor(self.sets_editor.sets, user_config['parameters'],
-                                                     self.spec, self.lookup)
+        p = {k: v for k, v in self.parameters.items() if k != 'J'}
+        self.parameters_editor = mw.ParametersEditor(self.sets, p, self.spec, self.lookup)
         self.model_run = mr.ModelRun(self.lookup)
         self.model_build = mqb.ModelBuild(self)
 
@@ -87,6 +93,13 @@ class CustomController(Controller):
         layout.addWidget(self.tabs)
         self.setLayout(layout)
 
+    def get_parameters(self):
+        self.parameters = self.parameters_editor.get_parameters()
+        # TODO: only allow process_flow to alter J
+        p = self.process_flow.get_parameters()
+        self.parameters.update({'J': p['J']})
+        return self.parameters
+
 
 class StandardController(Controller):
 
@@ -102,8 +115,8 @@ class StandardController(Controller):
         self.lookup = dv.LookupTables(self.conn)
 
         # add widgets for sets, parameters, build, run
-        self.sets_editor = mw.SetsEditor(user_config['sets'], self.spec, self.lookup)
-        self.parameters_editor = mw.ParametersEditor(self.sets_editor.sets, user_config['parameters'],
+        self.sets_editor = mw.SetsEditor(self.sets, self.spec, self.lookup)
+        self.parameters_editor = mw.ParametersEditor(self.sets, self.parameters,
                                                      self.spec, self.lookup)
         self.model_run = mr.ModelRun(self.lookup)
         self.model_build = mqb.ModelBuild(self)
@@ -134,6 +147,8 @@ class StandardController(Controller):
         layout.addWidget(self.tabs)
         self.setLayout(layout)
 
-
+    def get_parameters(self):
+        self.parameters = self.parameters_editor.get_parameters()
+        return self.parameters
 
 
