@@ -119,7 +119,7 @@ class LookupWidget(QDialog):
 
 class SetsEditor(QWidget):
 
-    def __init__(self, user_sets, spec, lookup):
+    def __init__(self, sets, spec, lookup):
         """
         Widget to edit optimisation sets.
 
@@ -129,12 +129,13 @@ class SetsEditor(QWidget):
         """
 
         super().__init__()
+        self.sets = sets
         self.spec = spec
         self.lookup = lookup
 
         # merge user set into spec defaults
-        sets = spec.get_default_sets()
-        sets.update(user_sets)
+        # sets = spec.get_default_sets()
+        # sets.update(user_sets)
 
         # only allow user-defined sets to be changed
         user_defined_sets = {k: sets[k] for k in spec.user_defined_sets.keys()}
@@ -181,7 +182,7 @@ class SetsEditor(QWidget):
         if current_set not in self.lookup.keys():
             text, ok = QInputDialog.getText(self, 'Add Element', 'Name:')
             if ok:
-                self.sets[current_set] += [str(text)]
+                self.sets[current_set].append(str(text))
                 self.set_table.setModel(md.SetModel(self.sets[current_set]))
                 self.dirty = True
                 print("Added element", text)
@@ -191,7 +192,7 @@ class SetsEditor(QWidget):
             ok = lookup_widget.exec_()
             if ok:
                 ref_ids = lookup_widget.get_elements()
-                self.sets[current_set] += ref_ids
+                self.sets[current_set].extend(ref_ids)
                 df = self.lookup.get(current_set, self.sets[current_set])
                 self.set_table.setModel(md.PandasModel(df, is_indexed=True))
                 self.dirty = True
@@ -210,7 +211,11 @@ class SetsEditor(QWidget):
     def remove_from_set(self):
         current_set = self.sets_list.currentItem().text()
         rows = [i.row() for i in self.set_table.selectedIndexes()]
-        self.sets[current_set] = [ref for i, ref in enumerate(self.sets[current_set]) if i not in rows]
+        model = self.set_table.model()
+        ref_ids = model._data.index[rows].to_list()
+        for ref in ref_ids:
+            if ref in self.sets[current_set]:
+                self.sets[current_set].remove(ref)
         if current_set in self.lookup.keys():
             df = self.lookup.get(current_set, self.sets[current_set])
             model = md.PandasModel(df, is_indexed=True)
@@ -288,7 +293,8 @@ class ParametersEditor(QWidget):
         self.lookup = lookup
 
         # build a dictionary of DataFrames of default parameters from sets
-        self.par = {k: v for k, v in mb.build_parameters(sets, parameters, spec).items() if k in parameters}
+        # self.par = {k: v for k, v in mb.build_parameters(sets, parameters, spec).items() if k in parameters}
+        self.par = mb.build_parameters(sets, parameters, spec)
 
         # list widget for user-defined parameters
         self.parameters_list = QListWidget()
@@ -337,7 +343,8 @@ class ParametersEditor(QWidget):
     def rebuild_clicked(self):
         print("Clicked rebuild button")
         p = self.get_parameters()
-        self.par = {k: v for k, v in mb.build_parameters(self.sets, p, self.spec).items() if k in p}
+        # self.par = {k: v for k, v in mb.build_parameters(self.sets, p, self.spec).items() if k in p}
+        self.par = mb.build_parameters(self.sets, p, self.spec)
         self.parameter_clicked(self.parameters_list.selectedItems()[0])
 
     def get_parameters(self):
