@@ -1,0 +1,10 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file alias="Sunfish2.jpg">resources/Sunfish2.jpg</file>
+    <file alias="python-logo.png">resources/python-logo.png</file>
+    <file alias="New.svg">resources/New.svg</file>
+    <file alias="Save.svg">resources/Save.svg</file>
+    <file alias="Library.svg">resources/Library.svg</file>
+    <file alias="Help.svg">resources/Help.svg</file>
+</qresource>
+</RCC>

@@ -2,10 +2,14 @@ import sys
 import json
 import webbrowser
 from zipfile import ZipFile
+
 from pathlib import Path
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QLabel
 from PyQt5.QtWidgets import QMessageBox, QAction, QTreeWidgetItem
 from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import QSize
+
+import qrc_resources
 import molaqt.dbview as dbv
 import molaqt.manager as mt
 import molaqt.dialogs as md
@@ -28,14 +32,16 @@ class MolaMainWindow(QMainWindow):
 
         self.setGeometry(50, 50, 800, 600)
         self.setWindowTitle(self.system['app_name'])
-        self.setWindowIcon(QIcon('images/python-logo.png'))
+        self.setWindowIcon(QIcon(":python-logo.png"))
         # self.statusBar()
 
         # model configuration
-        new_model_action = QAction("&New ...", self)
-        new_model_action.triggered.connect(self.new_model)
-        save_model_action = QAction("&Save", self)
-        save_model_action.triggered.connect(self.save_model)
+        self.new_model_action = QAction(QIcon(":New.svg"), "&New ...", self)
+        self.new_model_action.setShortcut("Ctrl+N")
+        self.new_model_action.triggered.connect(self.new_model)
+        self.save_model_action = QAction(QIcon(":Save.svg"), "&Save", self)
+        self.save_model_action.setShortcut("Ctrl+S")
+        self.save_model_action.triggered.connect(self.save_model)
         close_model_action = QAction("&Close", self)
         close_model_action.triggered.connect(self.close_model)
         exit_action = QAction("&Exit", self)
@@ -47,31 +53,33 @@ class MolaMainWindow(QMainWindow):
         import_sqlite_db_action = QAction("&Import sqlite ...", self)
         import_sqlite_db_action.setStatusTip('Import sqlite database')
         import_sqlite_db_action.triggered.connect(self.import_sqlite_database)
-        open_db_action = QAction("&Open ...", self)
-        open_db_action.setStatusTip('Open database')
-        open_db_action.triggered.connect(self.open_database)
+        self.open_db_action = QAction(QIcon(":Library.svg"), "&Open ...", self)
+        self.open_db_action.setStatusTip('Open database')
+        self.open_db_action.triggered.connect(self.open_database)
 
         # help
         general_specification_v5_action = QAction("&General Specification v5", self)
         general_specification_v5_action.triggered.connect(self.general_specification_v5)
-        about_action = QAction("&About", self)
-        about_action.triggered.connect(self.about)
+        self.about_action = QAction(QIcon(":Help.svg"), "&About", self)
+        self.about_action.triggered.connect(self.about)
 
         # menus
         main_menu = self.menuBar()
         model_menu = main_menu.addMenu('&Model')
-        model_menu.addAction(new_model_action)
-        model_menu.addAction(save_model_action)
+        model_menu.addAction(self.new_model_action)
+        model_menu.addAction(self.save_model_action)
         model_menu.addAction(close_model_action)
         model_menu.addAction(exit_action)
 
         db_menu = main_menu.addMenu('&Database')
         db_menu.addAction(import_sqlite_db_action)
-        db_menu.addAction(open_db_action)
+        db_menu.addAction(self.open_db_action)
 
         help_menu = main_menu.addMenu('&Help')
         help_menu.addAction(general_specification_v5_action)
-        help_menu.addAction(about_action)
+        help_menu.addAction(self.about_action)
+
+        self._create_toolbars()
 
         self.manager = mt.ModelManager(self.system)
         self.db_view = []
@@ -177,6 +185,13 @@ class MolaMainWindow(QMainWindow):
                 self.setWindowTitle(self.system['app_name'])
                 print('Closed model', self.manager.controller_config_file)
 
+    def _create_toolbars(self):
+        main_tool_bar = self.addToolBar("Main")
+        main_tool_bar.setIconSize(QSize(24, 24))
+        main_tool_bar.addAction(self.new_model_action)
+        main_tool_bar.addAction(self.save_model_action)
+        main_tool_bar.addAction(self.open_db_action)
+        main_tool_bar.addAction(self.about_action)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

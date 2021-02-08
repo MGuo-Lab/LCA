@@ -17,7 +17,7 @@ class DbView(QMainWindow):
         super(DbView, self).__init__()
         self.setGeometry(50, 50, 800, 600)
         self.setWindowTitle("Database " + db_name)
-        self.setWindowIcon(QIcon('images/python-logo.png'))
+        self.setWindowIcon(QIcon('resources/python-logo.png'))
         self.statusBar()
 
         # get first table

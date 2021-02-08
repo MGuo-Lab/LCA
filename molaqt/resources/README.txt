@@ -1,0 +1,1 @@
+Icons are taken from https://design.firefox.com/icons/viewer/

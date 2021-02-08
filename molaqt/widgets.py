@@ -45,7 +45,7 @@ class LookupWidget(QDialog):
             set_label = set_name
         self.setWindowTitle('Lookup ' + set_label)
         self.resize(800, 600)
-        self.setWindowIcon(QIcon('images/python-logo.png'))
+        self.setWindowIcon(QIcon('resources/python-logo.png'))
 
         # self.lookup = lookup
         # self.set_name = set_name
@@ -511,7 +511,7 @@ class AboutWidget(QWidget):
 
         # widgets
         label = QLabel()
-        pixmap = QPixmap(str(settings['package_path'].joinpath("images/Sunfish2.jpg")))
+        pixmap = QPixmap(str(settings['package_path'].joinpath(":Sunfish2.jpg")))
         pixmap = pixmap.scaledToWidth(800)
         # painter = QPainter(pixmap)
         # painter.setFont(QFont("Arial"));
