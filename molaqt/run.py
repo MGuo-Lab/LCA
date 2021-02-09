@@ -31,7 +31,7 @@ class ModelRun(QWidget):
 
         # add table for run content
         self.run_table = QTableView()
-        self.run_table.setSelectionBehavior(QTableView.SelectRows);
+        self.run_table.setSelectionBehavior(QTableView.SelectRows)
 
         # component documentation
         self.cpt_doc = QLabel()

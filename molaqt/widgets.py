@@ -75,6 +75,7 @@ class LookupWidget(QDialog):
         self.lookup_table.setModel(self.lookup_model)
         self.lookup_table.setContextMenuPolicy(Qt.ActionsContextMenu)
         self.lookup_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
+        self.lookup_table.setSelectionBehavior(QTableView.SelectRows)
 
         # arrange widgets in grid
         grid_layout = QGridLayout()
@@ -343,6 +344,7 @@ class ParametersEditor(QWidget):
     def rebuild_clicked(self):
         print("Clicked rebuild button")
         p = self.get_parameters()
+        # TODO fix the logic here
         # self.par = {k: v for k, v in mb.build_parameters(self.sets, p, self.spec).items() if k in p}
         self.par = mb.build_parameters(self.sets, p, self.spec)
         self.parameter_clicked(self.parameters_list.selectedItems()[0])
@@ -374,6 +376,7 @@ class ParameterWidget(QWidget):
         index_sets = spec.user_defined_parameters[name]['index']
         self.parameter_table.setModel(md.ParameterModel(table, index_sets, lookup))
         self.parameter_table.setColumnHidden(0, True)
+        self.parameter_table.resizeColumnsToContents()
 
         # arrange widgets
         layout = QVBoxLayout()
@@ -595,9 +598,6 @@ class ProcessFlow(QWidget):
         flows_model = md.PandasModel(pd.DataFrame(columns=['Input Process ID', 'Input Process Name',
                                                            'Output Flow ID', 'Output Flow Name']))
         self.flows_table.setModel(flows_model)
-        # self.flows_table.setContextMenuPolicy(Qt.ActionsContextMenu)
-        # self.remove_flow_action = QAction("Remove flow", None)
-        # self.remove_flow_action.triggered.connect(self.remove_flow)
         self.flows_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.flows_table.resizeRowsToContents()
 
@@ -700,11 +700,12 @@ class ProcessFlow(QWidget):
 
                 # add new product flows to set and update parameters
                 product_flow_df = mdv.get_process_product_flow(self.conn, new_processes)
-                flow_ids = product_flow_df.FLOW_REF_ID.to_list()
+                flow_ids = list(product_flow_df.FLOW_REF_ID.unique())
                 if len(flow_ids) > 0:
                     self.sets['F_m'].extend([fid for fid in flow_ids if fid not in self.sets['F_m']])
                 params = mb.build_parameters(self.sets, self.get_parameters(), self.spec)
                 self.parameters = mu.get_index_value_parameters(params)
+                self.process_tree.resizeColumnToContents(1)
 
     def remove_process(self):
         items = self.process_tree.selectedItems()
@@ -743,6 +744,7 @@ class ProcessFlow(QWidget):
         # rebuild sets and parameters
         params = mb.build_parameters(self.sets, self.get_parameters(), self.spec)
         self.parameters = mu.get_index_value_parameters(params)
+        self.process_tree.resizeColumnToContents(1)
 
     def add_transport_process_clicked(self):
         print('Add transport process button clicked')
@@ -764,11 +766,12 @@ class ProcessFlow(QWidget):
 
                 # add new product flows to set and update parameters
                 product_flow_df = mdv.get_process_product_flow(self.conn, new_processes)
-                flow_ids = product_flow_df.FLOW_REF_ID.to_list()
+                flow_ids = list(product_flow_df.FLOW_REF_ID.unique())
                 if len(flow_ids) > 0:
                     self.sets['F_t'].extend([fid for fid in flow_ids if fid not in self.sets['F_t']])
                 params = mb.build_parameters(self.sets, self.get_parameters(), self.spec)
                 self.parameters = mu.get_index_value_parameters(params)
+                self.process_tree.resizeColumnToContents(1)
 
     def material_transport_link(self, link: bool):
         item = self.process_tree.selectedItems()
@@ -819,12 +822,6 @@ class ProcessFlow(QWidget):
     #     new_j = list(df.apply(f, axis=1))
     #
     #     return new_j
-
-    # def remove_flow(self):
-    #     pass
-
-    # def remove_link(self):
-    #     pass
 
     def get_parameters(self):
         return self.parameters
