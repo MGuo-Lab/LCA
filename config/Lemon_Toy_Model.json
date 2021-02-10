@@ -4,7 +4,7 @@
         "test_setting": false
     },
     "doc_path": "Z:\\work\\code\\Python\\LCA\\molaqt\\doc\\Toy_Problem_A2_Lemon_Fruit.html",
-    "specification": "<class 'mola.specification5.ScheduleSpecification'>",
+    "specification": "<class 'mola.specification5.GeneralSpecification'>",
     "controller": "<class 'molaqt.controllers.StandardController'>",
     "db_file": "C:/data/openlca/sqlite/system/CSV_juice_ecoinvent_36_apos_lci_20200206_20201029-102818.sqlite",
     "sets": {

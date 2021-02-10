@@ -25,7 +25,7 @@ class TestWidgets(TestCase):
         sets_file = NamedTemporaryFile(suffix='.json', delete=False)
         with open(sets_file.name, 'w') as fp:
             json.dump(config['sets'], fp)
-        spec = ms.ScheduleSpecification()
+        spec = ms.GeneralSpecification()
         vbox, tab = mw.get_sets(spec, lookups, sets_file.name)
         sets_file.close()
         self.assertEqual(len(vbox.children), 2)

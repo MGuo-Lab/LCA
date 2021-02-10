@@ -17,9 +17,9 @@ class TestBuild(TestCase):
             self.assertEqual(len(instance), 1)
 
     def test_create_specification(self):
-        cls = "<class 'mola.specification5.ScheduleSpecification'>"
+        cls = "<class 'mola.specification5.GeneralSpecification'>"
         spec = mb.create_specification(cls)
-        self.assertIsInstance(spec, ms.ScheduleSpecification)
+        self.assertIsInstance(spec, ms.GeneralSpecification)
 
         spec1 = mb.create_specification(cls, settings={'distance_calculated': True})
         self.assertEqual(spec1.settings['distance_calculated'], True)

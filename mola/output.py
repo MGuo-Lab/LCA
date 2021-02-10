@@ -45,13 +45,13 @@ def get_objectives_frame(model_instance, max_object_size=100):
 
 
 @singledispatch
-def get_entity(cpt, lookup=dict(), drop_index=False):
+def get_entity(cpt, lookup=dict(), drop_index=False, units=None, non_zero=False, distinct_levels=False):
     print('Type not supported')
 
 
 @get_entity.register(pe.pyomo.core.base.var.IndexedVar)
 @get_entity.register(pe.pyomo.core.base.param.IndexedParam)
-def _(cpt, lookup=dict(), drop_index=True, units=None):
+def _(cpt, lookup=dict(), drop_index=True, units=None, non_zero=False, distinct_levels=False):
     v = cpt.extract_values()
     idx = cpt._index
 
@@ -69,15 +69,23 @@ def _(cpt, lookup=dict(), drop_index=True, units=None):
             units_dfr = lookup.get_units(process_ref_ids, set_name=u)
             df = df.merge(units_dfr, left_index=True, right_index=True)
 
-    # join text onto table from lookup
+    # join text from index onto table
     for pyo_set in idx.subsets():
-        if pyo_set.name in lookup:
-            set_content = lookup.get_single_column(pyo_set.name)
-            set_content.index.names = [pyo_set.name]
-            df = df.join(set_content)
+        if not distinct_levels or len(df.index.get_level_values(pyo_set.name).unique()) > 1:
+            if pyo_set.name in lookup:
+                set_content = lookup.get_single_column(pyo_set.name)
+                set_content.index.names = [pyo_set.name]
+                df = df.join(set_content)
+            else:
+                col_names = df.columns.to_list() + [pyo_set.name]
+                df = df.reset_index(pyo_set.name, drop=False).reindex(col_names, axis=1)
 
     if drop_index:
         df = df.reset_index(drop=drop_index)
+
+    if non_zero:
+        numeric_cols = df.select_dtypes('number').columns
+        df = df[(df[numeric_cols] > 0).any(axis=1)]
 
     return df
 

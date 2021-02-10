@@ -9,6 +9,8 @@ import importlib
 import pandas as pd
 from pyomo.environ import units as pu
 
+import mola.utils as mu
+
 
 def get_config(json_file_name):
     """
@@ -94,13 +96,15 @@ def create_specification(spec_class, settings=None):
     return spec
 
 
-def build_parameters(sets, parameters, spec):
+def build_parameters(sets, parameters, spec, index_value=False):
     """
-    Build a dictionary of DataFrames of default parameters from sets using existing parameter values
-    :param sets: dict of sets
-    :param spec: Specification object
-    :param parameters: dict of parameters
-    :return: dict of DataFrames
+    Build a dictionary of DataFrames of default parameters from sets using existing parameter values.
+
+    :param dict sets: sets for optimisation
+    :param dict parameters: parameters
+    :param Specification spec: Specification object
+    :param boolean index_value: return output in index-value form # TODO: make use of this functionality
+    :return: dict of DataFrames or dict of index-value dicts
     """
     par = {}
     for p, element_list in spec.get_default_parameters(sets).items():
@@ -121,6 +125,9 @@ def build_parameters(sets, parameters, spec):
             par[p] = pd.concat(row_list, ignore_index=True)
         else:
             par[p] = pd.DataFrame({'Index': [], 'Value': []})
+
+    if index_value:
+        par = mu.get_index_value_parameters(par)
 
     return par
 

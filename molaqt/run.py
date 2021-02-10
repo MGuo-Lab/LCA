@@ -19,10 +19,13 @@ class ModelRun(QWidget):
         self.run_button = QPushButton("Run")
         self.run_button.clicked.connect(self.run_button_clicked)
 
-        # checkbox to show zero values only
+        # checkboxes
         self.nonzero_checkbox = QCheckBox('Non-zero flows')
         self.nonzero_checkbox.toggle()
-        self.nonzero_checkbox.clicked.connect(self.nonzero_checkbox_clicked)
+        self.nonzero_checkbox.clicked.connect(self.checkbox_clicked)
+        self.distinct_levels_checkbox = QCheckBox('Distinct levels')
+        self.distinct_levels_checkbox.toggle()
+        self.distinct_levels_checkbox.clicked.connect(self.checkbox_clicked)
 
         # add list widget for output
         self.run_tree = QTreeWidget()
@@ -41,12 +44,13 @@ class ModelRun(QWidget):
         grid_layout.addWidget(self.run_button, 0, 0)
         grid_layout.addWidget(self.run_tree, 1, 0)
         grid_layout.addWidget(self.cpt_doc, 0, 1)
-        grid_layout.addWidget(self.nonzero_checkbox, 0, 2)
-        grid_layout.addWidget(self.run_table, 1, 1, 1, 2)
+        grid_layout.addWidget(self.distinct_levels_checkbox, 0, 2)
+        grid_layout.addWidget(self.nonzero_checkbox, 0, 3)
+        grid_layout.addWidget(self.run_table, 1, 1, 1, 3)
         grid_layout.setColumnStretch(1, 2)
         self.setLayout(grid_layout)
 
-    def nonzero_checkbox_clicked(self):
+    def checkbox_clicked(self):
         if self.run_tree:
             item = self.run_tree.selectedItems()
             self.run_item_clicked(item[0])
@@ -76,10 +80,10 @@ class ModelRun(QWidget):
             if item.parent().text(0) == 'Variables':
                 cpt = self.concrete_model.find_component(item.text(0))
                 self.cpt_doc.setText(item.text(0) + ': ' + cpt.doc)
-                df = mo.get_entity(cpt, self.lookup, units=True)
-                if self.nonzero_checkbox.isChecked():
-                    numeric_cols = df.select_dtypes('number').columns
-                    df = df[(df[numeric_cols] > 0).any(axis=1)]
+                df = mo.get_entity(cpt, self.lookup, units=True,
+                                   non_zero=self.nonzero_checkbox.isChecked(),
+                                   distinct_levels=self.distinct_levels_checkbox.isChecked()
+                                   )
                 run_model = md.PandasModel(df)
                 self.run_table.setModel(run_model)
                 self.run_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)

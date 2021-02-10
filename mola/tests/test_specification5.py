@@ -2,13 +2,15 @@ from unittest import TestCase
 from tempfile import NamedTemporaryFile
 
 import mola.specification5 as sp
+import mola.build as mb
+import mola.utils as mu
 import json
 
-# TODO add a SelectionSpecification test
+# TODO add a SimpleSpecification test
 
 
 class TestScheduleSpecification(TestCase):
-    spec = sp.ScheduleSpecification()
+    spec = sp.GeneralSpecification()
     with open('test_model_config.json') as fp:
         config = json.load(fp)
 
@@ -26,6 +28,23 @@ class TestScheduleSpecification(TestCase):
         parameters_json.close()
         model_instance = self.spec.populate([sets_json.name, parameters_json.name])
         self.assertGreater(len(model_instance), 0)
+
+    def test_populate_dummy(self):
+        sets_json = NamedTemporaryFile(suffix='.json', delete=False)
+        parameters_json = NamedTemporaryFile(suffix='.json', delete=False)
+        sets = self.config['sets']
+        parameters = self.config['parameters']
+        # using non-db sets
+        sets['P_m'] = ['pm1']
+        sets['P_s'] = ['pt1']
+        sets['P_t'] = ['ps1']
+        parameters = mb.build_parameters(sets, parameters, self.spec, index_value=True)
+        with open(sets_json.name, 'w') as fp:
+            json.dump(sets, fp)
+        with open(parameters_json.name, 'w') as fp:
+            json.dump(parameters, fp)
+        sets_json.close()
+        parameters_json.close()
         model_instance = self.spec.populate([sets_json.name, parameters_json.name],
                                             elementary_flow_ref_ids=['e1, e2, e3'])
         self.assertGreater(len(model_instance), 0)

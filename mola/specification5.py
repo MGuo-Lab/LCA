@@ -50,7 +50,7 @@ class Specification:
         raise NotImplementedError()
 
 
-class ScheduleSpecification(Specification):
+class GeneralSpecification(Specification):
     """
     Miao pyomo specification
     """
@@ -143,7 +143,7 @@ class ScheduleSpecification(Specification):
         abstract_model.YI = pe.Param(abstract_model.P_m, abstract_model.F_m, doc="Latitude", units=pu.degree)
 
         # Unit conversion factors
-        abstract_model.UU = pe.Param(abstract_model.F, abstract_model.P, within=pe.Any)
+        abstract_model.UU = pe.Param(abstract_model.F, abstract_model.P, default='', within=pe.Any)
 
         # distances calculated from db
         def distance_rule(model, pm, fm, k, t):
@@ -321,6 +321,11 @@ class ScheduleSpecification(Specification):
             olca_dp.load(filename=db_file, using='sqlite3', query=pfc_sql, param=self.abstract_model.phi,
                          index=(self.abstract_model.F, self.abstract_model.P, self.abstract_model.T))
 
+            # db units TODO: allow the user to define the unit conversion using a setting and model.U
+            olca_dp.load(filename=db_file, using='sqlite3',
+                         query=sq.build_product_flow_units(process_ref_ids=processes),
+                         param=self.abstract_model.UU, index=(self.abstract_model.F, self.abstract_model.P))
+
         else:
             # for testing
             olca_dp.__setitem__('E', elementary_flow_ref_ids)
@@ -328,12 +333,6 @@ class ScheduleSpecification(Specification):
             process_breakdown = {(e, f, p): 3 for e in olca_dp.data('E') for f in flows for p in processes}
             olca_dp.__setitem__('Ef', impact_factors)
             olca_dp.__setitem__('EF', process_breakdown)
-
-        # db units
-        olca_dp.load(filename=db_file, using='sqlite3',
-                     query=sq.build_product_flow_units(process_ref_ids=processes),
-                     param=self.abstract_model.UU, index=(self.abstract_model.F, self.abstract_model.P))
-
 
         # load locations
         p_m = list(olca_dp.data('P_m'))

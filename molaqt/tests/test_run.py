@@ -32,6 +32,7 @@ class ModelRunTest(TestCase):
         # setup a model run
         model_run = mr.ModelRun(lookup)
         model_run.concrete_model = instance
+        model_run.resize(800, 600)
         model_run.show()
 
         # run the model
