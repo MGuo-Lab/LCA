@@ -24,7 +24,8 @@ class NewModelDialog(QDialog):
         # specification combobox
         self.specification.currentIndexChanged.connect(self.specification_changed)
         self.specifications = {"General Specification": ms.ScheduleSpecification,
-                               "Simple Specification": ms.SimpleSpecification}
+                               "Simple Specification": ms.SimpleSpecification,
+                               "AIMMS Example Specification": ms.AIMMSExampleSpecification}
         for spec in self.specifications:
             self.specification.addItem(spec)
 

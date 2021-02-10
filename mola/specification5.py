@@ -49,6 +49,98 @@ class Specification:
         raise NotImplementedError()
 
 
+class AIMMSExampleSpecification(Specification):
+    """
+    A Mola Specification class containing an abstract model to solve the AIMMS simple tutorial problem.
+    """
+    user_defined_sets = {
+        'Q': 'Plants',
+        'C': 'Customers',
+    }
+    user_defined_parameters = {
+        'S': {'index': ['Q'], 'doc': 'Supply available at plant q'},
+        'D': {'index': ['C'], 'doc': 'Demand required by customer c'},
+        'U': {'index': ['Q', 'C'], 'doc': 'Cost per unit'},
+    }
+    # db parameters need to be constructed explicitly
+    controllers = {"Standard": "StandardController"}
+    default_settings = {
+    }
+
+    def __init__(self):
+
+        # instance object to hold just the setting values
+        self.settings = {k: v['value'] for k, v in self.default_settings.items()}
+
+        # setup abstract model
+        abstract_model = self.abstract_model = pe.AbstractModel()
+
+        # user-defined sets
+        for var, doc in self.user_defined_sets.items():
+            abstract_model.add_component(var, pe.Set(doc=doc))
+
+        # user-defined parameters
+        for param, val in self.user_defined_parameters.items():
+            idx = [abstract_model.component(i) for i in val['index']]
+            abstract_model.add_component(param, pe.Param(*idx, doc=val['doc'], within=pe.Reals))
+
+        # variables
+        abstract_model.x = pe.Var(abstract_model.Q, abstract_model.C,
+                                  within=pe.NonNegativeIntegers, doc='Number of units')
+
+        # objective
+        def objective_rule(model):
+            return sum(model.U[p, c] * model.x[p, c] for p in model.Q for c in model.C)
+
+        # TODO: add these to the user interface with doc strings and a setting
+        abstract_model.obj = pe.Objective(rule=objective_rule)
+        abstract_model.obj1 = pe.Objective(rule=objective_rule)
+        abstract_model.obj2 = pe.Objective(rule=objective_rule)
+
+        # constraints
+        def supply_rule(model, p):
+            return sum([model.x[p, c] for c in model.C]) <= model.S[p]
+        abstract_model.supply_constraint = pe.Constraint(abstract_model.Q, rule=supply_rule)
+
+        def demand_rule(model, c):
+            return sum([model.x[p, c] for p in model.Q]) >= model.D[c]
+        abstract_model.demand_constraint = pe.Constraint(abstract_model.C, rule=demand_rule)
+
+    def populate(self, json_files=None, elementary_flow_ref_ids=None, db_file=None):
+
+        olca_dp = pyod.DataPortal()
+
+        # user data
+        for json_file in json_files:
+            if json_file:
+                olca_dp.load(filename=json_file)
+
+        # use DataPortal to build concrete instance
+        model_instance = self.abstract_model.create_instance(olca_dp)
+
+        return model_instance
+
+    def get_default_sets(self, d=None):
+        user_sets = {
+            'Q': [],
+            'C': [],
+        }
+        if d is not None:
+            user_sets.update(d)
+
+        return user_sets
+
+    def get_default_parameters(self, user_sets):
+        user_params = {
+            'S': [{'index': [q], 'value': 0} for q in user_sets['Q']],
+            'D': [{'index': [c], 'value': 0} for c in user_sets['C']],
+            'U': [{'index': [q, c], 'value': 0}
+                  for q in user_sets['Q'] for c in user_sets['C']],
+        }
+
+        return user_params
+
+
 class SimpleSpecification(Specification):
     """
     Alex pyomo specification
@@ -100,11 +192,11 @@ class SimpleSpecification(Specification):
         # set of objectives
         abstract_model.OBJ = pe.Set(doc='Set of objective functions')
 
-        # Database sets
+        # database sets
         for var, doc in self.db_sets.items():
             abstract_model.add_component(var, pe.Set(doc=doc))
 
-        # User-defined parameters
+        # user-defined parameters
         for param, val in self.user_defined_parameters.items():
             idx = [abstract_model.component(i) for i in val['index']]
             if 'within' in val and val['within'] == 'Binary':
@@ -113,7 +205,7 @@ class SimpleSpecification(Specification):
                 within = pe.Reals
             abstract_model.add_component(param, pe.Param(*idx, doc=val['doc'], within=within))
 
-        # Database parameters
+        # database parameters
         abstract_model.Ef = pe.Param(abstract_model.KPI, abstract_model.E, default=0)
         abstract_model.EF = pe.Param(abstract_model.E, abstract_model.F, abstract_model.P, default=0)
 
@@ -121,14 +213,10 @@ class SimpleSpecification(Specification):
             return sum(model.Ef[kpi, e]*model.EF[e, f, p] for e in model.E)
         abstract_model.EI = pe.Param(abstract_model.KPI, abstract_model.F, abstract_model.P, rule=ei_rule)
 
-        # Unit conversion factors
+        # unit conversion factors
         abstract_model.UU = pe.Param(abstract_model.F, abstract_model.P, within=pe.Any)
 
-        # Unit conversion factors
-        abstract_model.UM = pe.Param(abstract_model.F_m, abstract_model.P_m, within=pe.Reals)
-        abstract_model.UT = pe.Param(abstract_model.F_t, abstract_model.P_t, within=pe.Reals)
-
-        # Variables
+        # variables
         abstract_model.Flow = pe.Var(abstract_model.F_m, abstract_model.P_m,
                                      within=pe.NonNegativeReals, doc='Material flow', units=pu.P_m)
         abstract_model.Specific_Material_Transport_Flow = pe.Var(abstract_model.F_m, abstract_model.P_m,
@@ -165,15 +253,14 @@ class SimpleSpecification(Specification):
                 model.Flow[fm, pm] * model.C[fm, d]
                 for fm in model.F_m for pm in model.P_m)
             return total_demand >= model.Total_Demand[d]
-        self.abstract_model.total_demand_constraint = pe.Constraint(
-            self.abstract_model.D, rule=flow_demand_rule)
+        abstract_model.total_demand_constraint = pe.Constraint(abstract_model.D, rule=flow_demand_rule)
 
         def material_flow_rule(model, fm, pm):
             return model.Flow[fm, pm] == sum(
                 model.J[fm, pm, ft, pt] * model.Specific_Material_Transport_Flow[fm, pm, ft, pt]
                 for ft in model.F_t for pt in model.P_t)
-        self.abstract_model.material_flow_constraint = \
-            pe.Constraint(self.abstract_model.F_m, self.abstract_model.P_m, rule=material_flow_rule)
+        abstract_model.material_flow_constraint = \
+            pe.Constraint(abstract_model.F_m, abstract_model.P_m, rule=material_flow_rule)
 
         def specific_transport_flow_rule(model, ft, pt):
             rhs = 0
@@ -192,22 +279,22 @@ class SimpleSpecification(Specification):
                                model.d[pm, fm]
             return model.Specific_Transport_Flow[ft, pt] == rhs
 
-        self.abstract_model.transport_constraint = pe.Constraint(self.abstract_model.F_t,
-                                                                 self.abstract_model.P_t,
-                                                                 rule=specific_transport_flow_rule)
+        abstract_model.transport_constraint = pe.Constraint(abstract_model.F_t,
+                                                            abstract_model.P_t,
+                                                            rule=specific_transport_flow_rule)
 
         def demand_selection_rule(model):
             return sum(model.Demand_Selection[d] for d in model.D) == 1
 
-        self.abstract_model.demand_selection_constraint = pe.Constraint(rule=demand_selection_rule)
+        abstract_model.demand_selection_constraint = pe.Constraint(rule=demand_selection_rule)
 
         def specific_demand_rule(model, d):
             total_flow = sum(model.Flow[fm, pm] * model.C[fm, d]
                              for fm in model.F_m for pm in model.P_m)
             return total_flow >= model.Demand[d] * model.Demand_Selection[d]
 
-        self.abstract_model.specific_demand_constraint = pe.Constraint(self.abstract_model.D,
-                                                                       rule=specific_demand_rule)
+        abstract_model.specific_demand_constraint = pe.Constraint(abstract_model.D,
+                                                                  rule=specific_demand_rule)
 
         def service_flow_link_rule(model, fs, ps):
             return model.Storage_Service_Flow[fs, ps] == \

@@ -124,7 +124,7 @@ class SetsEditor(QWidget):
         """
         Widget to edit optimisation sets.
 
-        :param list user_sets: sets modified in place by this widget
+        :param list sets: sets modified in place by this widget
         :param Specification spec: object
         :param LookupTables lookup: object
         """
@@ -283,7 +283,7 @@ class ParametersEditor(QWidget):
         up-to-date copy.
 
         :param list sets: optimisation sets
-        :param list parameters: optimisation parameters
+        :param list parameters: optimisation parameters modified in place by this widget
         :param Specification spec: object
         :param LookupTables lookup: object
         """
