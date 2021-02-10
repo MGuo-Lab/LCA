@@ -12,7 +12,6 @@ class NewModelDialog(QDialog):
 
         self.name = QLineEdit(self)
         self.name.setText('test_model')
-        self.specification = QComboBox(self)
 
         # builder combobox
         self.builder = QComboBox(self)
@@ -22,10 +21,9 @@ class NewModelDialog(QDialog):
             "CustomController": mqc.CustomController}
 
         # specification combobox
+        self.specification = QComboBox(self)
         self.specification.currentIndexChanged.connect(self.specification_changed)
-        self.specifications = {"General Specification": ms.ScheduleSpecification,
-                               "Simple Specification": ms.SimpleSpecification,
-                               "AIMMS Example Specification": ms.AIMMSExampleSpecification}
+        self.specifications = {cls.name: cls for cls in ms.Specification.__subclasses__()}
         for spec in self.specifications:
             self.specification.addItem(spec)
 
@@ -37,15 +35,11 @@ class NewModelDialog(QDialog):
 
         # documentation
         self.doc_widget = DocWidget()
-        # self.doc_button = QPushButton('...')
-        # self.doc_box = QHBoxLayout()
-        # self.doc_box.addWidget(self.doc_path)
-        # self.doc_box.addWidget(self.doc_button)
 
         layout = QFormLayout(self)
         layout.addRow("Name", self.name)
         layout.addRow("Specification", self.specification)
-        layout.addRow("Builder", self.builder)
+        layout.addRow("Controller", self.builder)
         layout.addRow("Database", self.database)
         layout.addRow("Documentation", self.doc_widget)
         layout.addWidget(button_box)
