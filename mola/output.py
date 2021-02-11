@@ -1,9 +1,9 @@
 """
 Convert pyomo output to DataFrames
 """
+import sys
 import pandas as pd
 import pyomo.environ as pe
-import mola.dataview as dv
 from functools import singledispatch
 
 
@@ -45,8 +45,8 @@ def get_objectives_frame(model_instance, max_object_size=100):
 
 
 @singledispatch
-def get_entity(cpt, lookup=dict(), drop_index=False, units=None, non_zero=False, distinct_levels=False):
-    print('Type not supported')
+def get_entity(cpt, drop_index=True, units=None, non_zero=False, distinct_levels=False):
+    sys.exit('Type not supported')
 
 
 @get_entity.register(pe.pyomo.core.base.var.IndexedVar)
@@ -89,4 +89,31 @@ def _(cpt, lookup=dict(), drop_index=True, units=None, non_zero=False, distinct_
 
     return df
 
+
+@get_entity.register(pe.pyomo.core.base.objective.IndexedObjective)
+def _(cpt, lookup=dict(), drop_index=True, units=None):
+    idx = cpt._index
+    s = pd.Series({i: pe.value(cpt[i]) for i in idx})
+    s.index_names = [j.name for j in idx.subsets()]
+    df = pd.DataFrame(s, columns=[cpt.name])
+
+    # if units:
+    #     if type(units) == bool:
+    #         u = str(cpt.get_units())
+    #     else:
+    #         u = units[0]
+    #     if u in df.index.names:
+    #         process_ref_ids = df.index.get_level_values(u).to_list()
+    #         units_dfr = lookup.get_units(process_ref_ids, set_name=u)
+    #         df = df.merge(units_dfr, left_index=True, right_index=True)
+
+    return df
+
+
+@get_entity.register(pe.pyomo.core.base.objective.Objective)
+def _(cpt, lookup=dict(), units=None):
+
+    df = pd.DataFrame({'Objective': pe.value(cpt)}, index=[0])
+
+    return df
 

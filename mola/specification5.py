@@ -200,9 +200,13 @@ class GeneralSpecification(Specification):
             return model.w['environment'] * environment_objective_rule(model, kpi) + \
                    model.w['cost'] * cost_objective_rule(model)
 
-        abstract_model.obj1 = pe.Objective(abstract_model.KPI, rule=environment_objective_rule)
-        abstract_model.obj2 = pe.Objective(rule=cost_objective_rule)
-        abstract_model.obj = pe.Objective(abstract_model.KPI, rule=objective_rule)
+        abstract_model.Environment_Impact = pe.Objective(
+            abstract_model.KPI, rule=environment_objective_rule,
+            doc='Minimise the environmental impact using openLCA data')
+        abstract_model.Cost = pe.Objective(rule=cost_objective_rule, doc='Minimise the cost using openLCA data')
+        abstract_model.Environmental_Cost_Impact = pe.Objective(
+            abstract_model.KPI, rule=objective_rule,
+            doc='Minimise the environmental impact and cost using openLCA data')
 
         # constraints
         def flow_demand_rule(model, d, k):
@@ -390,8 +394,6 @@ class GeneralSpecification(Specification):
                   for fs in user_sets['F_s'] for ps in user_sets['P_s']],
             'w': [{'index': [obj], 'value': 0} for obj in user_sets['OBJ']],
         }
-        # flows = [f for k in ['F_m', 'F_s', 'F_t'] for f in user_sets[k]]
-        # processes = [p for k in ['P_m', 'P_s', 'P_t'] for p in user_sets[k]]
 
         return user_params
 
@@ -557,11 +559,8 @@ class SimpleSpecification(Specification):
 
         def objective_rule(model, kpi):
             return environment_objective_rule(model, kpi)
-
-        # FIXME remove the superfluous objectives
-        abstract_model.obj1 = pe.Objective()
-        abstract_model.obj2 = pe.Objective()
-        abstract_model.obj = pe.Objective(abstract_model.KPI, rule=objective_rule)
+        abstract_model.Environmental_Impact = pe.Objective(abstract_model.KPI, rule=objective_rule,
+                                                           doc='Minimise the environmental impact using openLCA data')
 
         # constraints
         def flow_demand_rule(model, d):
@@ -782,11 +781,7 @@ class AIMMSExampleSpecification(Specification):
         # objective
         def objective_rule(model):
             return sum(model.U[p, c] * model.x[p, c] for p in model.Q for c in model.C)
-
-        # TODO: add these to the user interface with doc strings and a setting
-        abstract_model.obj = pe.Objective(rule=objective_rule)
-        abstract_model.obj1 = pe.Objective(rule=objective_rule)
-        abstract_model.obj2 = pe.Objective(rule=objective_rule)
+        abstract_model.Minimise_Cost = pe.Objective(rule=objective_rule, doc="Minimise the cost of moving beer")
 
         # constraints
         def supply_rule(model, p):

@@ -14305,7 +14305,7 @@ a.anchor-link {
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[93]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">mola.specification5</span> <span class="k">as</span> <span class="nn">ms</span>
@@ -14356,7 +14356,7 @@ a.anchor-link {
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[94]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">mola.input</span> <span class="k">as</span> <span class="nn">mi</span>
@@ -14390,7 +14390,7 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[94]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[2]:</div>
 
 
 
@@ -14433,10 +14433,10 @@ a.anchor-link {
 <h2 id="Sets">Sets<a class="anchor-link" href="#Sets">&#182;</a></h2><p>To configure the model we need lookup tables to select sets. These come from a database so part of the new model configuration is a link to a database.</p>
 
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[95]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">mola.dataview</span> <span class="k">as</span> <span class="nn">dv</span>
@@ -14452,31 +14452,6 @@ a.anchor-link {
 </div>
 </div>
 
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>SELECT &#34;REF_ID&#34;,&#34;NAME&#34; FROM &#34;TBL_CATEGORIES&#34;
-SELECT &#34;REF_ID&#34; &#34;FLOW_REF_ID&#34;,&#34;NAME&#34; FROM &#34;TBL_FLOWS&#34;
-SELECT &#34;TBL_PROCESSES&#34;.&#34;REF_ID&#34; &#34;PROCESS_REF_ID&#34;,&#34;TBL_PROCESSES&#34;.&#34;NAME&#34; &#34;PROCESS_NAME&#34;,&#34;TBL_LOCATIONS&#34;.&#34;NAME&#34; &#34;LOCATION_NAME&#34; FROM &#34;TBL_PROCESSES&#34; LEFT JOIN &#34;TBL_LOCATIONS&#34; ON CAST(&#34;TBL_PROCESSES&#34;.&#34;F_LOCATION&#34; AS INT)=&#34;TBL_LOCATIONS&#34;.&#34;ID&#34;
-SELECT &#34;REF_ID&#34;,&#34;NAME&#34; FROM &#34;TBL_FLOWS&#34; WHERE &#34;FLOW_TYPE&#34;=&#39;PRODUCT_FLOW&#39;
-SELECT &#34;TBL_IMPACT_METHODS&#34;.&#34;NAME&#34; &#34;method_NAME&#34;,&#34;TBL_IMPACT_CATEGORIES&#34;.&#34;REF_ID&#34; &#34;REF_ID&#34;,&#34;TBL_IMPACT_CATEGORIES&#34;.&#34;NAME&#34; &#34;category_NAME&#34; FROM &#34;TBL_IMPACT_CATEGORIES&#34; LEFT JOIN &#34;TBL_IMPACT_METHODS&#34; ON &#34;TBL_IMPACT_CATEGORIES&#34;.&#34;F_IMPACT_METHOD&#34;=&#34;TBL_IMPACT_METHODS&#34;.&#34;ID&#34;
-</pre>
-</div>
-</div>
-
-</div>
-
-</div>
-
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
@@ -14486,7 +14461,7 @@ SELECT &#34;TBL_IMPACT_METHODS&#34;.&#34;NAME&#34; &#34;method_NAME&#34;,&#34;TB
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[96]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># any way to distinquish material flows from transport flows in openLCA? fix a group of categories in lookup?</span>
@@ -14520,12 +14495,12 @@ SELECT &#34;TBL_IMPACT_METHODS&#34;.&#34;NAME&#34; &#34;method_NAME&#34;,&#34;TB
 
 
 
-<div id="a9d76afa-ca31-48f4-8656-fada401b9a99" class="jupyter-widgets jp-OutputArea-output ">
+<div id="2b7d8610-a596-4959-a00f-fe3c5cff09f0" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('a9d76afa-ca31-48f4-8656-fada401b9a99');
+var element = document.getElementById('2b7d8610-a596-4959-a00f-fe3c5cff09f0');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "3baa80f5a0414f4e9413419f40216f2d", "version_major": 2, "version_minor": 0}
+{"model_id": "e175a1178a9848ecb02ac3976bbb7d98", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -14544,7 +14519,7 @@ var element = document.getElementById('a9d76afa-ca31-48f4-8656-fada401b9a99');
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[97]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">json</span>
@@ -14566,7 +14541,7 @@ var element = document.getElementById('a9d76afa-ca31-48f4-8656-fada401b9a99');
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[97]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[5]:</div>
 
 
 
@@ -14612,7 +14587,7 @@ var element = document.getElementById('a9d76afa-ca31-48f4-8656-fada401b9a99');
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[98]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">qgrid</span>
@@ -14642,12 +14617,12 @@ var element = document.getElementById('a9d76afa-ca31-48f4-8656-fada401b9a99');
 
 
 
-<div id="33d6b9ca-3e8a-4d17-9fdd-70a09d334fde" class="jupyter-widgets jp-OutputArea-output ">
+<div id="ab1d6bab-64d2-4c3d-b467-609a0aef2dd7" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('33d6b9ca-3e8a-4d17-9fdd-70a09d334fde');
+var element = document.getElementById('ab1d6bab-64d2-4c3d-b467-609a0aef2dd7');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "f5a030492bf44bbd89aa3c17ebba07f5", "version_major": 2, "version_minor": 0}
+{"model_id": "e7e31ff6634c48508c94b2a5a2bb5c04", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -14666,7 +14641,7 @@ var element = document.getElementById('33d6b9ca-3e8a-4d17-9fdd-70a09d334fde');
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[99]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">model_parameters_file_name</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
@@ -14687,7 +14662,7 @@ var element = document.getElementById('33d6b9ca-3e8a-4d17-9fdd-70a09d334fde');
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[99]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[7]:</div>
 
 
 
@@ -15057,7 +15032,7 @@ var element = document.getElementById('33d6b9ca-3e8a-4d17-9fdd-70a09d334fde');
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[100]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">json_files</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;model_set_data.json&#39;</span><span class="p">,</span> <span class="n">model_parameters_file_name</span><span class="p">]</span>
@@ -15108,7 +15083,7 @@ var element = document.getElementById('33d6b9ca-3e8a-4d17-9fdd-70a09d334fde');
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[101]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[9]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">sets_dfr</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
@@ -15131,7 +15106,7 @@ var element = document.getElementById('33d6b9ca-3e8a-4d17-9fdd-70a09d334fde');
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[101]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[9]:</div>
 
 
 
@@ -15163,19 +15138,19 @@ var element = document.getElementById('33d6b9ca-3e8a-4d17-9fdd-70a09d334fde');
     <tr>
       <th>0</th>
       <td>P_m</td>
-      <td>Processes producing material flows in the optimisation problem</td>
+      <td>Processes producing material flows in the opti...</td>
       <td>3</td>
     </tr>
     <tr>
       <th>1</th>
       <td>P_t</td>
-      <td>Processes producing transport flows in the optimisation problem</td>
+      <td>Processes producing transport flows in the opt...</td>
       <td>7</td>
     </tr>
     <tr>
       <th>2</th>
       <td>P_s</td>
-      <td>Processes producing service flows in the optimisation problem</td>
+      <td>Processes producing service flows in the optim...</td>
       <td>0</td>
     </tr>
     <tr>
@@ -15271,7 +15246,7 @@ var element = document.getElementById('33d6b9ca-3e8a-4d17-9fdd-70a09d334fde');
     <tr>
       <th>18</th>
       <td>AKPI</td>
-      <td>All key performance indicators in an openLCA database</td>
+      <td>All key performance indicators in an openLCA d...</td>
       <td>878</td>
     </tr>
     <tr>
@@ -15366,72 +15341,78 @@ var element = document.getElementById('33d6b9ca-3e8a-4d17-9fdd-70a09d334fde');
     </tr>
     <tr>
       <th>34</th>
+      <td>UU_index</td>
+      <td>None</td>
+      <td>40</td>
+    </tr>
+    <tr>
+      <th>35</th>
       <td>dd_index</td>
       <td>None</td>
       <td>3</td>
     </tr>
     <tr>
-      <th>35</th>
+      <th>36</th>
       <td>Flow_index</td>
       <td>None</td>
       <td>3</td>
     </tr>
     <tr>
-      <th>36</th>
+      <th>37</th>
       <td>Storage_Service_Flow_index</td>
       <td>None</td>
       <td>40</td>
     </tr>
     <tr>
-      <th>37</th>
+      <th>38</th>
       <td>Specific_Material_Transport_Flow_index</td>
       <td>None</td>
       <td>63</td>
     </tr>
     <tr>
-      <th>38</th>
+      <th>39</th>
       <td>Specific_Transport_Flow_index</td>
       <td>None</td>
       <td>21</td>
     </tr>
     <tr>
-      <th>39</th>
+      <th>40</th>
       <td>Demand_Selection_index</td>
       <td>None</td>
       <td>1</td>
     </tr>
     <tr>
-      <th>40</th>
+      <th>41</th>
       <td>total_demand_constraint_index</td>
       <td>None</td>
       <td>1</td>
     </tr>
     <tr>
-      <th>41</th>
+      <th>42</th>
       <td>material_flow_constraint_index</td>
       <td>None</td>
       <td>3</td>
     </tr>
     <tr>
-      <th>42</th>
+      <th>43</th>
       <td>transport_constraint_index</td>
       <td>None</td>
       <td>21</td>
     </tr>
     <tr>
-      <th>43</th>
+      <th>44</th>
       <td>demand_selection_constraint_index</td>
       <td>None</td>
       <td>1</td>
     </tr>
     <tr>
-      <th>44</th>
+      <th>45</th>
       <td>specific_demand_constraint_index</td>
       <td>None</td>
       <td>1</td>
     </tr>
     <tr>
-      <th>45</th>
+      <th>46</th>
       <td>service_flow_link_constraint_index</td>
       <td>None</td>
       <td>0</td>
@@ -15455,7 +15436,7 @@ var element = document.getElementById('33d6b9ca-3e8a-4d17-9fdd-70a09d334fde');
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[102]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">param_dfr</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
@@ -15486,12 +15467,12 @@ var element = document.getElementById('33d6b9ca-3e8a-4d17-9fdd-70a09d334fde');
 
 
 
-<div id="2a5547d7-b938-432e-af61-fa9e03faa833" class="jupyter-widgets jp-OutputArea-output ">
+<div id="7c849ffe-a6dd-4661-b1ba-77efdb54f2ee" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('2a5547d7-b938-432e-af61-fa9e03faa833');
+var element = document.getElementById('7c849ffe-a6dd-4661-b1ba-77efdb54f2ee');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "d68e3496b9b2409b91aba21129c5d273", "version_major": 2, "version_minor": 0}
+{"model_id": "9eb8de2287f44afc9482c7ff24bef922", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -15509,7 +15490,7 @@ var element = document.getElementById('2a5547d7-b938-432e-af61-fa9e03faa833');
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[103]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">qgrid</span>
@@ -15541,12 +15522,12 @@ var element = document.getElementById('2a5547d7-b938-432e-af61-fa9e03faa833');
 
 
 
-<div id="176499ab-2e37-4129-bb6a-781a857fd235" class="jupyter-widgets jp-OutputArea-output ">
+<div id="22dbe676-bdbd-43be-a77b-9ef2c0a87ff3" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('176499ab-2e37-4129-bb6a-781a857fd235');
+var element = document.getElementById('22dbe676-bdbd-43be-a77b-9ef2c0a87ff3');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "c138858d334644cab4ecbbac4ffd49d5", "version_major": 2, "version_minor": 0}
+{"model_id": "3d630830d2b84897bd919de9cbda681c", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -15559,7 +15540,7 @@ var element = document.getElementById('176499ab-2e37-4129-bb6a-781a857fd235');
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[104]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[12]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">dfr</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
@@ -15601,7 +15582,7 @@ Total_Demand[d1,k1]  &lt;=  C[1f7bbd3e-fcd1-412d-8608-035b855ea735,k1,d1,t1]*Flo
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[105]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[13]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">dfr</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
@@ -15633,12 +15614,12 @@ Total_Demand[d1,k1]  &lt;=  C[1f7bbd3e-fcd1-412d-8608-035b855ea735,k1,d1,t1]*Flo
 
 
 
-<div id="a521b79d-f929-4d52-bc9c-f8353561dbdf" class="jupyter-widgets jp-OutputArea-output ">
+<div id="2cb7793a-139b-4e7e-a60e-df04583495ba" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('a521b79d-f929-4d52-bc9c-f8353561dbdf');
+var element = document.getElementById('2cb7793a-139b-4e7e-a60e-df04583495ba');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "920df748dfbf466b9a7d34f54b19978f", "version_major": 2, "version_minor": 0}
+{"model_id": "6e0b8c7c672d4100b8c86f30d45fd9c7", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -15657,7 +15638,7 @@ var element = document.getElementById('a521b79d-f929-4d52-bc9c-f8353561dbdf');
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[106]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[14]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">model_instance</span><span class="o">.</span><span class="n">obj1</span><span class="o">.</span><span class="n">activate</span><span class="p">()</span>
@@ -15673,7 +15654,7 @@ var element = document.getElementById('a521b79d-f929-4d52-bc9c-f8353561dbdf');
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[107]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[15]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">opt</span> <span class="o">=</span> <span class="n">SolverFactory</span><span class="p">(</span><span class="s2">&quot;glpk&quot;</span><span class="p">)</span>
@@ -15724,7 +15705,7 @@ Solver:
       Number of bounded subproblems: 1
       Number of created subproblems: 1
   Error rc: 0
-  Time: 0.031255245208740234
+  Time: 0.019008874893188477
 # ----------------------------------------------------------
 #   Solution Information
 # ----------------------------------------------------------
@@ -15748,7 +15729,7 @@ Solution:
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[108]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[16]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">model_instance</span><span class="o">.</span><span class="n">Flow</span><span class="o">.</span><span class="n">pprint</span><span class="p">()</span>
@@ -15788,7 +15769,7 @@ Solution:
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[109]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[17]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">model_instance</span><span class="o">.</span><span class="n">Specific_Material_Transport_Flow</span><span class="o">.</span><span class="n">pprint</span><span class="p">()</span>
@@ -15888,7 +15869,7 @@ Solution:
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[110]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[18]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">model_instance</span><span class="o">.</span><span class="n">Specific_Transport_Flow</span><span class="o">.</span><span class="n">pprint</span><span class="p">()</span>
@@ -15946,7 +15927,7 @@ Solution:
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[111]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[19]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">model_instance</span><span class="o">.</span><span class="n">transport_constraint</span><span class="o">.</span><span class="n">pprint</span><span class="p">()</span>
@@ -15970,28 +15951,28 @@ Solution:
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>transport_constraint : Size=21, Index=transport_constraint_index, Active=True
-    Key                                                                                          : Lower : Body                                                                                                                                                                                                                                                                                                                                                                                                                                                                    : Upper : Active
-    (&#39;0ace02fa-eca5-482d-a829-c18e46a52db4&#39;, &#39;44ad59ca-4fe0-394c-a6d9-5dea68783c23&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 : Specific_Transport_Flow[0ace02fa-eca5-482d-a829-c18e46a52db4,44ad59ca-4fe0-394c-a6d9-5dea68783c23,k1,t1] - U[1f7bbd3e-fcd1-412d-8608-035b855ea735,0ace02fa-eca5-482d-a829-c18e46a52db4]*Specific_Material_Transport_Flow[1f7bbd3e-fcd1-412d-8608-035b855ea735,cfc3f58f-7bdf-3019-888b-c4f2dbc332e8,0ace02fa-eca5-482d-a829-c18e46a52db4,44ad59ca-4fe0-394c-a6d9-5dea68783c23,k1,t1]*dd[cfc3f58f-7bdf-3019-888b-c4f2dbc332e8,1f7bbd3e-fcd1-412d-8608-035b855ea735,k1,t1] :   0.0 :   True
-    (&#39;0ace02fa-eca5-482d-a829-c18e46a52db4&#39;, &#39;660ba3fe-d7a5-4c43-8777-27d331934edf&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                                                                                                Specific_Transport_Flow[0ace02fa-eca5-482d-a829-c18e46a52db4,660ba3fe-d7a5-4c43-8777-27d331934edf,k1,t1] :   0.0 :   True
-    (&#39;0ace02fa-eca5-482d-a829-c18e46a52db4&#39;, &#39;9106bf8d-869d-425f-b8ee-0bf9a78bcf65&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 : Specific_Transport_Flow[0ace02fa-eca5-482d-a829-c18e46a52db4,9106bf8d-869d-425f-b8ee-0bf9a78bcf65,k1,t1] - U[1f7bbd3e-fcd1-412d-8608-035b855ea735,0ace02fa-eca5-482d-a829-c18e46a52db4]*Specific_Material_Transport_Flow[1f7bbd3e-fcd1-412d-8608-035b855ea735,f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768,0ace02fa-eca5-482d-a829-c18e46a52db4,9106bf8d-869d-425f-b8ee-0bf9a78bcf65,k1,t1]*dd[f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768,1f7bbd3e-fcd1-412d-8608-035b855ea735,k1,t1] :   0.0 :   True
-    (&#39;0ace02fa-eca5-482d-a829-c18e46a52db4&#39;, &#39;97aa2533-ae98-3f8f-b3e2-3acb9d66a010&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 : Specific_Transport_Flow[0ace02fa-eca5-482d-a829-c18e46a52db4,97aa2533-ae98-3f8f-b3e2-3acb9d66a010,k1,t1] - U[1f7bbd3e-fcd1-412d-8608-035b855ea735,0ace02fa-eca5-482d-a829-c18e46a52db4]*Specific_Material_Transport_Flow[1f7bbd3e-fcd1-412d-8608-035b855ea735,760f1858-b0ef-3280-930e-88ebe4645061,0ace02fa-eca5-482d-a829-c18e46a52db4,97aa2533-ae98-3f8f-b3e2-3acb9d66a010,k1,t1]*dd[760f1858-b0ef-3280-930e-88ebe4645061,1f7bbd3e-fcd1-412d-8608-035b855ea735,k1,t1] :   0.0 :   True
-    (&#39;0ace02fa-eca5-482d-a829-c18e46a52db4&#39;, &#39;b37252a8-fbb5-47cb-a3aa-1485d090bdfd&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 : Specific_Transport_Flow[0ace02fa-eca5-482d-a829-c18e46a52db4,b37252a8-fbb5-47cb-a3aa-1485d090bdfd,k1,t1] - U[1f7bbd3e-fcd1-412d-8608-035b855ea735,0ace02fa-eca5-482d-a829-c18e46a52db4]*Specific_Material_Transport_Flow[1f7bbd3e-fcd1-412d-8608-035b855ea735,f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768,0ace02fa-eca5-482d-a829-c18e46a52db4,b37252a8-fbb5-47cb-a3aa-1485d090bdfd,k1,t1]*dd[f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768,1f7bbd3e-fcd1-412d-8608-035b855ea735,k1,t1] :   0.0 :   True
-    (&#39;0ace02fa-eca5-482d-a829-c18e46a52db4&#39;, &#39;f615ae37-fa6d-4a47-958c-23234c986400&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 : Specific_Transport_Flow[0ace02fa-eca5-482d-a829-c18e46a52db4,f615ae37-fa6d-4a47-958c-23234c986400,k1,t1] - U[1f7bbd3e-fcd1-412d-8608-035b855ea735,0ace02fa-eca5-482d-a829-c18e46a52db4]*Specific_Material_Transport_Flow[1f7bbd3e-fcd1-412d-8608-035b855ea735,760f1858-b0ef-3280-930e-88ebe4645061,0ace02fa-eca5-482d-a829-c18e46a52db4,f615ae37-fa6d-4a47-958c-23234c986400,k1,t1]*dd[760f1858-b0ef-3280-930e-88ebe4645061,1f7bbd3e-fcd1-412d-8608-035b855ea735,k1,t1] :   0.0 :   True
-    (&#39;0ace02fa-eca5-482d-a829-c18e46a52db4&#39;, &#39;fe7d1840-4341-40fd-ba6d-fbba126ca7d3&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                                                                                                Specific_Transport_Flow[0ace02fa-eca5-482d-a829-c18e46a52db4,fe7d1840-4341-40fd-ba6d-fbba126ca7d3,k1,t1] :   0.0 :   True
-    (&#39;4ecf1190-7028-4038-89b0-79adeb3e98cc&#39;, &#39;44ad59ca-4fe0-394c-a6d9-5dea68783c23&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                                                                                                Specific_Transport_Flow[4ecf1190-7028-4038-89b0-79adeb3e98cc,44ad59ca-4fe0-394c-a6d9-5dea68783c23,k1,t1] :   0.0 :   True
-    (&#39;4ecf1190-7028-4038-89b0-79adeb3e98cc&#39;, &#39;660ba3fe-d7a5-4c43-8777-27d331934edf&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 : Specific_Transport_Flow[4ecf1190-7028-4038-89b0-79adeb3e98cc,660ba3fe-d7a5-4c43-8777-27d331934edf,k1,t1] - U[1f7bbd3e-fcd1-412d-8608-035b855ea735,4ecf1190-7028-4038-89b0-79adeb3e98cc]*Specific_Material_Transport_Flow[1f7bbd3e-fcd1-412d-8608-035b855ea735,f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768,4ecf1190-7028-4038-89b0-79adeb3e98cc,660ba3fe-d7a5-4c43-8777-27d331934edf,k1,t1]*dd[f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768,1f7bbd3e-fcd1-412d-8608-035b855ea735,k1,t1] :   0.0 :   True
-    (&#39;4ecf1190-7028-4038-89b0-79adeb3e98cc&#39;, &#39;9106bf8d-869d-425f-b8ee-0bf9a78bcf65&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                                                                                                Specific_Transport_Flow[4ecf1190-7028-4038-89b0-79adeb3e98cc,9106bf8d-869d-425f-b8ee-0bf9a78bcf65,k1,t1] :   0.0 :   True
-    (&#39;4ecf1190-7028-4038-89b0-79adeb3e98cc&#39;, &#39;97aa2533-ae98-3f8f-b3e2-3acb9d66a010&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                                                                                                Specific_Transport_Flow[4ecf1190-7028-4038-89b0-79adeb3e98cc,97aa2533-ae98-3f8f-b3e2-3acb9d66a010,k1,t1] :   0.0 :   True
-    (&#39;4ecf1190-7028-4038-89b0-79adeb3e98cc&#39;, &#39;b37252a8-fbb5-47cb-a3aa-1485d090bdfd&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                                                                                                Specific_Transport_Flow[4ecf1190-7028-4038-89b0-79adeb3e98cc,b37252a8-fbb5-47cb-a3aa-1485d090bdfd,k1,t1] :   0.0 :   True
-    (&#39;4ecf1190-7028-4038-89b0-79adeb3e98cc&#39;, &#39;f615ae37-fa6d-4a47-958c-23234c986400&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                                                                                                Specific_Transport_Flow[4ecf1190-7028-4038-89b0-79adeb3e98cc,f615ae37-fa6d-4a47-958c-23234c986400,k1,t1] :   0.0 :   True
-    (&#39;4ecf1190-7028-4038-89b0-79adeb3e98cc&#39;, &#39;fe7d1840-4341-40fd-ba6d-fbba126ca7d3&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                                                                                                Specific_Transport_Flow[4ecf1190-7028-4038-89b0-79adeb3e98cc,fe7d1840-4341-40fd-ba6d-fbba126ca7d3,k1,t1] :   0.0 :   True
-    (&#39;559d5695-102a-4beb-9f7f-3db334c9b51d&#39;, &#39;44ad59ca-4fe0-394c-a6d9-5dea68783c23&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                                                                                                Specific_Transport_Flow[559d5695-102a-4beb-9f7f-3db334c9b51d,44ad59ca-4fe0-394c-a6d9-5dea68783c23,k1,t1] :   0.0 :   True
-    (&#39;559d5695-102a-4beb-9f7f-3db334c9b51d&#39;, &#39;660ba3fe-d7a5-4c43-8777-27d331934edf&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                                                                                                Specific_Transport_Flow[559d5695-102a-4beb-9f7f-3db334c9b51d,660ba3fe-d7a5-4c43-8777-27d331934edf,k1,t1] :   0.0 :   True
-    (&#39;559d5695-102a-4beb-9f7f-3db334c9b51d&#39;, &#39;9106bf8d-869d-425f-b8ee-0bf9a78bcf65&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                                                                                                Specific_Transport_Flow[559d5695-102a-4beb-9f7f-3db334c9b51d,9106bf8d-869d-425f-b8ee-0bf9a78bcf65,k1,t1] :   0.0 :   True
-    (&#39;559d5695-102a-4beb-9f7f-3db334c9b51d&#39;, &#39;97aa2533-ae98-3f8f-b3e2-3acb9d66a010&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                                                                                                Specific_Transport_Flow[559d5695-102a-4beb-9f7f-3db334c9b51d,97aa2533-ae98-3f8f-b3e2-3acb9d66a010,k1,t1] :   0.0 :   True
-    (&#39;559d5695-102a-4beb-9f7f-3db334c9b51d&#39;, &#39;b37252a8-fbb5-47cb-a3aa-1485d090bdfd&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                                                                                                Specific_Transport_Flow[559d5695-102a-4beb-9f7f-3db334c9b51d,b37252a8-fbb5-47cb-a3aa-1485d090bdfd,k1,t1] :   0.0 :   True
-    (&#39;559d5695-102a-4beb-9f7f-3db334c9b51d&#39;, &#39;f615ae37-fa6d-4a47-958c-23234c986400&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                                                                                                Specific_Transport_Flow[559d5695-102a-4beb-9f7f-3db334c9b51d,f615ae37-fa6d-4a47-958c-23234c986400,k1,t1] :   0.0 :   True
-    (&#39;559d5695-102a-4beb-9f7f-3db334c9b51d&#39;, &#39;fe7d1840-4341-40fd-ba6d-fbba126ca7d3&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 : Specific_Transport_Flow[559d5695-102a-4beb-9f7f-3db334c9b51d,fe7d1840-4341-40fd-ba6d-fbba126ca7d3,k1,t1] - U[1f7bbd3e-fcd1-412d-8608-035b855ea735,559d5695-102a-4beb-9f7f-3db334c9b51d]*Specific_Material_Transport_Flow[1f7bbd3e-fcd1-412d-8608-035b855ea735,f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768,559d5695-102a-4beb-9f7f-3db334c9b51d,fe7d1840-4341-40fd-ba6d-fbba126ca7d3,k1,t1]*dd[f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768,1f7bbd3e-fcd1-412d-8608-035b855ea735,k1,t1] :   0.0 :   True
+    Key                                                                                          : Lower : Body                                                                                                                                                                                                                                                                                                                                                                                             : Upper : Active
+    (&#39;0ace02fa-eca5-482d-a829-c18e46a52db4&#39;, &#39;44ad59ca-4fe0-394c-a6d9-5dea68783c23&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 : Specific_Transport_Flow[0ace02fa-eca5-482d-a829-c18e46a52db4,44ad59ca-4fe0-394c-a6d9-5dea68783c23,k1,t1] - 0.001*Specific_Material_Transport_Flow[1f7bbd3e-fcd1-412d-8608-035b855ea735,cfc3f58f-7bdf-3019-888b-c4f2dbc332e8,0ace02fa-eca5-482d-a829-c18e46a52db4,44ad59ca-4fe0-394c-a6d9-5dea68783c23,k1,t1]*dd[cfc3f58f-7bdf-3019-888b-c4f2dbc332e8,1f7bbd3e-fcd1-412d-8608-035b855ea735,k1,t1] :   0.0 :   True
+    (&#39;0ace02fa-eca5-482d-a829-c18e46a52db4&#39;, &#39;660ba3fe-d7a5-4c43-8777-27d331934edf&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                         Specific_Transport_Flow[0ace02fa-eca5-482d-a829-c18e46a52db4,660ba3fe-d7a5-4c43-8777-27d331934edf,k1,t1] :   0.0 :   True
+    (&#39;0ace02fa-eca5-482d-a829-c18e46a52db4&#39;, &#39;9106bf8d-869d-425f-b8ee-0bf9a78bcf65&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 : Specific_Transport_Flow[0ace02fa-eca5-482d-a829-c18e46a52db4,9106bf8d-869d-425f-b8ee-0bf9a78bcf65,k1,t1] - 0.001*Specific_Material_Transport_Flow[1f7bbd3e-fcd1-412d-8608-035b855ea735,f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768,0ace02fa-eca5-482d-a829-c18e46a52db4,9106bf8d-869d-425f-b8ee-0bf9a78bcf65,k1,t1]*dd[f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768,1f7bbd3e-fcd1-412d-8608-035b855ea735,k1,t1] :   0.0 :   True
+    (&#39;0ace02fa-eca5-482d-a829-c18e46a52db4&#39;, &#39;97aa2533-ae98-3f8f-b3e2-3acb9d66a010&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 : Specific_Transport_Flow[0ace02fa-eca5-482d-a829-c18e46a52db4,97aa2533-ae98-3f8f-b3e2-3acb9d66a010,k1,t1] - 0.001*Specific_Material_Transport_Flow[1f7bbd3e-fcd1-412d-8608-035b855ea735,760f1858-b0ef-3280-930e-88ebe4645061,0ace02fa-eca5-482d-a829-c18e46a52db4,97aa2533-ae98-3f8f-b3e2-3acb9d66a010,k1,t1]*dd[760f1858-b0ef-3280-930e-88ebe4645061,1f7bbd3e-fcd1-412d-8608-035b855ea735,k1,t1] :   0.0 :   True
+    (&#39;0ace02fa-eca5-482d-a829-c18e46a52db4&#39;, &#39;b37252a8-fbb5-47cb-a3aa-1485d090bdfd&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 : Specific_Transport_Flow[0ace02fa-eca5-482d-a829-c18e46a52db4,b37252a8-fbb5-47cb-a3aa-1485d090bdfd,k1,t1] - 0.001*Specific_Material_Transport_Flow[1f7bbd3e-fcd1-412d-8608-035b855ea735,f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768,0ace02fa-eca5-482d-a829-c18e46a52db4,b37252a8-fbb5-47cb-a3aa-1485d090bdfd,k1,t1]*dd[f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768,1f7bbd3e-fcd1-412d-8608-035b855ea735,k1,t1] :   0.0 :   True
+    (&#39;0ace02fa-eca5-482d-a829-c18e46a52db4&#39;, &#39;f615ae37-fa6d-4a47-958c-23234c986400&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 : Specific_Transport_Flow[0ace02fa-eca5-482d-a829-c18e46a52db4,f615ae37-fa6d-4a47-958c-23234c986400,k1,t1] - 0.001*Specific_Material_Transport_Flow[1f7bbd3e-fcd1-412d-8608-035b855ea735,760f1858-b0ef-3280-930e-88ebe4645061,0ace02fa-eca5-482d-a829-c18e46a52db4,f615ae37-fa6d-4a47-958c-23234c986400,k1,t1]*dd[760f1858-b0ef-3280-930e-88ebe4645061,1f7bbd3e-fcd1-412d-8608-035b855ea735,k1,t1] :   0.0 :   True
+    (&#39;0ace02fa-eca5-482d-a829-c18e46a52db4&#39;, &#39;fe7d1840-4341-40fd-ba6d-fbba126ca7d3&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                         Specific_Transport_Flow[0ace02fa-eca5-482d-a829-c18e46a52db4,fe7d1840-4341-40fd-ba6d-fbba126ca7d3,k1,t1] :   0.0 :   True
+    (&#39;4ecf1190-7028-4038-89b0-79adeb3e98cc&#39;, &#39;44ad59ca-4fe0-394c-a6d9-5dea68783c23&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                         Specific_Transport_Flow[4ecf1190-7028-4038-89b0-79adeb3e98cc,44ad59ca-4fe0-394c-a6d9-5dea68783c23,k1,t1] :   0.0 :   True
+    (&#39;4ecf1190-7028-4038-89b0-79adeb3e98cc&#39;, &#39;660ba3fe-d7a5-4c43-8777-27d331934edf&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 : Specific_Transport_Flow[4ecf1190-7028-4038-89b0-79adeb3e98cc,660ba3fe-d7a5-4c43-8777-27d331934edf,k1,t1] - 0.001*Specific_Material_Transport_Flow[1f7bbd3e-fcd1-412d-8608-035b855ea735,f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768,4ecf1190-7028-4038-89b0-79adeb3e98cc,660ba3fe-d7a5-4c43-8777-27d331934edf,k1,t1]*dd[f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768,1f7bbd3e-fcd1-412d-8608-035b855ea735,k1,t1] :   0.0 :   True
+    (&#39;4ecf1190-7028-4038-89b0-79adeb3e98cc&#39;, &#39;9106bf8d-869d-425f-b8ee-0bf9a78bcf65&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                         Specific_Transport_Flow[4ecf1190-7028-4038-89b0-79adeb3e98cc,9106bf8d-869d-425f-b8ee-0bf9a78bcf65,k1,t1] :   0.0 :   True
+    (&#39;4ecf1190-7028-4038-89b0-79adeb3e98cc&#39;, &#39;97aa2533-ae98-3f8f-b3e2-3acb9d66a010&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                         Specific_Transport_Flow[4ecf1190-7028-4038-89b0-79adeb3e98cc,97aa2533-ae98-3f8f-b3e2-3acb9d66a010,k1,t1] :   0.0 :   True
+    (&#39;4ecf1190-7028-4038-89b0-79adeb3e98cc&#39;, &#39;b37252a8-fbb5-47cb-a3aa-1485d090bdfd&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                         Specific_Transport_Flow[4ecf1190-7028-4038-89b0-79adeb3e98cc,b37252a8-fbb5-47cb-a3aa-1485d090bdfd,k1,t1] :   0.0 :   True
+    (&#39;4ecf1190-7028-4038-89b0-79adeb3e98cc&#39;, &#39;f615ae37-fa6d-4a47-958c-23234c986400&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                         Specific_Transport_Flow[4ecf1190-7028-4038-89b0-79adeb3e98cc,f615ae37-fa6d-4a47-958c-23234c986400,k1,t1] :   0.0 :   True
+    (&#39;4ecf1190-7028-4038-89b0-79adeb3e98cc&#39;, &#39;fe7d1840-4341-40fd-ba6d-fbba126ca7d3&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                         Specific_Transport_Flow[4ecf1190-7028-4038-89b0-79adeb3e98cc,fe7d1840-4341-40fd-ba6d-fbba126ca7d3,k1,t1] :   0.0 :   True
+    (&#39;559d5695-102a-4beb-9f7f-3db334c9b51d&#39;, &#39;44ad59ca-4fe0-394c-a6d9-5dea68783c23&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                         Specific_Transport_Flow[559d5695-102a-4beb-9f7f-3db334c9b51d,44ad59ca-4fe0-394c-a6d9-5dea68783c23,k1,t1] :   0.0 :   True
+    (&#39;559d5695-102a-4beb-9f7f-3db334c9b51d&#39;, &#39;660ba3fe-d7a5-4c43-8777-27d331934edf&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                         Specific_Transport_Flow[559d5695-102a-4beb-9f7f-3db334c9b51d,660ba3fe-d7a5-4c43-8777-27d331934edf,k1,t1] :   0.0 :   True
+    (&#39;559d5695-102a-4beb-9f7f-3db334c9b51d&#39;, &#39;9106bf8d-869d-425f-b8ee-0bf9a78bcf65&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                         Specific_Transport_Flow[559d5695-102a-4beb-9f7f-3db334c9b51d,9106bf8d-869d-425f-b8ee-0bf9a78bcf65,k1,t1] :   0.0 :   True
+    (&#39;559d5695-102a-4beb-9f7f-3db334c9b51d&#39;, &#39;97aa2533-ae98-3f8f-b3e2-3acb9d66a010&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                         Specific_Transport_Flow[559d5695-102a-4beb-9f7f-3db334c9b51d,97aa2533-ae98-3f8f-b3e2-3acb9d66a010,k1,t1] :   0.0 :   True
+    (&#39;559d5695-102a-4beb-9f7f-3db334c9b51d&#39;, &#39;b37252a8-fbb5-47cb-a3aa-1485d090bdfd&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                         Specific_Transport_Flow[559d5695-102a-4beb-9f7f-3db334c9b51d,b37252a8-fbb5-47cb-a3aa-1485d090bdfd,k1,t1] :   0.0 :   True
+    (&#39;559d5695-102a-4beb-9f7f-3db334c9b51d&#39;, &#39;f615ae37-fa6d-4a47-958c-23234c986400&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 :                                                                                                                                                                                                                                                                                         Specific_Transport_Flow[559d5695-102a-4beb-9f7f-3db334c9b51d,f615ae37-fa6d-4a47-958c-23234c986400,k1,t1] :   0.0 :   True
+    (&#39;559d5695-102a-4beb-9f7f-3db334c9b51d&#39;, &#39;fe7d1840-4341-40fd-ba6d-fbba126ca7d3&#39;, &#39;k1&#39;, &#39;t1&#39;) :   0.0 : Specific_Transport_Flow[559d5695-102a-4beb-9f7f-3db334c9b51d,fe7d1840-4341-40fd-ba6d-fbba126ca7d3,k1,t1] - 0.001*Specific_Material_Transport_Flow[1f7bbd3e-fcd1-412d-8608-035b855ea735,f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768,559d5695-102a-4beb-9f7f-3db334c9b51d,fe7d1840-4341-40fd-ba6d-fbba126ca7d3,k1,t1]*dd[f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768,1f7bbd3e-fcd1-412d-8608-035b855ea735,k1,t1] :   0.0 :   True
 </pre>
 </div>
 </div>
@@ -16003,17 +15984,19 @@ Solution:
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="Prettified-output">Prettified output<a class="anchor-link" href="#Prettified-output">&#182;</a></h1><p>We use the <code>mola.output</code> module to prettify the output.</p>
+<h1 id="Prettified-output">Prettified output<a class="anchor-link" href="#Prettified-output">&#182;</a></h1><p>We use the <code>mola.output</code> module to prettify <code>pyomo</code> output.</p>
 
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[112]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[20]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">mola.output</span> <span class="k">as</span> <span class="nn">mo</span>
+<span class="kn">import</span> <span class="nn">mola</span>
 <span class="n">lookup</span> <span class="o">=</span> <span class="n">dv</span><span class="o">.</span><span class="n">LookupTables</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+<span class="n">mola</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;show.SQL&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.max_colwidth&#39;</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
 </pre></div>
 
@@ -16022,38 +16005,13 @@ Solution:
 </div>
 </div>
 
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>SELECT &#34;REF_ID&#34;,&#34;NAME&#34; FROM &#34;TBL_CATEGORIES&#34;
-SELECT &#34;REF_ID&#34; &#34;FLOW_REF_ID&#34;,&#34;NAME&#34; FROM &#34;TBL_FLOWS&#34;
-SELECT &#34;TBL_PROCESSES&#34;.&#34;REF_ID&#34; &#34;PROCESS_REF_ID&#34;,&#34;TBL_PROCESSES&#34;.&#34;NAME&#34; &#34;PROCESS_NAME&#34;,&#34;TBL_LOCATIONS&#34;.&#34;NAME&#34; &#34;LOCATION_NAME&#34; FROM &#34;TBL_PROCESSES&#34; LEFT JOIN &#34;TBL_LOCATIONS&#34; ON CAST(&#34;TBL_PROCESSES&#34;.&#34;F_LOCATION&#34; AS INT)=&#34;TBL_LOCATIONS&#34;.&#34;ID&#34;
-SELECT &#34;REF_ID&#34;,&#34;NAME&#34; FROM &#34;TBL_FLOWS&#34; WHERE &#34;FLOW_TYPE&#34;=&#39;PRODUCT_FLOW&#39;
-SELECT &#34;TBL_IMPACT_METHODS&#34;.&#34;NAME&#34; &#34;method_NAME&#34;,&#34;TBL_IMPACT_CATEGORIES&#34;.&#34;REF_ID&#34; &#34;REF_ID&#34;,&#34;TBL_IMPACT_CATEGORIES&#34;.&#34;NAME&#34; &#34;category_NAME&#34; FROM &#34;TBL_IMPACT_CATEGORIES&#34; LEFT JOIN &#34;TBL_IMPACT_METHODS&#34; ON &#34;TBL_IMPACT_CATEGORIES&#34;.&#34;F_IMPACT_METHOD&#34;=&#34;TBL_IMPACT_METHODS&#34;.&#34;ID&#34;
-</pre>
-</div>
-</div>
-
-</div>
-
-</div>
-
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[113]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[21]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">flows_dfr</span> <span class="o">=</span> <span class="n">mo</span><span class="o">.</span><span class="n">get_entity</span><span class="p">(</span><span class="n">model_instance</span><span class="o">.</span><span class="n">component</span><span class="p">(</span><span class="s1">&#39;Flow&#39;</span><span class="p">),</span> <span class="n">lookup</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;P_m&#39;</span><span class="p">])</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">flows_dfr</span> <span class="o">=</span> <span class="n">mo</span><span class="o">.</span><span class="n">get_entity</span><span class="p">(</span><span class="n">model_instance</span><span class="o">.</span><span class="n">component</span><span class="p">(</span><span class="s1">&#39;Flow&#39;</span><span class="p">),</span> <span class="n">lookup</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">flows_dfr</span>
 </pre></div>
 
@@ -16070,19 +16028,7 @@ SELECT &#34;TBL_IMPACT_METHODS&#34;.&#34;NAME&#34; &#34;method_NAME&#34;,&#34;TB
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>SELECT &#34;TBL_PROCESSES&#34;.&#34;REF_ID&#34; &#34;P_m&#34;,&#34;TBL_UNITS&#34;.&#34;NAME&#34; &#34;UNITS&#34; FROM (SELECT &#34;F_OWNER&#34;,&#34;F_FLOW&#34;,&#34;F_UNIT&#34;,&#34;RESULTING_AMOUNT_VALUE&#34; FROM &#34;TBL_EXCHANGES&#34; WHERE &#34;F_OWNER&#34; IN (SELECT &#34;ID&#34; FROM &#34;TBL_PROCESSES&#34; WHERE &#34;REF_ID&#34; IN (&#39;f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768&#39;,&#39;cfc3f58f-7bdf-3019-888b-c4f2dbc332e8&#39;,&#39;760f1858-b0ef-3280-930e-88ebe4645061&#39;))) &#34;sq0&#34; LEFT JOIN &#34;TBL_FLOWS&#34; ON &#34;TBL_FLOWS&#34;.&#34;ID&#34;=&#34;sq0&#34;.&#34;F_FLOW&#34; LEFT JOIN &#34;TBL_PROCESSES&#34; ON &#34;TBL_PROCESSES&#34;.&#34;ID&#34;=&#34;sq0&#34;.&#34;F_OWNER&#34; LEFT JOIN &#34;TBL_UNITS&#34; ON &#34;TBL_UNITS&#34;.&#34;ID&#34;=&#34;sq0&#34;.&#34;F_UNIT&#34; WHERE &#34;TBL_FLOWS&#34;.&#34;FlOW_TYPE&#34;=&#39;PRODUCT_FLOW&#39;
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[113]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[21]:</div>
 
 
 
@@ -16106,32 +16052,40 @@ SELECT &#34;TBL_IMPACT_METHODS&#34;.&#34;NAME&#34; &#34;method_NAME&#34;,&#34;TB
     <tr style="text-align: right;">
       <th></th>
       <th>Flow</th>
+      <th>Units</th>
       <th>F_m</th>
       <th>P_m</th>
-      <th>UNITS</th>
+      <th>K</th>
+      <th>T</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
       <td>0.0</td>
+      <td>kg</td>
       <td>orange, fresh grade</td>
       <td>orange production, fresh grade | orange, fresh grade | APOS, S | South Africa</td>
-      <td>kg</td>
+      <td>k1</td>
+      <td>t1</td>
     </tr>
     <tr>
       <th>1</th>
       <td>200.0</td>
+      <td>kg</td>
       <td>orange, fresh grade</td>
       <td>orange production, fresh grade | orange, fresh grade | APOS, S | United States</td>
-      <td>kg</td>
+      <td>k1</td>
+      <td>t1</td>
     </tr>
     <tr>
       <th>2</th>
       <td>0.0</td>
+      <td>kg</td>
       <td>orange, fresh grade</td>
       <td>orange production, fresh grade | orange, fresh grade | APOS, S | Rest-of-World</td>
-      <td>kg</td>
+      <td>k1</td>
+      <td>t1</td>
     </tr>
   </tbody>
 </table>
@@ -16144,14 +16098,20 @@ SELECT &#34;TBL_IMPACT_METHODS&#34;.&#34;NAME&#34; &#34;method_NAME&#34;,&#34;TB
 
 </div>
 
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>We can omit non-zero flows and columns that only have one level.</p>
+
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[114]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[22]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">f_dfr</span> <span class="o">=</span> <span class="n">mo</span><span class="o">.</span><span class="n">get_entity</span><span class="p">(</span><span class="n">model_instance</span><span class="o">.</span><span class="n">component</span><span class="p">(</span><span class="s1">&#39;Specific_Material_Transport_Flow&#39;</span><span class="p">),</span> <span class="n">lookup</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;P_t&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
-<span class="n">f_dfr</span><span class="p">[[</span><span class="s1">&#39;Specific_Material_Transport_Flow&#39;</span><span class="p">,</span> <span class="s1">&#39;P_t&#39;</span><span class="p">,</span> <span class="s1">&#39;UNITS&#39;</span><span class="p">]]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">mo</span><span class="o">.</span><span class="n">get_entity</span><span class="p">(</span><span class="n">model_instance</span><span class="o">.</span><span class="n">component</span><span class="p">(</span><span class="s1">&#39;Specific_Material_Transport_Flow&#39;</span><span class="p">),</span> <span class="n">lookup</span><span class="p">,</span> 
+              <span class="n">units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">distinct_levels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">non_zero</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -16167,19 +16127,7 @@ SELECT &#34;TBL_IMPACT_METHODS&#34;.&#34;NAME&#34; &#34;method_NAME&#34;,&#34;TB
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>SELECT &#34;TBL_PROCESSES&#34;.&#34;REF_ID&#34; &#34;P_t&#34;,&#34;TBL_UNITS&#34;.&#34;NAME&#34; &#34;UNITS&#34; FROM (SELECT &#34;F_OWNER&#34;,&#34;F_FLOW&#34;,&#34;F_UNIT&#34;,&#34;RESULTING_AMOUNT_VALUE&#34; FROM &#34;TBL_EXCHANGES&#34; WHERE &#34;F_OWNER&#34; IN (SELECT &#34;ID&#34; FROM &#34;TBL_PROCESSES&#34; WHERE &#34;REF_ID&#34; IN (&#39;44ad59ca-4fe0-394c-a6d9-5dea68783c23&#39;,&#39;f615ae37-fa6d-4a47-958c-23234c986400&#39;,&#39;9106bf8d-869d-425f-b8ee-0bf9a78bcf65&#39;,&#39;97aa2533-ae98-3f8f-b3e2-3acb9d66a010&#39;,&#39;b37252a8-fbb5-47cb-a3aa-1485d090bdfd&#39;,&#39;660ba3fe-d7a5-4c43-8777-27d331934edf&#39;,&#39;fe7d1840-4341-40fd-ba6d-fbba126ca7d3&#39;,&#39;44ad59ca-4fe0-394c-a6d9-5dea68783c23&#39;,&#39;f615ae37-fa6d-4a47-958c-23234c986400&#39;,&#39;9106bf8d-869d-425f-b8ee-0bf9a78bcf65&#39;,&#39;97aa2533-ae98-3f8f-b3e2-3acb9d66a010&#39;,&#39;b37252a8-fbb5-47cb-a3aa-1485d090bdfd&#39;,&#39;660ba3fe-d7a5-4c43-8777-27d331934edf&#39;,&#39;fe7d1840-4341-40fd-ba6d-fbba126ca7d3&#39;,&#39;44ad59ca-4fe0-394c-a6d9-5dea68783c23&#39;,&#39;f615ae37-fa6d-4a47-958c-23234c986400&#39;,&#39;9106bf8d-869d-425f-b8ee-0bf9a78bcf65&#39;,&#39;97aa2533-ae98-3f8f-b3e2-3acb9d66a010&#39;,&#39;b37252a8-fbb5-47cb-a3aa-1485d090bdfd&#39;,&#39;660ba3fe-d7a5-4c43-8777-27d331934edf&#39;,&#39;fe7d1840-4341-40fd-ba6d-fbba126ca7d3&#39;,&#39;44ad59ca-4fe0-394c-a6d9-5dea68783c23&#39;,&#39;f615ae37-fa6d-4a47-958c-23234c986400&#39;,&#39;9106bf8d-869d-425f-b8ee-0bf9a78bcf65&#39;,&#39;97aa2533-ae98-3f8f-b3e2-3acb9d66a010&#39;,&#39;b37252a8-fbb5-47cb-a3aa-1485d090bdfd&#39;,&#39;660ba3fe-d7a5-4c43-8777-27d331934edf&#39;,&#39;fe7d1840-4341-40fd-ba6d-fbba126ca7d3&#39;,&#39;44ad59ca-4fe0-394c-a6d9-5dea68783c23&#39;,&#39;f615ae37-fa6d-4a47-958c-23234c986400&#39;,&#39;9106bf8d-869d-425f-b8ee-0bf9a78bcf65&#39;,&#39;97aa2533-ae98-3f8f-b3e2-3acb9d66a010&#39;,&#39;b37252a8-fbb5-47cb-a3aa-1485d090bdfd&#39;,&#39;660ba3fe-d7a5-4c43-8777-27d331934edf&#39;,&#39;fe7d1840-4341-40fd-ba6d-fbba126ca7d3&#39;,&#39;44ad59ca-4fe0-394c-a6d9-5dea68783c23&#39;,&#39;f615ae37-fa6d-4a47-958c-23234c986400&#39;,&#39;9106bf8d-869d-425f-b8ee-0bf9a78bcf65&#39;,&#39;97aa2533-ae98-3f8f-b3e2-3acb9d66a010&#39;,&#39;b37252a8-fbb5-47cb-a3aa-1485d090bdfd&#39;,&#39;660ba3fe-d7a5-4c43-8777-27d331934edf&#39;,&#39;fe7d1840-4341-40fd-ba6d-fbba126ca7d3&#39;,&#39;44ad59ca-4fe0-394c-a6d9-5dea68783c23&#39;,&#39;f615ae37-fa6d-4a47-958c-23234c986400&#39;,&#39;9106bf8d-869d-425f-b8ee-0bf9a78bcf65&#39;,&#39;97aa2533-ae98-3f8f-b3e2-3acb9d66a010&#39;,&#39;b37252a8-fbb5-47cb-a3aa-1485d090bdfd&#39;,&#39;660ba3fe-d7a5-4c43-8777-27d331934edf&#39;,&#39;fe7d1840-4341-40fd-ba6d-fbba126ca7d3&#39;,&#39;44ad59ca-4fe0-394c-a6d9-5dea68783c23&#39;,&#39;f615ae37-fa6d-4a47-958c-23234c986400&#39;,&#39;9106bf8d-869d-425f-b8ee-0bf9a78bcf65&#39;,&#39;97aa2533-ae98-3f8f-b3e2-3acb9d66a010&#39;,&#39;b37252a8-fbb5-47cb-a3aa-1485d090bdfd&#39;,&#39;660ba3fe-d7a5-4c43-8777-27d331934edf&#39;,&#39;fe7d1840-4341-40fd-ba6d-fbba126ca7d3&#39;,&#39;44ad59ca-4fe0-394c-a6d9-5dea68783c23&#39;,&#39;f615ae37-fa6d-4a47-958c-23234c986400&#39;,&#39;9106bf8d-869d-425f-b8ee-0bf9a78bcf65&#39;,&#39;97aa2533-ae98-3f8f-b3e2-3acb9d66a010&#39;,&#39;b37252a8-fbb5-47cb-a3aa-1485d090bdfd&#39;,&#39;660ba3fe-d7a5-4c43-8777-27d331934edf&#39;,&#39;fe7d1840-4341-40fd-ba6d-fbba126ca7d3&#39;))) &#34;sq0&#34; LEFT JOIN &#34;TBL_FLOWS&#34; ON &#34;TBL_FLOWS&#34;.&#34;ID&#34;=&#34;sq0&#34;.&#34;F_FLOW&#34; LEFT JOIN &#34;TBL_PROCESSES&#34; ON &#34;TBL_PROCESSES&#34;.&#34;ID&#34;=&#34;sq0&#34;.&#34;F_OWNER&#34; LEFT JOIN &#34;TBL_UNITS&#34; ON &#34;TBL_UNITS&#34;.&#34;ID&#34;=&#34;sq0&#34;.&#34;F_UNIT&#34; WHERE &#34;TBL_FLOWS&#34;.&#34;FlOW_TYPE&#34;=&#39;PRODUCT_FLOW&#39;
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[114]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[22]:</div>
 
 
 
@@ -16203,52 +16151,20 @@ SELECT &#34;TBL_IMPACT_METHODS&#34;.&#34;NAME&#34; &#34;method_NAME&#34;,&#34;TB
     <tr style="text-align: right;">
       <th></th>
       <th>Specific_Material_Transport_Flow</th>
+      <th>Units</th>
+      <th>P_m</th>
+      <th>F_t</th>
       <th>P_t</th>
-      <th>UNITS</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>2</th>
-      <td>-0.0</td>
-      <td>transport, freight train, diesel | transport, freight train | APOS, S | South Africa</td>
-      <td>t*km</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>0.0</td>
-      <td>transport, freight train, electricity | transport, freight train | APOS, S | South Africa</td>
-      <td>t*km</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>0.0</td>
-      <td>transport, freight, lorry 16-32 metric ton, EURO1 | transport, freight, lorry 16-32 metric ton, EURO1 | APOS, S | South Africa</td>
-      <td>t*km</td>
-    </tr>
-    <tr>
-      <th>20</th>
-      <td>0.0</td>
-      <td>transport, freight, lorry 16-32 metric ton, EURO2 | transport, freight, lorry 16-32 metric ton, EURO2 | APOS, S | South Africa</td>
-      <td>t*km</td>
-    </tr>
-    <tr>
       <th>21</th>
       <td>200.0</td>
+      <td>kg</td>
+      <td>orange production, fresh grade | orange, fresh grade | APOS, S | United States</td>
+      <td>transport, freight train</td>
       <td>transport, freight train, diesel | transport, freight train | APOS, S | United States</td>
-      <td>t*km</td>
-    </tr>
-    <tr>
-      <th>43</th>
-      <td>0.0</td>
-      <td>transport, freight train, diesel | transport, freight train | APOS, S | Rest-of-World</td>
-      <td>t*km</td>
-    </tr>
-    <tr>
-      <th>45</th>
-      <td>-0.0</td>
-      <td>transport, freight train, electricity | transport, freight train | APOS, S | Rest-of-World</td>
-      <td>t*km</td>
     </tr>
   </tbody>
 </table>
@@ -16264,11 +16180,10 @@ SELECT &#34;TBL_IMPACT_METHODS&#34;.&#34;NAME&#34; &#34;method_NAME&#34;,&#34;TB
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[115]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[23]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">t_dfr</span> <span class="o">=</span> <span class="n">mo</span><span class="o">.</span><span class="n">get_entity</span><span class="p">(</span><span class="n">model_instance</span><span class="o">.</span><span class="n">component</span><span class="p">(</span><span class="s1">&#39;Specific_Transport_Flow&#39;</span><span class="p">),</span> <span class="n">lookup</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;P_t&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
-<span class="n">t_dfr</span><span class="p">[[</span><span class="s1">&#39;Specific_Transport_Flow&#39;</span><span class="p">,</span> <span class="s1">&#39;P_t&#39;</span><span class="p">,</span> <span class="s1">&#39;UNITS&#39;</span><span class="p">]]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">mo</span><span class="o">.</span><span class="n">get_entity</span><span class="p">(</span><span class="n">model_instance</span><span class="o">.</span><span class="n">component</span><span class="p">(</span><span class="s1">&#39;Specific_Transport_Flow&#39;</span><span class="p">),</span> <span class="n">lookup</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">non_zero</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -16284,19 +16199,7 @@ SELECT &#34;TBL_IMPACT_METHODS&#34;.&#34;NAME&#34; &#34;method_NAME&#34;,&#34;TB
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>SELECT &#34;TBL_PROCESSES&#34;.&#34;REF_ID&#34; &#34;P_t&#34;,&#34;TBL_UNITS&#34;.&#34;NAME&#34; &#34;UNITS&#34; FROM (SELECT &#34;F_OWNER&#34;,&#34;F_FLOW&#34;,&#34;F_UNIT&#34;,&#34;RESULTING_AMOUNT_VALUE&#34; FROM &#34;TBL_EXCHANGES&#34; WHERE &#34;F_OWNER&#34; IN (SELECT &#34;ID&#34; FROM &#34;TBL_PROCESSES&#34; WHERE &#34;REF_ID&#34; IN (&#39;44ad59ca-4fe0-394c-a6d9-5dea68783c23&#39;,&#39;f615ae37-fa6d-4a47-958c-23234c986400&#39;,&#39;9106bf8d-869d-425f-b8ee-0bf9a78bcf65&#39;,&#39;97aa2533-ae98-3f8f-b3e2-3acb9d66a010&#39;,&#39;b37252a8-fbb5-47cb-a3aa-1485d090bdfd&#39;,&#39;660ba3fe-d7a5-4c43-8777-27d331934edf&#39;,&#39;fe7d1840-4341-40fd-ba6d-fbba126ca7d3&#39;,&#39;44ad59ca-4fe0-394c-a6d9-5dea68783c23&#39;,&#39;f615ae37-fa6d-4a47-958c-23234c986400&#39;,&#39;9106bf8d-869d-425f-b8ee-0bf9a78bcf65&#39;,&#39;97aa2533-ae98-3f8f-b3e2-3acb9d66a010&#39;,&#39;b37252a8-fbb5-47cb-a3aa-1485d090bdfd&#39;,&#39;660ba3fe-d7a5-4c43-8777-27d331934edf&#39;,&#39;fe7d1840-4341-40fd-ba6d-fbba126ca7d3&#39;,&#39;44ad59ca-4fe0-394c-a6d9-5dea68783c23&#39;,&#39;f615ae37-fa6d-4a47-958c-23234c986400&#39;,&#39;9106bf8d-869d-425f-b8ee-0bf9a78bcf65&#39;,&#39;97aa2533-ae98-3f8f-b3e2-3acb9d66a010&#39;,&#39;b37252a8-fbb5-47cb-a3aa-1485d090bdfd&#39;,&#39;660ba3fe-d7a5-4c43-8777-27d331934edf&#39;,&#39;fe7d1840-4341-40fd-ba6d-fbba126ca7d3&#39;))) &#34;sq0&#34; LEFT JOIN &#34;TBL_FLOWS&#34; ON &#34;TBL_FLOWS&#34;.&#34;ID&#34;=&#34;sq0&#34;.&#34;F_FLOW&#34; LEFT JOIN &#34;TBL_PROCESSES&#34; ON &#34;TBL_PROCESSES&#34;.&#34;ID&#34;=&#34;sq0&#34;.&#34;F_OWNER&#34; LEFT JOIN &#34;TBL_UNITS&#34; ON &#34;TBL_UNITS&#34;.&#34;ID&#34;=&#34;sq0&#34;.&#34;F_UNIT&#34; WHERE &#34;TBL_FLOWS&#34;.&#34;FlOW_TYPE&#34;=&#39;PRODUCT_FLOW&#39;
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[115]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[23]:</div>
 
 
 
@@ -16320,136 +16223,22 @@ SELECT &#34;TBL_IMPACT_METHODS&#34;.&#34;NAME&#34; &#34;method_NAME&#34;,&#34;TB
     <tr style="text-align: right;">
       <th></th>
       <th>Specific_Transport_Flow</th>
+      <th>Units</th>
+      <th>F_t</th>
       <th>P_t</th>
-      <th>UNITS</th>
+      <th>K</th>
+      <th>T</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
       <td>40.0</td>
+      <td>t*km</td>
+      <td>transport, freight train</td>
       <td>transport, freight train, diesel | transport, freight train | APOS, S | United States</td>
-      <td>t*km</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>0.0</td>
-      <td>transport, freight train, diesel | transport, freight train | APOS, S | Rest-of-World</td>
-      <td>t*km</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>0.0</td>
-      <td>transport, freight train, diesel | transport, freight train | APOS, S | South Africa</td>
-      <td>t*km</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>0.0</td>
-      <td>transport, freight train, electricity | transport, freight train | APOS, S | Rest-of-World</td>
-      <td>t*km</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>0.0</td>
-      <td>transport, freight train, electricity | transport, freight train | APOS, S | South Africa</td>
-      <td>t*km</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>0.0</td>
-      <td>transport, freight, lorry 16-32 metric ton, EURO1 | transport, freight, lorry 16-32 metric ton, EURO1 | APOS, S | South Africa</td>
-      <td>t*km</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>0.0</td>
-      <td>transport, freight, lorry 16-32 metric ton, EURO2 | transport, freight, lorry 16-32 metric ton, EURO2 | APOS, S | South Africa</td>
-      <td>t*km</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>0.0</td>
-      <td>transport, freight train, diesel | transport, freight train | APOS, S | United States</td>
-      <td>t*km</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>0.0</td>
-      <td>transport, freight train, diesel | transport, freight train | APOS, S | Rest-of-World</td>
-      <td>t*km</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>0.0</td>
-      <td>transport, freight train, diesel | transport, freight train | APOS, S | South Africa</td>
-      <td>t*km</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>0.0</td>
-      <td>transport, freight train, electricity | transport, freight train | APOS, S | Rest-of-World</td>
-      <td>t*km</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>0.0</td>
-      <td>transport, freight train, electricity | transport, freight train | APOS, S | South Africa</td>
-      <td>t*km</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>0.0</td>
-      <td>transport, freight, lorry 16-32 metric ton, EURO1 | transport, freight, lorry 16-32 metric ton, EURO1 | APOS, S | South Africa</td>
-      <td>t*km</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <td>0.0</td>
-      <td>transport, freight, lorry 16-32 metric ton, EURO2 | transport, freight, lorry 16-32 metric ton, EURO2 | APOS, S | South Africa</td>
-      <td>t*km</td>
-    </tr>
-    <tr>
-      <th>14</th>
-      <td>0.0</td>
-      <td>transport, freight train, diesel | transport, freight train | APOS, S | United States</td>
-      <td>t*km</td>
-    </tr>
-    <tr>
-      <th>15</th>
-      <td>0.0</td>
-      <td>transport, freight train, diesel | transport, freight train | APOS, S | Rest-of-World</td>
-      <td>t*km</td>
-    </tr>
-    <tr>
-      <th>16</th>
-      <td>0.0</td>
-      <td>transport, freight train, diesel | transport, freight train | APOS, S | South Africa</td>
-      <td>t*km</td>
-    </tr>
-    <tr>
-      <th>17</th>
-      <td>0.0</td>
-      <td>transport, freight train, electricity | transport, freight train | APOS, S | Rest-of-World</td>
-      <td>t*km</td>
-    </tr>
-    <tr>
-      <th>18</th>
-      <td>0.0</td>
-      <td>transport, freight train, electricity | transport, freight train | APOS, S | South Africa</td>
-      <td>t*km</td>
-    </tr>
-    <tr>
-      <th>19</th>
-      <td>0.0</td>
-      <td>transport, freight, lorry 16-32 metric ton, EURO1 | transport, freight, lorry 16-32 metric ton, EURO1 | APOS, S | South Africa</td>
-      <td>t*km</td>
-    </tr>
-    <tr>
-      <th>20</th>
-      <td>0.0</td>
-      <td>transport, freight, lorry 16-32 metric ton, EURO2 | transport, freight, lorry 16-32 metric ton, EURO2 | APOS, S | South Africa</td>
-      <td>t*km</td>
+      <td>k1</td>
+      <td>t1</td>
     </tr>
   </tbody>
 </table>
