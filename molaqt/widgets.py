@@ -134,9 +134,8 @@ class SetsEditor(QWidget):
         self.spec = spec
         self.lookup = lookup
 
-        # merge user set into spec defaults
-        # sets = spec.get_default_sets()
-        # sets.update(user_sets)
+        # sets that need to be looked up in db
+        self.lookup_sets = [n for n, d in spec.user_defined_sets.items() if 'lookup' in d and d['lookup']]
 
         # only allow user-defined sets to be changed
         user_defined_sets = {k: sets[k] for k in spec.user_defined_sets.keys()}
@@ -171,7 +170,7 @@ class SetsEditor(QWidget):
         grid_layout = QGridLayout()
         grid_layout.addWidget(QLabel("Sets"), 0, 0)
         grid_layout.addWidget(self.sets_list, 1, 0, 2, 1)
-        self.set_label = QLabel(first_set + ': ' + spec.user_defined_sets[first_set])
+        self.set_label = QLabel(first_set + ': ' + spec.user_defined_sets[first_set]['doc'])
         grid_layout.addWidget(self.set_label, 0, 1)
         grid_layout.addWidget(self.add_element_button, 0, 2)
         grid_layout.addWidget(self.set_table, 1, 1, 1, 2)
@@ -180,7 +179,7 @@ class SetsEditor(QWidget):
 
     def add_element_clicked(self):
         current_set = self.sets_list.currentItem().text()
-        if current_set not in self.lookup.keys():
+        if current_set not in self.lookup_sets:
             text, ok = QInputDialog.getText(self, 'Add Element', 'Name:')
             if ok:
                 self.sets[current_set].append(str(text))
@@ -199,16 +198,6 @@ class SetsEditor(QWidget):
                 self.dirty = True
                 print('Added to set', ref_ids)
 
-    # def add_to_set(self):
-    #     current_set = self.sets_list.currentItem().text()
-    #     # get the unfiltered row numbers
-    #     rows = [self.filter_lookup_model.mapToSource(i).row() for i in self.lookup_table.selectedIndexes()]
-    #     self.sets[current_set] += self.lookup[current_set].index[rows].to_list()
-    #     df = self.lookup[current_set].loc[self.sets[current_set], :]
-    #     self.set_table.setModel(md.PandasModel(df, is_indexed=True))
-    #     self.dirty = True
-    #     print('Added to set', rows)
-
     def remove_from_set(self):
         current_set = self.sets_list.currentItem().text()
         rows = [i.row() for i in self.set_table.selectedIndexes()]
@@ -217,7 +206,7 @@ class SetsEditor(QWidget):
         for ref in ref_ids:
             if ref in self.sets[current_set]:
                 self.sets[current_set].remove(ref)
-        if current_set in self.lookup.keys():
+        if current_set in self.lookup_sets:
             df = self.lookup.get(current_set, self.sets[current_set])
             model = md.PandasModel(df, is_indexed=True)
         else:
@@ -229,12 +218,12 @@ class SetsEditor(QWidget):
     def set_clicked(self, item):
         user_set = item.text()
         print("Clicked set list with", user_set)
-        self.set_label.setText(user_set + ': ' + self.spec.user_defined_sets[user_set])
+        self.set_label.setText(user_set + ': ' + self.spec.user_defined_sets[user_set]['doc'])
         model = self.get_model(user_set)
         self.set_table.setModel(model)
 
     def get_model(self, set_name):
-        if set_name in self.lookup.keys():
+        if set_name in self.lookup_sets:
             set_dfr = self.lookup.get(set_name, self.sets[set_name])
             model = md.PandasModel(set_dfr, is_indexed=True)
         else:
@@ -294,7 +283,6 @@ class ParametersEditor(QWidget):
         self.lookup = lookup
 
         # build a dictionary of DataFrames of default parameters from sets
-        # self.par = {k: v for k, v in mb.build_parameters(sets, parameters, spec).items() if k in parameters}
         self.par = mb.build_parameters(sets, parameters, spec)
 
         # list widget for user-defined parameters
@@ -374,7 +362,7 @@ class ParameterWidget(QWidget):
         # table of parameters
         self.parameter_table = QTableView()
         index_sets = spec.user_defined_parameters[name]['index']
-        self.parameter_table.setModel(md.ParameterModel(table, index_sets, lookup))
+        self.parameter_table.setModel(md.ParameterModel(table, index_sets, lookup, spec))
         self.parameter_table.setColumnHidden(0, True)
         self.parameter_table.resizeColumnsToContents()
 
@@ -402,7 +390,7 @@ class LinkingParameterWidget(QWidget):
         # table of parameters (affects table!)
         self.parameter_table = QTableView()
         index_sets = self.spec.user_defined_parameters[name]['index']
-        self.parameter_table.setModel(md.ParameterModel(table, index_sets, lookup))
+        self.parameter_table.setModel(md.ParameterModel(table, index_sets, lookup, spec))
         self.parameter_table.setColumnHidden(0, True)
 
         # dict to map link number to table row in sets enumeration

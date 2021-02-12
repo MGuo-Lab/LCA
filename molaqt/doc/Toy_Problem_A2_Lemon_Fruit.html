@@ -14259,8 +14259,8 @@ a.anchor-link {
 
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="Lemon-Toy-Problem-A">Lemon Toy Problem A<a class="anchor-link" href="#Lemon-Toy-Problem-A">&#182;</a></h1><p>This is an example optimisation problem that demonstrates the low-level functionality available in the <code>mola</code> package for manipulating openLCA data in a notebook.</p>
-<h2 id="Problem-Statement">Problem Statement<a class="anchor-link" href="#Problem-Statement">&#182;</a></h2><p>A citrus fruit juice producer in wishes to transport 1 tonne of lemons from Spain to their UK operation. They would like to choose a freight transport option that minimises the environmental impact on climate change. The freight transport options are by road in a light commercial vehicle, diesel train or sea tanker.</p>
+<h1 id="Lemon-Toy-Problem">Lemon Toy Problem<a class="anchor-link" href="#Lemon-Toy-Problem">&#182;</a></h1><p>This is an example optimisation problem that demonstrates the low-level functionality available in the <code>mola</code> package for manipulating openLCA data in a notebook.</p>
+<h2 id="Problem-Statement">Problem Statement<a class="anchor-link" href="#Problem-Statement">&#182;</a></h2><p>A citrus fruit juice producer wishes to transport 1 tonne of lemons from Spain to their UK operation. They would like to choose a freight transport option that minimises the environmental impact on climate change. The freight transport options are by road in a light commercial vehicle, diesel train or sea tanker.</p>
 <p>Assumptions</p>
 <ul>
 <li>All data can be sourced from openLCA</li>
@@ -14308,7 +14308,7 @@ $$<p>where $f_{f_m, p_m, f_t, p_t}$ is the total quantity of lemons in kg transp
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>The quantity of lemons transported by flow $f_t$ times the distance travelled is</p>
 $$
-t_{f_t, p_t} = f_{f_m, p_m, f_t, p_t}d_{p_m, f_m},
+t_{f_t, p_t} = U_{f_m, f_t}f_{f_m, p_m, f_t, p_t}d_{p_m, f_m},
 $$<p>where $d_{p_m, f_m}$ is the distance in km travelled by lemons from the production process $p_m$ in Spain and London. We assume the distance travelled is the same for each transport mode.</p>
 
 </div>
@@ -14318,7 +14318,7 @@ $$<p>where $d_{p_m, f_m}$ is the distance in km travelled by lemons from the pro
 <p>Thus</p>
 $$
 d_{p_m,f_m}=\text{Haversine}(Y, X, Y_{p_m, f_m}^I, X_{p_m, f_m}^I)
-$$<p>where $(X,Y)$ is the Longitude and Latitude of the London in the UK, and $(X^I_{p_m,f_m}, Y^I_{p_m,f_m})$ is the longitude and latitude of Spain from openLCA location data. The Haversine formula calculates the great circle distance between points on the earth's surface.</p>
+$$<p>where $(X,Y)$ is the Longitude and Latitude of the London in the UK, and $(X^I_{p_m,f_m}, Y^I_{p_m,f_m})$ is the longitude and latitude of Spain from openLCA location data measured in degrees. The Haversine formula calculates the great circle distance between points on the earth's surface.</p>
 
 </div>
 </div>
@@ -15465,21 +15465,67 @@ $$<p>So the solution is $f_{f_m, p_m, f_t, p_t}=1000$ kg for whichever tranport 
         vertical-align: top;
     }
 
-    .dataframe thead th {
+    .dataframe thead tr th {
+        text-align: left;
+    }
+
+    .dataframe thead tr:last-of-type th {
         text-align: right;
     }
 </style>
 <table border="1" class="dataframe">
   <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>64867712-23c4-3be5-a50e-3631e74571a6</th>
-      <th>4ce4cc23-c7be-3317-a9fb-45d4d4a0a8ab</th>
-      <th>9f6a92b7-80aa-3705-8cae-042e064e3090</th>
-      <th>727a873a-27de-3274-a0ae-ecd2c90b122f</th>
+    <tr>
+      <th>F_OWNER</th>
+      <th colspan="7" halign="left">64867712-23c4-3be5-a50e-3631e74571a6</th>
+      <th colspan="3" halign="left">4ce4cc23-c7be-3317-a9fb-45d4d4a0a8ab</th>
+      <th>...</th>
+      <th colspan="3" halign="left">9f6a92b7-80aa-3705-8cae-042e064e3090</th>
+      <th colspan="7" halign="left">727a873a-27de-3274-a0ae-ecd2c90b122f</th>
+    </tr>
+    <tr>
+      <th>F_UNIT</th>
+      <th>1056</th>
+      <th>1217</th>
+      <th>1084</th>
+      <th>1191</th>
+      <th>1098</th>
+      <th>1052</th>
+      <th>1218</th>
+      <th>1056</th>
+      <th>1084</th>
+      <th>1217</th>
+      <th>...</th>
+      <th>1191</th>
+      <th>1052</th>
+      <th>1218</th>
+      <th>1056</th>
+      <th>1052</th>
+      <th>1217</th>
+      <th>1191</th>
+      <th>1084</th>
+      <th>1098</th>
+      <th>1218</th>
     </tr>
     <tr>
       <th>REF_ID</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
       <th></th>
       <th></th>
       <th></th>
@@ -15490,40 +15536,142 @@ $$<p>So the solution is $f_{f_m, p_m, f_t, p_t}=1000$ kg for whichever tranport 
     <tr>
       <th>00012c0a-9bff-4787-a7eb-56c3d2f43692</th>
       <td>3.315358e-11</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>3.537200e-11</td>
-      <td>7.379112e-11</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>2.143797e-11</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
     </tr>
     <tr>
       <th>0015ec22-72cb-4af1-8c7b-0ba0d041553c</th>
       <td>3.310572e-11</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>9.230810e-11</td>
-      <td>7.169612e-11</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>1.202275e-10</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
     </tr>
     <tr>
       <th>0017271e-7df5-40bc-833a-36110c1fe5d5</th>
       <td>2.314766e-08</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>2.739918e-08</td>
-      <td>1.928944e-08</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>3.124432e-08</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
     </tr>
     <tr>
       <th>001790f3-fd86-4a0d-a2a1-06c7099d90c8</th>
+      <td>NaN</td>
       <td>1.216010e-05</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>1.236320e-05</td>
-      <td>8.304251e-06</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>2.156249e-05</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
     </tr>
     <tr>
       <th>0017ce28-9f7a-404b-ad55-d3f43ad13cae</th>
       <td>8.560851e-14</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>6.166200e-14</td>
-      <td>1.592893e-13</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>1.611737e-14</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
     </tr>
     <tr>
       <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -15532,41 +15680,126 @@ $$<p>So the solution is $f_{f_m, p_m, f_t, p_t}=1000$ kg for whichever tranport 
     <tr>
       <th>ff36578b-f403-4656-b934-81d8d4e02dc8</th>
       <td>5.983466e-09</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>1.028824e-08</td>
-      <td>7.814235e-09</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>8.067001e-09</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
     </tr>
     <tr>
       <th>ff65658c-2d39-44a2-b23e-7ec3c644f064</th>
       <td>7.704246e-06</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>9.875376e-06</td>
-      <td>1.338127e-05</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>6.799632e-06</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
     </tr>
     <tr>
       <th>ff6dccc1-5ebd-42c3-9fd9-3d73db7a3dd2</th>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>2.270127e-10</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>1.969600e-10</td>
-      <td>3.703580e-10</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>1.010055e-10</td>
+      <td>NaN</td>
+      <td>NaN</td>
     </tr>
     <tr>
       <th>ffaaffd3-5deb-4508-9e5f-e47f551ac2b8</th>
       <td>1.224823e-12</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>3.121575e-12</td>
-      <td>2.678038e-12</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>3.933826e-12</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
     </tr>
     <tr>
       <th>ffbe8447-6d78-46dd-8378-47019a82ce82</th>
+      <td>NaN</td>
       <td>3.046266e-11</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>4.446081e-11</td>
-      <td>3.686342e-11</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>5.419525e-11</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
     </tr>
   </tbody>
 </table>
-<p>2046 rows × 4 columns</p>
+<p>2046 rows × 28 columns</p>
 </div>
 </div>
 
@@ -15742,7 +15975,7 @@ is structured. A product flow can be linked to many different processes in TBL_E
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>SELECT &#34;TBL_IMPACT_METHODS&#34;.&#34;ID&#34; &#34;methods_ID&#34;,&#34;TBL_IMPACT_METHODS&#34;.&#34;REF_ID&#34; &#34;methods_REF_ID&#34;,&#34;TBL_IMPACT_METHODS&#34;.&#34;NAME&#34; &#34;methods_NAME&#34;,&#34;TBL_IMPACT_CATEGORIES&#34;.&#34;ID&#34; &#34;categories_ID&#34;,&#34;TBL_IMPACT_CATEGORIES&#34;.&#34;REF_ID&#34; &#34;categories_REF_ID&#34;,&#34;TBL_IMPACT_CATEGORIES&#34;.&#34;NAME&#34; &#34;categories_NAME&#34; FROM &#34;TBL_IMPACT_CATEGORIES&#34; LEFT JOIN &#34;TBL_IMPACT_METHODS&#34; ON &#34;TBL_IMPACT_CATEGORIES&#34;.&#34;F_IMPACT_METHOD&#34;=&#34;TBL_IMPACT_METHODS&#34;.&#34;ID&#34; WHERE &#34;TBL_IMPACT_METHODS&#34;.&#34;name&#34; LIKE &#39;ReCiPe Midpoint (H) V1.13&#39;
+<pre>SELECT &#34;TBL_IMPACT_METHODS&#34;.&#34;ID&#34; &#34;methods_ID&#34;,&#34;TBL_IMPACT_METHODS&#34;.&#34;REF_ID&#34; &#34;methods_REF_ID&#34;,&#34;TBL_IMPACT_METHODS&#34;.&#34;NAME&#34; &#34;methods_NAME&#34;,&#34;TBL_IMPACT_CATEGORIES&#34;.&#34;ID&#34; &#34;categories_ID&#34;,&#34;TBL_IMPACT_CATEGORIES&#34;.&#34;REF_ID&#34; &#34;categories_REF_ID&#34;,&#34;TBL_IMPACT_CATEGORIES&#34;.&#34;NAME&#34; &#34;categories_NAME&#34;,&#34;TBL_IMPACT_CATEGORIES&#34;.&#34;REFERENCE_UNIT&#34; &#34;categories_REFERENCE_UNIT&#34; FROM &#34;TBL_IMPACT_CATEGORIES&#34; LEFT JOIN &#34;TBL_IMPACT_METHODS&#34; ON &#34;TBL_IMPACT_CATEGORIES&#34;.&#34;F_IMPACT_METHOD&#34;=&#34;TBL_IMPACT_METHODS&#34;.&#34;ID&#34; WHERE &#34;TBL_IMPACT_METHODS&#34;.&#34;name&#34; LIKE &#39;ReCiPe Midpoint (H) V1.13&#39;
 </pre>
 </div>
 </div>
@@ -15779,6 +16012,7 @@ is structured. A product flow can be linked to many different processes in TBL_E
       <th>categories_ID</th>
       <th>categories_REF_ID</th>
       <th>categories_NAME</th>
+      <th>categories_REFERENCE_UNIT</th>
     </tr>
   </thead>
   <tbody>
@@ -15790,6 +16024,7 @@ is structured. A product flow can be linked to many different processes in TBL_E
       <td>36139392</td>
       <td>515aa8fc-27aa-3ec8-9b0b-42a8bd26a26b</td>
       <td>metal depletion - MDP</td>
+      <td>kg Fe-Eq</td>
     </tr>
     <tr>
       <th>1</th>
@@ -15799,6 +16034,7 @@ is structured. A product flow can be linked to many different processes in TBL_E
       <td>36134269</td>
       <td>8060a79a-473c-3834-b874-6d25239d06f3</td>
       <td>marine ecotoxicity - METPinf</td>
+      <td>kg 1,4-DB-Eq</td>
     </tr>
     <tr>
       <th>2</th>
@@ -15808,6 +16044,7 @@ is structured. A product flow can be linked to many different processes in TBL_E
       <td>36135829</td>
       <td>42b1e910-3bd2-3741-85ce-a3966798440b</td>
       <td>climate change - GWP100</td>
+      <td>kg CO2-Eq</td>
     </tr>
     <tr>
       <th>3</th>
@@ -15817,6 +16054,7 @@ is structured. A product flow can be linked to many different processes in TBL_E
       <td>36132595</td>
       <td>dea5d939-c042-300a-916c-dd903180575f</td>
       <td>human toxicity - HTPinf</td>
+      <td>kg 1,4-DCB-Eq</td>
     </tr>
     <tr>
       <th>4</th>
@@ -15826,6 +16064,7 @@ is structured. A product flow can be linked to many different processes in TBL_E
       <td>36139540</td>
       <td>3bb7b9c4-6934-325c-974c-12d2ed74407b</td>
       <td>fossil depletion - FDP</td>
+      <td>kg oil-Eq</td>
     </tr>
     <tr>
       <th>5</th>
@@ -15835,6 +16074,7 @@ is structured. A product flow can be linked to many different processes in TBL_E
       <td>36134054</td>
       <td>e762c963-e5e8-33eb-829c-bff1110c5ecd</td>
       <td>water depletion - WDP</td>
+      <td>m3 water-Eq</td>
     </tr>
     <tr>
       <th>6</th>
@@ -15844,6 +16084,7 @@ is structured. A product flow can be linked to many different processes in TBL_E
       <td>36136043</td>
       <td>e84190cb-0e34-34a8-aca6-78de883d7409</td>
       <td>freshwater ecotoxicity - FETPinf</td>
+      <td>kg 1,4-DCB-Eq</td>
     </tr>
     <tr>
       <th>7</th>
@@ -15853,6 +16094,7 @@ is structured. A product flow can be linked to many different processes in TBL_E
       <td>36139181</td>
       <td>fa0789f2-602a-35c6-a6f3-fabc100f21e4</td>
       <td>photochemical oxidant formation - POFP</td>
+      <td>kg NMVOC-Eq</td>
     </tr>
     <tr>
       <th>8</th>
@@ -15862,6 +16104,7 @@ is structured. A product flow can be linked to many different processes in TBL_E
       <td>36133837</td>
       <td>f10f3229-9d8f-30dd-8ff9-51413d46f94d</td>
       <td>ionising radiation - IRP_HE</td>
+      <td>kg U235-Eq</td>
     </tr>
     <tr>
       <th>9</th>
@@ -15871,6 +16114,7 @@ is structured. A product flow can be linked to many different processes in TBL_E
       <td>36139478</td>
       <td>4fa0339d-af04-336e-9772-19fdc201afeb</td>
       <td>urban land occupation - ULOP</td>
+      <td>m2a</td>
     </tr>
     <tr>
       <th>10</th>
@@ -15880,6 +16124,7 @@ is structured. A product flow can be linked to many different processes in TBL_E
       <td>36134074</td>
       <td>446d9408-01ff-3e5c-a4b0-2e07c5b8517b</td>
       <td>natural land transformation - NLTP</td>
+      <td>m2</td>
     </tr>
     <tr>
       <th>11</th>
@@ -15889,6 +16134,7 @@ is structured. A product flow can be linked to many different processes in TBL_E
       <td>36134242</td>
       <td>ecb568fa-94a5-3a0c-9f8e-61f43d6ac0c2</td>
       <td>particulate matter formation - PMFP</td>
+      <td>kg PM10-Eq</td>
     </tr>
     <tr>
       <th>12</th>
@@ -15898,6 +16144,7 @@ is structured. A product flow can be linked to many different processes in TBL_E
       <td>36134195</td>
       <td>483dac29-100d-3b29-ab59-fe6ea273afbd</td>
       <td>marine eutrophication - MEP</td>
+      <td>kg N-Eq</td>
     </tr>
     <tr>
       <th>13</th>
@@ -15907,6 +16154,7 @@ is structured. A product flow can be linked to many different processes in TBL_E
       <td>36133820</td>
       <td>3f8964fa-4ca7-3e65-9980-1a3c439fed67</td>
       <td>terrestrial acidification - TAP100</td>
+      <td>kg SO2-Eq</td>
     </tr>
     <tr>
       <th>14</th>
@@ -15916,6 +16164,7 @@ is structured. A product flow can be linked to many different processes in TBL_E
       <td>36139491</td>
       <td>1aff4012-dc1f-389b-b159-dea32f6672f1</td>
       <td>agricultural land occupation - ALOP</td>
+      <td>m2a</td>
     </tr>
     <tr>
       <th>15</th>
@@ -15925,6 +16174,7 @@ is structured. A product flow can be linked to many different processes in TBL_E
       <td>36135985</td>
       <td>ca66df4b-0715-3669-b188-3e056792c036</td>
       <td>ozone depletion - ODPinf</td>
+      <td>kg CFC-11-Eq</td>
     </tr>
     <tr>
       <th>16</th>
@@ -15934,6 +16184,7 @@ is structured. A product flow can be linked to many different processes in TBL_E
       <td>36137602</td>
       <td>d61fe21d-eebc-320f-8329-e77421bac320</td>
       <td>terrestrial ecotoxicity - TETPinf</td>
+      <td>kg 1,4-DCB-Eq</td>
     </tr>
     <tr>
       <th>17</th>
@@ -15943,6 +16194,7 @@ is structured. A product flow can be linked to many different processes in TBL_E
       <td>36134060</td>
       <td>cb7138bf-75df-36b5-b75c-1b5dda0443a9</td>
       <td>freshwater eutrophication - FEP</td>
+      <td>kg P-Eq</td>
     </tr>
   </tbody>
 </table>
@@ -15982,7 +16234,7 @@ is structured. A product flow can be linked to many different processes in TBL_E
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>SELECT &#34;TBL_IMPACT_METHODS&#34;.&#34;ID&#34; &#34;methods_ID&#34;,&#34;TBL_IMPACT_METHODS&#34;.&#34;REF_ID&#34; &#34;methods_REF_ID&#34;,&#34;TBL_IMPACT_METHODS&#34;.&#34;NAME&#34; &#34;methods_NAME&#34;,&#34;TBL_IMPACT_CATEGORIES&#34;.&#34;ID&#34; &#34;categories_ID&#34;,&#34;TBL_IMPACT_CATEGORIES&#34;.&#34;REF_ID&#34; &#34;categories_REF_ID&#34;,&#34;TBL_IMPACT_CATEGORIES&#34;.&#34;NAME&#34; &#34;categories_NAME&#34; FROM &#34;TBL_IMPACT_CATEGORIES&#34; LEFT JOIN &#34;TBL_IMPACT_METHODS&#34; ON &#34;TBL_IMPACT_CATEGORIES&#34;.&#34;F_IMPACT_METHOD&#34;=&#34;TBL_IMPACT_METHODS&#34;.&#34;ID&#34; WHERE &#34;TBL_IMPACT_METHODS&#34;.&#34;name&#34; LIKE &#39;ReCiPe Midpoint (H) V1.13&#39; AND &#34;TBL_IMPACT_CATEGORIES&#34;.&#34;name&#34; LIKE &#39;Climate change - GWP100%&#39;
+<pre>SELECT &#34;TBL_IMPACT_METHODS&#34;.&#34;ID&#34; &#34;methods_ID&#34;,&#34;TBL_IMPACT_METHODS&#34;.&#34;REF_ID&#34; &#34;methods_REF_ID&#34;,&#34;TBL_IMPACT_METHODS&#34;.&#34;NAME&#34; &#34;methods_NAME&#34;,&#34;TBL_IMPACT_CATEGORIES&#34;.&#34;ID&#34; &#34;categories_ID&#34;,&#34;TBL_IMPACT_CATEGORIES&#34;.&#34;REF_ID&#34; &#34;categories_REF_ID&#34;,&#34;TBL_IMPACT_CATEGORIES&#34;.&#34;NAME&#34; &#34;categories_NAME&#34;,&#34;TBL_IMPACT_CATEGORIES&#34;.&#34;REFERENCE_UNIT&#34; &#34;categories_REFERENCE_UNIT&#34; FROM &#34;TBL_IMPACT_CATEGORIES&#34; LEFT JOIN &#34;TBL_IMPACT_METHODS&#34; ON &#34;TBL_IMPACT_CATEGORIES&#34;.&#34;F_IMPACT_METHOD&#34;=&#34;TBL_IMPACT_METHODS&#34;.&#34;ID&#34; WHERE &#34;TBL_IMPACT_METHODS&#34;.&#34;name&#34; LIKE &#39;ReCiPe Midpoint (H) V1.13&#39; AND &#34;TBL_IMPACT_CATEGORIES&#34;.&#34;name&#34; LIKE &#39;Climate change - GWP100%&#39;
 </pre>
 </div>
 </div>
@@ -16019,6 +16271,7 @@ is structured. A product flow can be linked to many different processes in TBL_E
       <th>categories_ID</th>
       <th>categories_REF_ID</th>
       <th>categories_NAME</th>
+      <th>categories_REFERENCE_UNIT</th>
     </tr>
   </thead>
   <tbody>
@@ -16030,6 +16283,7 @@ is structured. A product flow can be linked to many different processes in TBL_E
       <td>36135829</td>
       <td>42b1e910-3bd2-3741-85ce-a3966798440b</td>
       <td>climate change - GWP100</td>
+      <td>kg CO2-Eq</td>
     </tr>
   </tbody>
 </table>
@@ -16110,7 +16364,7 @@ is structured. A product flow can be linked to many different processes in TBL_E
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[17]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">impact_element_dfr</span> <span class="o">=</span> <span class="n">dv</span><span class="o">.</span><span class="n">get_impact_category_elementary_flow</span><span class="p">(</span><span class="n">dbconn</span><span class="p">,</span> <span class="n">ref_ids</span><span class="o">=</span><span class="n">impact_ref_ids</span><span class="p">,</span> <span class="n">limit_factors</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">impact_element_dfr</span> <span class="o">=</span> <span class="n">dv</span><span class="o">.</span><span class="n">get_impact_category_elementary_flow</span><span class="p">(</span><span class="n">dbconn</span><span class="p">,</span> <span class="n">ref_ids</span><span class="o">=</span><span class="n">impact_ref_ids</span><span class="p">)</span>
 <span class="n">impact_element_dfr</span>
 </pre></div>
 
@@ -16131,7 +16385,7 @@ is structured. A product flow can be linked to many different processes in TBL_E
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>SELECT &#34;ic&#34;.&#34;REF_ID&#34; &#34;IMPACT_CATEGORY_REF_ID&#34;,&#34;TBL_FLOWS&#34;.&#34;REF_ID&#34; &#34;FLOW_REF_ID&#34;,&#34;TBL_IMPACT_FACTORS&#34;.&#34;value&#34; FROM (SELECT &#34;ID&#34;,&#34;REF_ID&#34; FROM &#34;TBL_IMPACT_CATEGORIES&#34; WHERE &#34;REF_ID&#34; IN (&#39;42b1e910-3bd2-3741-85ce-a3966798440b&#39;)) &#34;ic&#34; LEFT JOIN &#34;TBL_IMPACT_FACTORS&#34; ON &#34;TBL_IMPACT_FACTORS&#34;.&#34;F_IMPACT_CATEGORY&#34;=&#34;ic&#34;.&#34;ID&#34; LEFT JOIN &#34;TBL_FLOWS&#34; ON &#34;TBL_IMPACT_FACTORS&#34;.&#34;F_FLOW&#34;=&#34;TBL_FLOWS&#34;.&#34;ID&#34;
+<pre>SELECT &#34;ic&#34;.&#34;REF_ID&#34; &#34;IMPACT_CATEGORY_REF_ID&#34;,&#34;TBL_FLOWS&#34;.&#34;REF_ID&#34; &#34;FLOW_REF_ID&#34;,&#34;TBL_IMPACT_FACTORS&#34;.&#34;VALUE&#34;,&#34;TBL_IMPACT_FACTORS&#34;.&#34;F_UNIT&#34; FROM (SELECT &#34;ID&#34;,&#34;REF_ID&#34; FROM &#34;TBL_IMPACT_CATEGORIES&#34; WHERE &#34;REF_ID&#34; IN (&#39;42b1e910-3bd2-3741-85ce-a3966798440b&#39;)) &#34;ic&#34; LEFT JOIN &#34;TBL_IMPACT_FACTORS&#34; ON &#34;TBL_IMPACT_FACTORS&#34;.&#34;F_IMPACT_CATEGORY&#34;=&#34;ic&#34;.&#34;ID&#34; LEFT JOIN &#34;TBL_FLOWS&#34; ON &#34;TBL_IMPACT_FACTORS&#34;.&#34;F_FLOW&#34;=&#34;TBL_FLOWS&#34;.&#34;ID&#34;
 </pre>
 </div>
 </div>
@@ -16154,15 +16408,23 @@ is structured. A product flow can be linked to many different processes in TBL_E
         vertical-align: top;
     }
 
-    .dataframe thead th {
+    .dataframe thead tr th {
+        text-align: left;
+    }
+
+    .dataframe thead tr:last-of-type th {
         text-align: right;
     }
 </style>
 <table border="1" class="dataframe">
   <thead>
-    <tr style="text-align: right;">
+    <tr>
       <th>IMPACT_CATEGORY_REF_ID</th>
       <th>42b1e910-3bd2-3741-85ce-a3966798440b</th>
+    </tr>
+    <tr>
+      <th>F_UNIT</th>
+      <th>1056</th>
     </tr>
     <tr>
       <th>FLOW_REF_ID</th>
@@ -16692,7 +16954,7 @@ kpi : KPI for optimisation
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>We obtain the breakdown of the $kpi$ in terms of elementary flows.</p>
+<p>We obtain the breakdown of the $kpi$ in terms of elementary flows. For this impact category units are in kgCO2/kg, which is consistent with the units for product flows.</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -16701,7 +16963,7 @@ kpi : KPI for optimisation
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[25]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">recipe_climate_impact_factors</span> <span class="o">=</span> <span class="n">dv</span><span class="o">.</span><span class="n">get_impact_category_elementary_flow</span><span class="p">(</span><span class="n">dbconn</span><span class="p">,</span> <span class="n">ref_ids</span><span class="o">=</span><span class="n">kpi_ref_id</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">recipe_climate_impact_factors</span> <span class="o">=</span> <span class="n">dv</span><span class="o">.</span><span class="n">get_impact_category_elementary_flow</span><span class="p">(</span><span class="n">dbconn</span><span class="p">,</span> <span class="n">ref_ids</span><span class="o">=</span><span class="n">kpi_ref_id</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">olca_model_A</span><span class="o">.</span><span class="n">Ef</span> <span class="o">=</span> <span class="n">Param</span><span class="p">(</span><span class="n">olca_model_A</span><span class="o">.</span><span class="n">E</span><span class="p">,</span> <span class="n">olca_model_A</span><span class="o">.</span><span class="n">kpi</span><span class="p">,</span> <span class="n">initialize</span><span class="o">=</span><span class="n">recipe_climate_impact_factors</span><span class="o">.</span><span class="n">stack</span><span class="p">()</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
                         <span class="n">within</span><span class="o">=</span><span class="n">Any</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;Impact category for each elementary flow&#39;</span><span class="p">,</span> <span class="n">default</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
@@ -16723,7 +16985,7 @@ kpi : KPI for optimisation
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>SELECT &#34;ic&#34;.&#34;REF_ID&#34; &#34;IMPACT_CATEGORY_REF_ID&#34;,&#34;TBL_FLOWS&#34;.&#34;REF_ID&#34; &#34;FLOW_REF_ID&#34;,&#34;TBL_IMPACT_FACTORS&#34;.&#34;value&#34; FROM (SELECT &#34;ID&#34;,&#34;REF_ID&#34; FROM &#34;TBL_IMPACT_CATEGORIES&#34; WHERE &#34;REF_ID&#34; IN (&#39;42b1e910-3bd2-3741-85ce-a3966798440b&#39;)) &#34;ic&#34; LEFT JOIN &#34;TBL_IMPACT_FACTORS&#34; ON &#34;TBL_IMPACT_FACTORS&#34;.&#34;F_IMPACT_CATEGORY&#34;=&#34;ic&#34;.&#34;ID&#34; LEFT JOIN &#34;TBL_FLOWS&#34; ON &#34;TBL_IMPACT_FACTORS&#34;.&#34;F_FLOW&#34;=&#34;TBL_FLOWS&#34;.&#34;ID&#34;
+<pre>SELECT &#34;ic&#34;.&#34;REF_ID&#34; &#34;IMPACT_CATEGORY_REF_ID&#34;,&#34;TBL_FLOWS&#34;.&#34;REF_ID&#34; &#34;FLOW_REF_ID&#34;,&#34;TBL_IMPACT_FACTORS&#34;.&#34;VALUE&#34;,&#34;TBL_IMPACT_FACTORS&#34;.&#34;F_UNIT&#34; FROM (SELECT &#34;ID&#34;,&#34;REF_ID&#34; FROM &#34;TBL_IMPACT_CATEGORIES&#34; WHERE &#34;REF_ID&#34; IN (&#39;42b1e910-3bd2-3741-85ce-a3966798440b&#39;)) &#34;ic&#34; LEFT JOIN &#34;TBL_IMPACT_FACTORS&#34; ON &#34;TBL_IMPACT_FACTORS&#34;.&#34;F_IMPACT_CATEGORY&#34;=&#34;ic&#34;.&#34;ID&#34; LEFT JOIN &#34;TBL_FLOWS&#34; ON &#34;TBL_IMPACT_FACTORS&#34;.&#34;F_FLOW&#34;=&#34;TBL_FLOWS&#34;.&#34;ID&#34;
 </pre>
 </div>
 </div>
@@ -16744,7 +17006,7 @@ kpi : KPI for optimisation
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[26]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">material_process_elementary_dfr</span> <span class="o">=</span> <span class="n">dv</span><span class="o">.</span><span class="n">get_process_elementary_flow</span><span class="p">(</span><span class="n">dbconn</span><span class="p">,</span> <span class="n">ref_ids</span><span class="o">=</span><span class="n">production_dfr</span><span class="p">[</span><span class="s1">&#39;REF_ID&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">limit_exchanges</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">material_process_elementary_dfr</span> <span class="o">=</span> <span class="n">dv</span><span class="o">.</span><span class="n">get_process_elementary_flow</span><span class="p">(</span><span class="n">dbconn</span><span class="p">,</span> <span class="n">ref_ids</span><span class="o">=</span><span class="n">production_dfr</span><span class="p">[</span><span class="s1">&#39;REF_ID&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">limit_exchanges</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="n">material_process_elementary_dfr</span>
 </pre></div>
 
@@ -16866,7 +17128,7 @@ kpi : KPI for optimisation
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[27]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">transport_process_elementary_dfr</span> <span class="o">=</span> <span class="n">dv</span><span class="o">.</span><span class="n">get_process_elementary_flow</span><span class="p">(</span><span class="n">dbconn</span><span class="p">,</span> <span class="n">ref_ids</span><span class="o">=</span><span class="n">transport_ref_ids</span><span class="p">,</span> <span class="n">limit_exchanges</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">transport_process_elementary_dfr</span> <span class="o">=</span> <span class="n">dv</span><span class="o">.</span><span class="n">get_process_elementary_flow</span><span class="p">(</span><span class="n">dbconn</span><span class="p">,</span> <span class="n">ref_ids</span><span class="o">=</span><span class="n">transport_ref_ids</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">limit_exchanges</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="n">transport_process_elementary_dfr</span>
 </pre></div>
 
@@ -17147,7 +17409,7 @@ EI_Pt : Environment Impact of flow from transport process
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[31]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">process_dfr</span> <span class="o">=</span> <span class="n">dv</span><span class="o">.</span><span class="n">get_process_product_flow</span><span class="p">(</span><span class="n">dbconn</span><span class="p">,</span> <span class="n">ref_ids</span><span class="o">=</span><span class="n">material_ref_ids</span> <span class="o">+</span> <span class="n">transport_ref_ids</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">process_dfr</span> <span class="o">=</span> <span class="n">dv</span><span class="o">.</span><span class="n">get_process_product_flow</span><span class="p">(</span><span class="n">dbconn</span><span class="p">,</span> <span class="n">process_ref_ids</span><span class="o">=</span><span class="n">material_ref_ids</span> <span class="o">+</span> <span class="n">transport_ref_ids</span><span class="p">)</span>
 <span class="n">process</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">process_dfr</span><span class="p">[</span><span class="s1">&#39;FLOW_REF_ID&#39;</span><span class="p">],</span> <span class="n">process_dfr</span><span class="p">[</span><span class="s1">&#39;PROCESS_REF_ID&#39;</span><span class="p">]))</span>
 <span class="n">process_dfr</span>
 </pre></div>
@@ -17169,7 +17431,7 @@ EI_Pt : Environment Impact of flow from transport process
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>SELECT &#34;TBL_PROCESSES&#34;.&#34;REF_ID&#34; &#34;PROCESS_REF_ID&#34;,&#34;TBL_PROCESSES&#34;.&#34;NAME&#34; &#34;PROCESS_NAME&#34;,&#34;TBL_LOCATIONS&#34;.&#34;NAME&#34; &#34;LOCATION&#34;,&#34;TBL_FLOWS&#34;.&#34;REF_ID&#34; &#34;FLOW_REF_ID&#34;,&#34;TBL_FLOWS&#34;.&#34;NAME&#34; &#34;FLOW_NAME&#34; FROM (SELECT &#34;F_OWNER&#34;,&#34;F_FLOW&#34;,&#34;F_UNIT&#34;,&#34;RESULTING_AMOUNT_VALUE&#34; FROM &#34;TBL_EXCHANGES&#34; WHERE &#34;F_OWNER&#34; IN (5409534,10990570,25967156,33642886)) &#34;e&#34; LEFT JOIN &#34;TBL_FLOWS&#34; ON &#34;TBL_FLOWS&#34;.&#34;ID&#34;=&#34;e&#34;.&#34;F_FLOW&#34; LEFT JOIN &#34;TBL_PROCESSES&#34; ON &#34;TBL_PROCESSES&#34;.&#34;ID&#34;=&#34;e&#34;.&#34;F_OWNER&#34; LEFT JOIN &#34;TBL_LOCATIONS&#34; ON CAST(&#34;TBL_PROCESSES&#34;.&#34;F_LOCATION&#34; AS INT)=&#34;TBL_LOCATIONS&#34;.&#34;ID&#34; WHERE &#34;TBL_FLOWS&#34;.&#34;FlOW_TYPE&#34;=&#39;PRODUCT_FLOW&#39;
+<pre>SELECT &#34;TBL_PROCESSES&#34;.&#34;REF_ID&#34; &#34;PROCESS_REF_ID&#34;,&#34;TBL_PROCESSES&#34;.&#34;NAME&#34; &#34;PROCESS_NAME&#34;,&#34;TBL_LOCATIONS&#34;.&#34;NAME&#34; &#34;LOCATION&#34;,&#34;TBL_FLOWS&#34;.&#34;REF_ID&#34; &#34;FLOW_REF_ID&#34;,&#34;TBL_FLOWS&#34;.&#34;NAME&#34; &#34;FLOW_NAME&#34; FROM (SELECT &#34;F_OWNER&#34;,&#34;F_FLOW&#34;,&#34;F_UNIT&#34;,&#34;RESULTING_AMOUNT_VALUE&#34; FROM &#34;TBL_EXCHANGES&#34; WHERE &#34;F_OWNER&#34; IN (SELECT &#34;ID&#34; FROM &#34;TBL_PROCESSES&#34; WHERE &#34;REF_ID&#34; IN (&#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;,&#39;b0d5d6ec-77f4-3213-b613-2391089d5f96&#39;,&#39;13e79207-71e6-36c9-be76-716700ea1e81&#39;,&#39;3886c7a5-bb83-41d8-9b20-41c0df9742ce&#39;))) &#34;sq0&#34; LEFT JOIN &#34;TBL_FLOWS&#34; ON &#34;TBL_FLOWS&#34;.&#34;ID&#34;=&#34;sq0&#34;.&#34;F_FLOW&#34; LEFT JOIN &#34;TBL_PROCESSES&#34; ON &#34;TBL_PROCESSES&#34;.&#34;ID&#34;=&#34;sq0&#34;.&#34;F_OWNER&#34; LEFT JOIN &#34;TBL_LOCATIONS&#34; ON CAST(&#34;TBL_PROCESSES&#34;.&#34;F_LOCATION&#34; AS INT)=&#34;TBL_LOCATIONS&#34;.&#34;ID&#34; WHERE &#34;TBL_FLOWS&#34;.&#34;FlOW_TYPE&#34;=&#39;PRODUCT_FLOW&#39;
 </pre>
 </div>
 </div>
@@ -17826,7 +18088,7 @@ Solver:
       Number of bounded subproblems: 0
       Number of created subproblems: 0
   Error rc: 0
-  Time: 0.015050172805786133
+  Time: 0.017404794692993164
 # ----------------------------------------------------------
 #   Solution Information
 # ----------------------------------------------------------
@@ -17922,7 +18184,7 @@ f : Transport flow
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[42]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span> <span class="n">dv</span><span class="o">.</span><span class="n">get_process_product_flow</span><span class="p">(</span><span class="n">dbconn</span><span class="p">,</span> <span class="n">ref_ids</span><span class="o">=</span><span class="n">material_ref_ids</span> <span class="o">+</span> <span class="n">transport_ref_ids</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span> <span class="n">dv</span><span class="o">.</span><span class="n">get_process_product_flow</span><span class="p">(</span><span class="n">dbconn</span><span class="p">,</span> <span class="n">process_ref_ids</span><span class="o">=</span><span class="n">material_ref_ids</span> <span class="o">+</span> <span class="n">transport_ref_ids</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -17942,7 +18204,7 @@ f : Transport flow
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>SELECT &#34;TBL_PROCESSES&#34;.&#34;REF_ID&#34; &#34;PROCESS_REF_ID&#34;,&#34;TBL_PROCESSES&#34;.&#34;NAME&#34; &#34;PROCESS_NAME&#34;,&#34;TBL_LOCATIONS&#34;.&#34;NAME&#34; &#34;LOCATION&#34;,&#34;TBL_FLOWS&#34;.&#34;REF_ID&#34; &#34;FLOW_REF_ID&#34;,&#34;TBL_FLOWS&#34;.&#34;NAME&#34; &#34;FLOW_NAME&#34; FROM (SELECT &#34;F_OWNER&#34;,&#34;F_FLOW&#34;,&#34;F_UNIT&#34;,&#34;RESULTING_AMOUNT_VALUE&#34; FROM &#34;TBL_EXCHANGES&#34; WHERE &#34;F_OWNER&#34; IN (5409534,10990570,25967156,33642886)) &#34;e&#34; LEFT JOIN &#34;TBL_FLOWS&#34; ON &#34;TBL_FLOWS&#34;.&#34;ID&#34;=&#34;e&#34;.&#34;F_FLOW&#34; LEFT JOIN &#34;TBL_PROCESSES&#34; ON &#34;TBL_PROCESSES&#34;.&#34;ID&#34;=&#34;e&#34;.&#34;F_OWNER&#34; LEFT JOIN &#34;TBL_LOCATIONS&#34; ON CAST(&#34;TBL_PROCESSES&#34;.&#34;F_LOCATION&#34; AS INT)=&#34;TBL_LOCATIONS&#34;.&#34;ID&#34; WHERE &#34;TBL_FLOWS&#34;.&#34;FlOW_TYPE&#34;=&#39;PRODUCT_FLOW&#39;
+<pre>SELECT &#34;TBL_PROCESSES&#34;.&#34;REF_ID&#34; &#34;PROCESS_REF_ID&#34;,&#34;TBL_PROCESSES&#34;.&#34;NAME&#34; &#34;PROCESS_NAME&#34;,&#34;TBL_LOCATIONS&#34;.&#34;NAME&#34; &#34;LOCATION&#34;,&#34;TBL_FLOWS&#34;.&#34;REF_ID&#34; &#34;FLOW_REF_ID&#34;,&#34;TBL_FLOWS&#34;.&#34;NAME&#34; &#34;FLOW_NAME&#34; FROM (SELECT &#34;F_OWNER&#34;,&#34;F_FLOW&#34;,&#34;F_UNIT&#34;,&#34;RESULTING_AMOUNT_VALUE&#34; FROM &#34;TBL_EXCHANGES&#34; WHERE &#34;F_OWNER&#34; IN (SELECT &#34;ID&#34; FROM &#34;TBL_PROCESSES&#34; WHERE &#34;REF_ID&#34; IN (&#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;,&#39;b0d5d6ec-77f4-3213-b613-2391089d5f96&#39;,&#39;13e79207-71e6-36c9-be76-716700ea1e81&#39;,&#39;3886c7a5-bb83-41d8-9b20-41c0df9742ce&#39;))) &#34;sq0&#34; LEFT JOIN &#34;TBL_FLOWS&#34; ON &#34;TBL_FLOWS&#34;.&#34;ID&#34;=&#34;sq0&#34;.&#34;F_FLOW&#34; LEFT JOIN &#34;TBL_PROCESSES&#34; ON &#34;TBL_PROCESSES&#34;.&#34;ID&#34;=&#34;sq0&#34;.&#34;F_OWNER&#34; LEFT JOIN &#34;TBL_LOCATIONS&#34; ON CAST(&#34;TBL_PROCESSES&#34;.&#34;F_LOCATION&#34; AS INT)=&#34;TBL_LOCATIONS&#34;.&#34;ID&#34; WHERE &#34;TBL_FLOWS&#34;.&#34;FlOW_TYPE&#34;=&#39;PRODUCT_FLOW&#39;
 </pre>
 </div>
 </div>
@@ -18208,7 +18470,16 @@ f : Transport flow
 
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
 <pre>{&#39;C&#39;: [{&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;, &#39;k1&#39;, &#39;d1&#39;, &#39;t1&#39;],
-   &#39;value&#39;: 1}],
+   &#39;value&#39;: 0}],
+ &#39;U&#39;: [{&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;0ace02fa-eca5-482d-a829-c18e46a52db4&#39;],
+   &#39;value&#39;: 0.001},
+  {&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;090f56b8-6a83-48c1-ae26-234d04771e53&#39;],
+   &#39;value&#39;: 0.001},
+  {&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;2741cea8-327f-4e0f-9401-b10858dc68f8&#39;],
+   &#39;value&#39;: 0.001}],
  &#39;d&#39;: [{&#39;index&#39;: [&#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;,
     &#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
     &#39;k1&#39;,
@@ -18289,7 +18560,7 @@ f : Transport flow
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">user_parameters</span><span class="p">[</span><span class="s1">&#39;C&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">value</span><span class="p">(</span><span class="n">olca_model_A</span><span class="o">.</span><span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">olca_model_A</span><span class="o">.</span><span class="n">C</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">user_parameters</span><span class="p">[</span><span class="s1">&#39;Total_Demand&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="p">(</span><span class="n">olca_model_A</span><span class="o">.</span><span class="n">D_total</span><span class="p">)</span>
 <span class="n">user_parameters</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">link_df</span> <span class="o">=</span> <span class="n">dv</span><span class="o">.</span><span class="n">get_process_product_flow</span><span class="p">(</span><span class="n">dbconn</span><span class="p">,</span> <span class="n">ref_ids</span><span class="o">=</span><span class="n">transport_ref_ids</span><span class="p">)[[</span><span class="s1">&#39;PROCESS_REF_ID&#39;</span><span class="p">,</span> <span class="s1">&#39;FLOW_REF_ID&#39;</span><span class="p">]]</span>
+<span class="n">link_df</span> <span class="o">=</span> <span class="n">dv</span><span class="o">.</span><span class="n">get_process_product_flow</span><span class="p">(</span><span class="n">dbconn</span><span class="p">,</span> <span class="n">process_ref_ids</span><span class="o">=</span><span class="n">transport_ref_ids</span><span class="p">)[[</span><span class="s1">&#39;PROCESS_REF_ID&#39;</span><span class="p">,</span> <span class="s1">&#39;FLOW_REF_ID&#39;</span><span class="p">]]</span>
 <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">user_parameters</span><span class="p">[</span><span class="s1">&#39;J&#39;</span><span class="p">]:</span>
     <span class="n">fm</span><span class="p">,</span> <span class="n">pm</span><span class="p">,</span> <span class="n">ft</span><span class="p">,</span> <span class="n">pt</span> <span class="o">=</span> <span class="n">j</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">link_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
@@ -18317,7 +18588,7 @@ f : Transport flow
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>SELECT &#34;TBL_PROCESSES&#34;.&#34;REF_ID&#34; &#34;PROCESS_REF_ID&#34;,&#34;TBL_PROCESSES&#34;.&#34;NAME&#34; &#34;PROCESS_NAME&#34;,&#34;TBL_LOCATIONS&#34;.&#34;NAME&#34; &#34;LOCATION&#34;,&#34;TBL_FLOWS&#34;.&#34;REF_ID&#34; &#34;FLOW_REF_ID&#34;,&#34;TBL_FLOWS&#34;.&#34;NAME&#34; &#34;FLOW_NAME&#34; FROM (SELECT &#34;F_OWNER&#34;,&#34;F_FLOW&#34;,&#34;F_UNIT&#34;,&#34;RESULTING_AMOUNT_VALUE&#34; FROM &#34;TBL_EXCHANGES&#34; WHERE &#34;F_OWNER&#34; IN (10990570,25967156,33642886)) &#34;e&#34; LEFT JOIN &#34;TBL_FLOWS&#34; ON &#34;TBL_FLOWS&#34;.&#34;ID&#34;=&#34;e&#34;.&#34;F_FLOW&#34; LEFT JOIN &#34;TBL_PROCESSES&#34; ON &#34;TBL_PROCESSES&#34;.&#34;ID&#34;=&#34;e&#34;.&#34;F_OWNER&#34; LEFT JOIN &#34;TBL_LOCATIONS&#34; ON CAST(&#34;TBL_PROCESSES&#34;.&#34;F_LOCATION&#34; AS INT)=&#34;TBL_LOCATIONS&#34;.&#34;ID&#34; WHERE &#34;TBL_FLOWS&#34;.&#34;FlOW_TYPE&#34;=&#39;PRODUCT_FLOW&#39;
+<pre>SELECT &#34;TBL_PROCESSES&#34;.&#34;REF_ID&#34; &#34;PROCESS_REF_ID&#34;,&#34;TBL_PROCESSES&#34;.&#34;NAME&#34; &#34;PROCESS_NAME&#34;,&#34;TBL_LOCATIONS&#34;.&#34;NAME&#34; &#34;LOCATION&#34;,&#34;TBL_FLOWS&#34;.&#34;REF_ID&#34; &#34;FLOW_REF_ID&#34;,&#34;TBL_FLOWS&#34;.&#34;NAME&#34; &#34;FLOW_NAME&#34; FROM (SELECT &#34;F_OWNER&#34;,&#34;F_FLOW&#34;,&#34;F_UNIT&#34;,&#34;RESULTING_AMOUNT_VALUE&#34; FROM &#34;TBL_EXCHANGES&#34; WHERE &#34;F_OWNER&#34; IN (SELECT &#34;ID&#34; FROM &#34;TBL_PROCESSES&#34; WHERE &#34;REF_ID&#34; IN (&#39;b0d5d6ec-77f4-3213-b613-2391089d5f96&#39;,&#39;13e79207-71e6-36c9-be76-716700ea1e81&#39;,&#39;3886c7a5-bb83-41d8-9b20-41c0df9742ce&#39;))) &#34;sq0&#34; LEFT JOIN &#34;TBL_FLOWS&#34; ON &#34;TBL_FLOWS&#34;.&#34;ID&#34;=&#34;sq0&#34;.&#34;F_FLOW&#34; LEFT JOIN &#34;TBL_PROCESSES&#34; ON &#34;TBL_PROCESSES&#34;.&#34;ID&#34;=&#34;sq0&#34;.&#34;F_OWNER&#34; LEFT JOIN &#34;TBL_LOCATIONS&#34; ON CAST(&#34;TBL_PROCESSES&#34;.&#34;F_LOCATION&#34; AS INT)=&#34;TBL_LOCATIONS&#34;.&#34;ID&#34; WHERE &#34;TBL_FLOWS&#34;.&#34;FlOW_TYPE&#34;=&#39;PRODUCT_FLOW&#39;
 </pre>
 </div>
 </div>
@@ -18333,6 +18604,15 @@ f : Transport flow
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
 <pre>{&#39;C&#39;: [{&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;, &#39;k1&#39;, &#39;d1&#39;, &#39;t1&#39;],
    &#39;value&#39;: 1}],
+ &#39;U&#39;: [{&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;0ace02fa-eca5-482d-a829-c18e46a52db4&#39;],
+   &#39;value&#39;: 0.001},
+  {&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;090f56b8-6a83-48c1-ae26-234d04771e53&#39;],
+   &#39;value&#39;: 0.001},
+  {&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;2741cea8-327f-4e0f-9401-b10858dc68f8&#39;],
+   &#39;value&#39;: 0.001}],
  &#39;d&#39;: [{&#39;index&#39;: [&#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;,
     &#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
     &#39;k1&#39;,
@@ -18478,7 +18758,7 @@ WARNING: DEPRECATED: Providing construction data to SetOperator objects is
 
 
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>{&#39;distance_calculated&#39;: True}</pre>
+<pre>{&#39;distance_calculated&#39;: True, &#39;test_setting&#39;: False}</pre>
 </div>
 
 </div>
@@ -18521,11 +18801,11 @@ WARNING: DEPRECATED: Providing construction data to SetOperator objects is
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>XI : Longitude
-    Size=1, Index=XI_index, Domain=Any, Default=None, Mutable=False
+    Size=1, Index=XI_index, Domain=Any, Default=None, Mutable=True
     Key                                                                              : Value
     (&#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;, &#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;) : -3.64
 YI : Latitude
-    Size=1, Index=YI_index, Domain=Any, Default=None, Mutable=False
+    Size=1, Index=YI_index, Domain=Any, Default=None, Mutable=True
     Key                                                                              : Value
     (&#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;, &#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;) : 40.22
 </pre>
@@ -18569,7 +18849,7 @@ YI : Latitude
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>d : Distance
-    Size=1, Index=d_index, Domain=Reals, Default=None, Mutable=False
+    Size=1, Index=d_index, Domain=Reals, Default=None, Mutable=True
     Key                                                                                          : Value
     (&#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;, &#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;, &#39;k1&#39;, &#39;t1&#39;) :     0
 </pre>
@@ -18607,7 +18887,7 @@ YI : Latitude
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>dd : Calculated distance
-    Size=1, Index=dd_index, Domain=Any, Default=None, Mutable=False
+    Size=1, Index=dd_index, Domain=Any, Default=None, Mutable=True
     Key                                                                                          : Value
     (&#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;, &#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;, &#39;k1&#39;, &#39;t1&#39;) : 1283.834155118865
 </pre>
@@ -18645,7 +18925,7 @@ YI : Latitude
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>Total_Demand : Total demand
-    Size=1, Index=Total_Demand_index, Domain=Reals, Default=None, Mutable=False
+    Size=1, Index=Total_Demand_index, Domain=Reals, Default=None, Mutable=True
     Key          : Value
     (&#39;d1&#39;, &#39;k1&#39;) :  1000
 </pre>
@@ -18668,9 +18948,9 @@ YI : Latitude
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[55]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">concrete_model</span><span class="o">.</span><span class="n">obj1</span><span class="o">.</span><span class="n">activate</span><span class="p">()</span>
-<span class="n">concrete_model</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">deactivate</span><span class="p">()</span>
-<span class="n">concrete_model</span><span class="o">.</span><span class="n">obj2</span><span class="o">.</span><span class="n">deactivate</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">concrete_model</span><span class="o">.</span><span class="n">Environmental_Impact</span><span class="o">.</span><span class="n">activate</span><span class="p">()</span>
+<span class="n">concrete_model</span><span class="o">.</span><span class="n">Cost</span><span class="o">.</span><span class="n">deactivate</span><span class="p">()</span>
+<span class="n">concrete_model</span><span class="o">.</span><span class="n">Environmental_Cost_Impact</span><span class="o">.</span><span class="n">deactivate</span><span class="p">()</span>
 <span class="n">results</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">concrete_model</span><span class="p">)</span>
 <span class="n">results</span><span class="o">.</span><span class="n">write</span><span class="p">()</span>
 </pre></div>
@@ -18700,8 +18980,8 @@ YI : Latitude
 # ----------------------------------------------------------
 Problem: 
 - Name: unknown
-  Lower bound: 12165.1217728104
-  Upper bound: 12165.1217728104
+  Lower bound: 151.47309586916
+  Upper bound: 151.47309586916
   Number of objectives: 1
   Number of constraints: 14
   Number of variables: 15
@@ -18718,7 +18998,7 @@ Solver:
       Number of bounded subproblems: 1
       Number of created subproblems: 1
   Error rc: 0
-  Time: 0.01635265350341797
+  Time: 0.016949176788330078
 # ----------------------------------------------------------
 #   Solution Information
 # ----------------------------------------------------------
@@ -18807,7 +19087,7 @@ Solution:
     (&#39;0ace02fa-eca5-482d-a829-c18e46a52db4&#39;, &#39;3886c7a5-bb83-41d8-9b20-41c0df9742ce&#39;, &#39;k1&#39;, &#39;t1&#39;) :     0 :              0.0 :  None : False : False : NonNegativeReals
     (&#39;0ace02fa-eca5-482d-a829-c18e46a52db4&#39;, &#39;b0d5d6ec-77f4-3213-b613-2391089d5f96&#39;, &#39;k1&#39;, &#39;t1&#39;) :     0 :              0.0 :  None : False : False : NonNegativeReals
     (&#39;2741cea8-327f-4e0f-9401-b10858dc68f8&#39;, &#39;13e79207-71e6-36c9-be76-716700ea1e81&#39;, &#39;k1&#39;, &#39;t1&#39;) :     0 :              0.0 :  None : False : False : NonNegativeReals
-    (&#39;2741cea8-327f-4e0f-9401-b10858dc68f8&#39;, &#39;3886c7a5-bb83-41d8-9b20-41c0df9742ce&#39;, &#39;k1&#39;, &#39;t1&#39;) :     0 : 1283834.15511886 :  None : False : False : NonNegativeReals
+    (&#39;2741cea8-327f-4e0f-9401-b10858dc68f8&#39;, &#39;3886c7a5-bb83-41d8-9b20-41c0df9742ce&#39;, &#39;k1&#39;, &#39;t1&#39;) :     0 : 1283.83415511887 :  None : False : False : NonNegativeReals
     (&#39;2741cea8-327f-4e0f-9401-b10858dc68f8&#39;, &#39;b0d5d6ec-77f4-3213-b613-2391089d5f96&#39;, &#39;k1&#39;, &#39;t1&#39;) :     0 :              0.0 :  None : False : False : NonNegativeReals
 </pre>
 </div>

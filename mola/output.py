@@ -116,7 +116,12 @@ def _(cpt, lookup=dict(), drop_index=True, units=None):
 @get_entity.register(pe.pyomo.core.base.objective.Objective)
 def _(cpt, lookup=dict(), units=None):
 
-    df = pd.DataFrame({'Objective': pe.value(cpt)}, index=[0])
+    try:
+        v = pe.value(cpt)
+    except ValueError as e:
+        print(e)
+        v = None
+    df = pd.DataFrame({'Objective': v}, index=[0])
 
     return df
 

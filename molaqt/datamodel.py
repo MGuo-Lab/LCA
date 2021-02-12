@@ -31,11 +31,12 @@ class PandasModel(QAbstractTableModel):
 
 class ParameterModel(QAbstractTableModel):
 
-    def __init__(self, data, index_sets, lookup):
+    def __init__(self, data, index_sets, lookup, spec):
         QAbstractTableModel.__init__(self)
         data[index_sets] = pd.DataFrame(data["Index"].to_list(), columns=index_sets)
+        lookup_sets = [n for n, d in spec.user_defined_sets.items() if 'lookup' in d and d['lookup']]
         for k in index_sets:
-            if k in lookup:
+            if k in lookup_sets and k in lookup:
                 data[k] = data[k].map(lookup.get_single_column(k)[k])
         self._data = data
 

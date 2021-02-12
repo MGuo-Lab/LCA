@@ -25,7 +25,7 @@ pu.load_definitions_from_strings([
 
 
 class Specification:
-    """Abstract specification class"""
+    """Specification of a Pyomo model for configuration in a GUI"""
     name: str
     user_defined_sets: dict
     db_sets: dict
@@ -56,16 +56,16 @@ class GeneralSpecification(Specification):
     """
     name = "General Specification"
     user_defined_sets = {
-        'P_m': 'Processes producing material flows in the optimisation problem',
-        'P_t': 'Processes producing transport flows in the optimisation problem',
-        'P_s': 'Processes producing service flows in the optimisation problem',
-        'F_m': 'Material flows to optimise',
-        'F_t': 'Transport flows to optimise',
-        'F_s': 'Service flows to optimise',
-        'T': 'Time intervals',
-        'K': 'Tasks',
-        'D': 'Demands',
-        'KPI': 'Performance indicators for optimisation problem',
+        'P_m': {'doc': 'Processes producing material flows in the optimisation problem', 'lookup': True},
+        'P_t': {'doc': 'Processes producing transport flows in the optimisation problem', 'lookup': True},
+        'P_s': {'doc': 'Processes producing service flows in the optimisation problem', 'lookup': True},
+        'F_m': {'doc': 'Material flows to optimise', 'lookup': True},
+        'F_t': {'doc': 'Transport flows to optimise', 'lookup': True},
+        'F_s': {'doc': 'Service flows to optimise', 'lookup': True},
+        'T': {'doc': 'Time intervals'},
+        'K': {'doc': 'Tasks'},
+        'D': {'doc': 'Demands'},
+        'KPI': {'doc': 'Performance indicators for optimisation problem', 'lookup': True},
     }
     db_sets = {
         'AF': 'All flows in openLCA database',
@@ -105,8 +105,8 @@ class GeneralSpecification(Specification):
         abstract_model = self.abstract_model = pe.AbstractModel()
 
         # user-defined sets
-        for var, doc in self.user_defined_sets.items():
-            abstract_model.add_component(var, pe.Set(doc=doc))
+        for var, d in self.user_defined_sets.items():
+            abstract_model.add_component(var, pe.Set(doc=d['doc']))
 
         abstract_model.F = abstract_model.F_m | abstract_model.F_t | abstract_model.F_s
         abstract_model.P = abstract_model.P_m | abstract_model.P_t | abstract_model.P_s
@@ -464,12 +464,12 @@ class SimpleSpecification(Specification):
     """
     name = "Simple Specification"
     user_defined_sets = {
-        'P_m': 'Processes producing material flows in the optimisation problem',
-        'P_t': 'Processes producing transport flows in the optimisation problem',
-        'F_m': 'Material flows to optimise',
-        'F_t': 'Transport flows to optimise',
-        'D': 'Demands',
-        'KPI': 'Performance indicators for optimisation problem',
+        'P_m': {'doc': 'Processes producing material flows in the optimisation problem', 'lookup': True},
+        'P_t': {'doc': 'Processes producing transport flows in the optimisation problem', 'lookup': True},
+        'F_m': {'doc': 'Material flows to optimise', 'lookup': True},
+        'F_t': {'doc': 'Transport flows to optimise', 'lookup': True},
+        'D': {'doc': 'Demands'},
+        'KPI': {'doc': 'Performance indicators for optimisation problem', 'lookup': True},
     }
     db_sets = {
         'E': 'Elementary Flows in OpenLCA database',
@@ -501,8 +501,8 @@ class SimpleSpecification(Specification):
         abstract_model = self.abstract_model = pe.AbstractModel()
 
         # user-defined sets
-        for var, doc in self.user_defined_sets.items():
-            abstract_model.add_component(var, pe.Set(doc=doc))
+        for var, d in self.user_defined_sets.items():
+            abstract_model.add_component(var, pe.Set(doc=d['doc']))
 
         abstract_model.F = abstract_model.F_m | abstract_model.F_t
         abstract_model.P = abstract_model.P_m | abstract_model.P_t
@@ -744,13 +744,13 @@ class AIMMSExampleSpecification(Specification):
     """
     name = "AIMMS Example Specification"
     user_defined_sets = {
-        'Q': 'Plants',
-        'C': 'Customers',
+        'P': {'doc': 'Plants'},
+        'C': {'doc': 'Customers'},
     }
     user_defined_parameters = {
-        'S': {'index': ['Q'], 'doc': 'Supply available at plant q'},
+        'S': {'index': ['P'], 'doc': 'Supply available at plant p'},
         'D': {'index': ['C'], 'doc': 'Demand required by customer c'},
-        'U': {'index': ['Q', 'C'], 'doc': 'Cost per unit'},
+        'U': {'index': ['P', 'C'], 'doc': 'Cost per unit'},
     }
     # db parameters need to be constructed explicitly
     controllers = {"Standard": "StandardController"}
@@ -766,8 +766,8 @@ class AIMMSExampleSpecification(Specification):
         abstract_model = self.abstract_model = pe.AbstractModel()
 
         # user-defined sets
-        for var, doc in self.user_defined_sets.items():
-            abstract_model.add_component(var, pe.Set(doc=doc))
+        for var, d in self.user_defined_sets.items():
+            abstract_model.add_component(var, pe.Set(doc=d['doc']))
 
         # user-defined parameters
         for param, val in self.user_defined_parameters.items():
@@ -775,21 +775,21 @@ class AIMMSExampleSpecification(Specification):
             abstract_model.add_component(param, pe.Param(*idx, doc=val['doc'], within=pe.Reals))
 
         # variables
-        abstract_model.x = pe.Var(abstract_model.Q, abstract_model.C,
+        abstract_model.x = pe.Var(abstract_model.P, abstract_model.C,
                                   within=pe.NonNegativeIntegers, doc='Number of units')
 
         # objective
         def objective_rule(model):
-            return sum(model.U[p, c] * model.x[p, c] for p in model.Q for c in model.C)
+            return sum(model.U[p, c] * model.x[p, c] for p in model.P for c in model.C)
         abstract_model.Minimise_Cost = pe.Objective(rule=objective_rule, doc="Minimise the cost of moving beer")
 
         # constraints
         def supply_rule(model, p):
             return sum([model.x[p, c] for c in model.C]) <= model.S[p]
-        abstract_model.supply_constraint = pe.Constraint(abstract_model.Q, rule=supply_rule)
+        abstract_model.supply_constraint = pe.Constraint(abstract_model.P, rule=supply_rule)
 
         def demand_rule(model, c):
-            return sum([model.x[p, c] for p in model.Q]) >= model.D[c]
+            return sum([model.x[p, c] for p in model.P]) >= model.D[c]
         abstract_model.demand_constraint = pe.Constraint(abstract_model.C, rule=demand_rule)
 
     def populate(self, json_files=None, elementary_flow_ref_ids=None, db_file=None):
@@ -808,7 +808,7 @@ class AIMMSExampleSpecification(Specification):
 
     def get_default_sets(self, d=None):
         user_sets = {
-            'Q': [],
+            'P': [],
             'C': [],
         }
         if d is not None:
@@ -818,10 +818,10 @@ class AIMMSExampleSpecification(Specification):
 
     def get_default_parameters(self, user_sets):
         user_params = {
-            'S': [{'index': [q], 'value': 0} for q in user_sets['Q']],
+            'S': [{'index': [p], 'value': 0} for p in user_sets['P']],
             'D': [{'index': [c], 'value': 0} for c in user_sets['C']],
-            'U': [{'index': [q, c], 'value': 0}
-                  for q in user_sets['Q'] for c in user_sets['C']],
+            'U': [{'index': [p, c], 'value': 0}
+                  for p in user_sets['P'] for c in user_sets['C']],
         }
 
         return user_params

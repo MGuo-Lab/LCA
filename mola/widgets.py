@@ -10,6 +10,7 @@ import json
 def get_set(dfr):
     """
     Widget to populate a single set.
+
     :param dfr: Dataframe of set contents
     :return: qgrid widget
     """
@@ -43,12 +44,20 @@ def get_set(dfr):
 
 
 def get_sets(spec, lookups, model_sets_file_name):
+    """
+    Low-level Jupyter widget to get sets for optimisation
+
+    :param Specification spec: object
+    :param dict lookups: lookup tables
+    :param str model_sets_file_name: filename
+    :return: Tab widget
+    """
 
     # main widget
     tab = widgets.Tab()
 
     # sets that don't need a lookup table
-    non_lookups = spec.user_defined_sets - lookups.keys()
+    non_lookups = spec.user_defined_sets.keys() - lookups.keys()
 
     # lists for widget content
     lookup_name = list(lookups.keys())
@@ -168,7 +177,6 @@ def get_parameters(param_dfr, model_parameters_file_name):
     }
     param_qg = qgrid.show_grid(param_dfr, grid_options={'maxVisibleRows': 10, 'forceFitColumns': False},
                                column_definitions=col_defs)
-    #get_parameters.param = param_dfr.loc[0, 'Parameter']
 
     def save_configuration(b):
         dfr = param_qg.df.copy()
