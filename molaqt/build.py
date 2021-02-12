@@ -1,6 +1,10 @@
+import traceback
 import pandas as pd
 from PyQt5.QtWidgets import QWidget, QPushButton, QListWidget, QTableView, QGridLayout, QMessageBox,\
     QHeaderView, QTextEdit
+
+from pyomo.core.base.units_container import UnitsError
+
 import mola.output as mo
 import mola.build as mb
 import molaqt.datamodel as dm
@@ -46,11 +50,11 @@ class ModelBuild(QWidget):
             self.build_list.addItems(self.build_items)
             print('Build completed')
         except ValueError as e:
-            print(e)
-            self.dialog_critical("Unable to find data in database", str(e))
+            self.dialog_critical("Unable to find data in database", str(e), traceback.format_exc())
+        except UnitsError as e:
+            self.dialog_critical("Unit conversion error", str(e), traceback.format_exc())
         except Exception as e:
-            print(e)
-            self.dialog_critical("Uncaught exception for model build", str(e))
+            self.dialog_critical("Uncaught exception for model build", str(e), traceback.format_exc())
 
     def build_item_clicked(self, item):
         print('Build item', item.text(), 'clicked')
@@ -70,8 +74,9 @@ class ModelBuild(QWidget):
             # self.build_table.resizeRowsToContents()
             self.build_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
-    def dialog_critical(self, text, detailed_text=None):
+    def dialog_critical(self, title, text, detailed_text=None):
         dlg = QMessageBox(self)
+        dlg.setWindowTitle(title)
         dlg.setText(text)
         dlg.setDetailedText(detailed_text)
         details_box = dlg.findChild(QTextEdit)
