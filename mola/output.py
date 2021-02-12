@@ -94,18 +94,21 @@ def _(cpt, lookup=dict(), drop_index=True, units=None, non_zero=False, distinct_
 def _(cpt, lookup=dict(), drop_index=True, units=None):
     idx = cpt._index
     s = pd.Series({i: pe.value(cpt[i]) for i in idx})
-    s.index_names = [j.name for j in idx.subsets()]
+    s.index.names = [j.name for j in idx.subsets()]
     df = pd.DataFrame(s, columns=[cpt.name])
 
-    # if units:
-    #     if type(units) == bool:
-    #         u = str(cpt.get_units())
-    #     else:
-    #         u = units[0]
-    #     if u in df.index.names:
-    #         process_ref_ids = df.index.get_level_values(u).to_list()
-    #         units_dfr = lookup.get_units(process_ref_ids, set_name=u)
-    #         df = df.merge(units_dfr, left_index=True, right_index=True)
+    if units:
+        if type(units) == bool:
+            u = s.index.names[0]
+        else:
+            u = units[0]
+        if u in s.index.names:
+            ref_ids = df.index.get_level_values(u).to_list()
+            units_dfr = lookup.get(u, ref_ids)[['Unit']]
+            df = df.merge(units_dfr, left_index=True, right_index=True)
+
+    if drop_index:
+        df = df.reset_index(drop=drop_index)
 
     return df
 

@@ -1,6 +1,8 @@
 # Unit tests for output functions
 from unittest import TestCase
-import mola.output as o
+import pyomo.environ as pe
+
+import mola.output as mo
 import mola.dataimport as di
 import mola.dataview as dv
 import mola.build as mb
@@ -13,23 +15,28 @@ class Output(TestCase):
     lookup = dv.LookupTables(conn)
 
     def test_get_entity(self):
-        # TODO just go through each output variable programmatically
-        flow = self.instance.Flow
-        storage_service_flow = self.instance.Storage_Service_Flow
-        demand_selection = self.instance.Demand_Selection
-        c = self.instance.C
-        flow_dfr = o.get_entity(flow)
-        self.assertGreater(len(flow_dfr), 0)
-        c_dfr = o.get_entity(c)
-        self.assertGreater(len(c_dfr), 0)
+        # output the variables with and without units
+        for v in self.instance.component_objects(pe.Var, active=True):
+            v_dfr = mo.get_entity(v)
+            self.assertGreater(len(v_dfr), 0)
+            u_dfr = mo.get_entity(v, self.lookup, units=True)
+            self.assertGreater(len(u_dfr), 0)
 
-        # with lookups and units
-        demand_selection_dfr = o.get_entity(demand_selection, self.lookup, units=True)
-        self.assertGreater(len(demand_selection_dfr), 0)
-        flow_dfr = o.get_entity(flow, self.lookup, units=['P_m'])
+        # name the unit set for lookup
+        flow_dfr = mo.get_entity(self.instance.Flow, self.lookup, units=['P_m'])
         self.assertGreater(len(flow_dfr), 0)
-        c_dfr = o.get_entity(c, self.lookup)
-        self.assertGreater(len(c_dfr), 0)
-        storage_service_flow_dfr = o.get_entity(storage_service_flow, self.lookup, units=True)
-        self.assertGreater(len(storage_service_flow_dfr), 0)
 
+    def test_objectives(self):
+        # do the optimisation for each objective
+        for i, o in enumerate(self.instance.component_objects(pe.Objective)):
+            for j, oo in enumerate(self.instance.component_objects(pe.Objective)):
+                if i == j:
+                    oo.activate()
+                else:
+                    oo.deactivate()
+            opt = pe.SolverFactory("glpk")
+            opt.solve(self.instance)
+            o_dfr = mo.get_entity(o)
+            self.assertGreater(len(o_dfr), 0)
+            ou_dfr = mo.get_entity(o, self.lookup, units=True)
+            self.assertGreater(len(ou_dfr), 0)

@@ -66,6 +66,7 @@ class ModelRun(QWidget):
         print('Concrete model changed in ModelRun')
         self._concrete_model = model
         self.objectives = {}
+        self.objective_combobox.clear()
         for i, obj in enumerate(model.component_objects(pe.Objective)):
             self.objective_combobox.addItem(obj.name)
             # activate first objective
@@ -93,6 +94,7 @@ class ModelRun(QWidget):
             self.results = opt.solve(self.concrete_model)
 
             self.run_tree.clear()
+            self.run_table.setModel(md.PandasModel(pd.DataFrame()))
             var_item = QTreeWidgetItem(self.run_tree, ['Variables'])
             for var in self._concrete_model.component_objects(pe.Var, active=True):
                 QTreeWidgetItem(var_item, [var.name])
@@ -103,6 +105,7 @@ class ModelRun(QWidget):
                     QTreeWidgetItem(objective_item, [obj.name])
 
             log_item = QTreeWidgetItem(self.run_tree, ['Log'])
+            self.run_tree.expandAll()
         else:
             print("No successful build")
 

@@ -200,7 +200,7 @@ class GeneralSpecification(Specification):
             return model.w['environment'] * environment_objective_rule(model, kpi) + \
                    model.w['cost'] * cost_objective_rule(model)
 
-        abstract_model.Environment_Impact = pe.Objective(
+        abstract_model.Environmental_Impact = pe.Objective(
             abstract_model.KPI, rule=environment_objective_rule,
             doc='Minimise the environmental impact using openLCA data')
         abstract_model.Cost = pe.Objective(rule=cost_objective_rule, doc='Minimise the cost using openLCA data')
