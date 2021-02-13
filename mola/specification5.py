@@ -18,9 +18,13 @@ import mola.build as mb
 pu.load_definitions_from_strings([
     'P = [Product_Flow]',
     'P_m = [Material_Product_Flow]',
-    'P = [Service_Product_Flow]',
+    'P_s = [Service_Product_Flow]',
     'P_t = [Transport_Product_Flow]',
-    'D = [Demand]'
+    'D = [Demand]',
+    'KPI = [Key_Performance_Indicator]',
+    'KPI_ref = [Reference_Key_Performance_Indicator]',
+    'OBJ = [Objective]',
+    'Output = [Output]',
 ])
 
 
@@ -83,11 +87,12 @@ class GeneralSpecification(Specification):
               'within': 'Binary', 'nodes': ['P_m', 'P_t'], 'edges': ['F_m', 'F_t']},
         'X': {'index': ['K', 'T'], 'doc': 'Longitude', 'unit': pu.degree},
         'Y': {'index': ['K', 'T'], 'doc': 'Latitude', 'unit': pu.degree},
-        'd': {'index': ['P', 'F_m', 'K', 'T'], 'doc': 'Distance', 'unit': pu.km},
+        'd': {'index': ['P_m', 'F_m', 'K', 'T'], 'doc': 'Distance', 'unit': pu.km},
         'J': {'index': ['F_m', 'P_m', 'F_t', 'P_t'],
               'doc': 'Binary conversion factor between material and transport flows', 'within': 'Binary',
               'nodes': ['P_m', 'P_t'], 'edges': ['F_m', 'F_t']},
-        'w': {'index': ['OBJ'], 'doc': 'Objective weights'},
+        'w': {'index': ['KPI'], 'doc': 'Environmental objective weights', 'unit': pu.KPI_ref/pu.KPI},
+        'u': {'index': ['OBJ'], 'doc': 'Objective weights', 'unit': pu.Output/pu.OBJ},
     }
     # db parameters need to be constructed explicitly
     controllers = {"Standard": "StandardController"}
@@ -196,16 +201,15 @@ class GeneralSpecification(Specification):
                     sum(model.Specific_Transport_Flow[ft, pt, k, t] * model.phi[ft, pt, t]
                         for ft in model.F_t for pt in model.P_t for k in model.K for t in model.T)
 
-        def objective_rule(model, kpi):
-            return model.w['environment'] * environment_objective_rule(model, kpi) + \
-                   model.w['cost'] * cost_objective_rule(model)
+        def objective_rule(model):
+            return model.u['environment'] * sum(model.w[kpi] * environment_objective_rule(model, kpi)
+                                                for kpi in model.KPI) + model.u['cost'] * cost_objective_rule(model)
 
         abstract_model.Environmental_Impact = pe.Objective(
             abstract_model.KPI, rule=environment_objective_rule,
             doc='Minimise the environmental impact using openLCA data')
         abstract_model.Cost = pe.Objective(rule=cost_objective_rule, doc='Minimise the cost using openLCA data')
-        abstract_model.Environmental_Cost_Impact = pe.Objective(
-            abstract_model.KPI, rule=objective_rule,
+        abstract_model.Environmental_Cost_Impact = pe.Objective(rule=objective_rule,
             doc='Minimise the environmental impact and cost using openLCA data')
 
         # constraints
@@ -392,7 +396,8 @@ class GeneralSpecification(Specification):
             'L': [{'index': [fm, pm, fs, ps], 'value': 0}
                   for fm in user_sets['F_m'] for pm in user_sets['P_m']
                   for fs in user_sets['F_s'] for ps in user_sets['P_s']],
-            'w': [{'index': [obj], 'value': 0} for obj in user_sets['OBJ']],
+            'w': [{'index': [kpi], 'value': 0} for kpi in user_sets['KPI']],
+            'u': [{'index': [obj], 'value': 1} for obj in user_sets['OBJ']],
         }
 
         return user_params
@@ -441,7 +446,8 @@ class GeneralSpecification(Specification):
         user_params['L'] = [{'index': [fm, pm, fs, ps], 'value': 1}
                             for fm in user_sets['F_m'] for pm in user_sets['P_m']
                             for fs in user_sets['F_s'] for ps in user_sets['P_s']]
-        user_params['w'] = [{'index': [obj], 'value': 0} for obj in user_sets['OBJ']]
+        user_params['w'] = [{'index': [kpi], 'value': 0} for kpi in user_sets['KPI']]
+        user_params['u'] = [{'index': [obj], 'value': 1} for obj in user_sets['OBJ']]
 
         return {**user_sets, **user_params}
 

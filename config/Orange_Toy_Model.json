@@ -724,15 +724,23 @@
         "w": [
             {
                 "index": [
-                    "environment"
+                    "061b7db5-4f56-3368-bf50-9ff0fcc8dd1f"
                 ],
                 "value": 1
+            }
+        ],
+        "u": [
+            {
+                "index": [
+                    "environment"
+                ],
+                "value": 0.01456
             },
             {
                 "index": [
                     "cost"
                 ],
-                "value": 0
+                "value": 0.88
             }
         ]
     }

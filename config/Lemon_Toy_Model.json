@@ -214,6 +214,14 @@
         "w": [
             {
                 "index": [
+                    "42b1e910-3bd2-3741-85ce-a3966798440b"
+                ],
+                "value": 1
+            }
+        ],
+        "u": [
+            {
+                "index": [
                     "environment"
                 ],
                 "value": 1
@@ -222,7 +230,7 @@
                 "index": [
                     "cost"
                 ],
-                "value": 0
+                "value": 1
             }
         ]
     }
