@@ -16,6 +16,7 @@ import molaqt.dialogs as md
 import molaqt.widgets as mw
 import molaqt.utils as mu
 import molaqt.controllers as mc
+from molaqt.console import QtConsoleWindow
 
 
 class MolaMainWindow(QMainWindow):
@@ -29,6 +30,7 @@ class MolaMainWindow(QMainWindow):
         # general configuration
         self.development = False
         self.system = mu.system_settings(development=True)
+        self.qt_console = None
 
         self.setGeometry(50, 50, 800, 600)
         self.setWindowTitle(self.system['app_name'])
@@ -60,6 +62,8 @@ class MolaMainWindow(QMainWindow):
         # help
         general_specification_v5_action = QAction("&General Specification v5", self)
         general_specification_v5_action.triggered.connect(self.general_specification_v5)
+        console_action = QAction("Qt Console", self)
+        console_action.triggered.connect(self.console)
         self.about_action = QAction(QIcon(":Help.svg"), "&About", self)
         self.about_action.triggered.connect(self.about)
 
@@ -77,6 +81,7 @@ class MolaMainWindow(QMainWindow):
 
         help_menu = main_menu.addMenu('&Help')
         help_menu.addAction(general_specification_v5_action)
+        help_menu.addAction(console_action)
         help_menu.addAction(self.about_action)
 
         self._create_toolbars()
@@ -99,6 +104,14 @@ class MolaMainWindow(QMainWindow):
 
     def about(self):
         self.about_widget = mw.AboutWidget(self.system)
+
+    def console(self):
+        self.qt_console = QtConsoleWindow()
+        self.qt_console.show()
+
+    def shutdown_kernel(self):
+        if self.qt_console is not None:
+            self.qt_console.shutdown_kernel()
 
     def close_application(self):
         choice = QMessageBox.question(self, 'Exit ' + self.system['app_name'], "Confirm exit?",
@@ -124,7 +137,7 @@ class MolaMainWindow(QMainWindow):
                 with ZipFile(zip_name[0], 'r') as zr:
                     zr.extractall(self.system['data_path'])
                 self.manager.add_database(db_output_path)
-            except:
+            except Exception as e:
                 QMessageBox.critical(self, 'Error', 'Cannot uncompress ' + zip_name[0],
                                      QMessageBox.Ok)
 
@@ -193,7 +206,9 @@ class MolaMainWindow(QMainWindow):
         main_tool_bar.addAction(self.open_db_action)
         main_tool_bar.addAction(self.about_action)
 
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     gui = MolaMainWindow()
+    app.aboutToQuit.connect(gui.shutdown_kernel)
     sys.exit(app.exec_())
