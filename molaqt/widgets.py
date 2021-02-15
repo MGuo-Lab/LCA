@@ -181,7 +181,7 @@ class SetsEditor(QWidget):
         current_set = self.sets_list.currentItem().text()
         if current_set not in self.lookup_sets:
             text, ok = QInputDialog.getText(self, 'Add Element', 'Name:')
-            if ok:
+            if ok and len(text)>0:
                 self.sets[current_set].append(str(text))
                 self.set_table.setModel(md.SetModel(self.sets[current_set]))
                 self.dirty = True
@@ -202,14 +202,16 @@ class SetsEditor(QWidget):
         current_set = self.sets_list.currentItem().text()
         rows = [i.row() for i in self.set_table.selectedIndexes()]
         model = self.set_table.model()
-        ref_ids = model._data.index[rows].to_list()
-        for ref in ref_ids:
-            if ref in self.sets[current_set]:
-                self.sets[current_set].remove(ref)
         if current_set in self.lookup_sets:
+            ref_ids = model._data.index[rows].to_list()
+            for ref in ref_ids:
+                if ref in self.sets[current_set]:
+                    self.sets[current_set].remove(ref)
             df = self.lookup.get(current_set, self.sets[current_set])
             model = md.PandasModel(df, is_indexed=True)
         else:
+            for row in sorted(rows, reverse=True):
+                del self.sets[current_set][row]
             model = md.SetModel(self.sets[current_set])
         self.dirty = True
         self.set_table.setModel(model)
