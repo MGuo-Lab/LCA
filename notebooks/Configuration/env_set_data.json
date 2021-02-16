@@ -24,7 +24,9 @@
         "8d82d02e-f52f-41f9-aa10-ae607746b04e"
     ],
     "P_s": [],
-    "KPI": [],
+    "KPI": [
+        "bf42d8f0-23fc-32f3-b159-f79bfccfec28"
+    ],
     "OBJ": [
         "environment",
         "cost"

@@ -93,6 +93,9 @@ class GeneralSpecification(Specification):
               'nodes': ['P_m', 'P_t'], 'edges': ['F_m', 'F_t']},
         'w': {'index': ['KPI'], 'doc': 'Environmental objective weights', 'unit': pu.KPI_ref/pu.KPI},
         'u': {'index': ['OBJ'], 'doc': 'Objective weights', 'unit': pu.Output/pu.OBJ},
+        'calA': {'index': ['F_m', 'P_m', 'K', 'T'], 'doc': 'Material flow task link'},
+        'calB': {'index': ['F_m', 'P_m', 'K', 'T'], 'doc': 'Service flow task link'},
+        'calC': {'index': ['F_m', 'P_m', 'F_t', 'P_t', 'K', 'T'], 'doc': 'Transport flow task link'},
     }
     # db parameters need to be constructed explicitly
     controllers = {"Standard": "StandardController"}
@@ -280,11 +283,33 @@ class GeneralSpecification(Specification):
                    sum(model.L[fm, pm, fs, ps] * model.Storage_Service_Flow[fm, pm, k, t]
                        for fm in model.F_m for pm in model.P_m)
 
-        abstract_model.service_flow_link_constraint = pe.Constraint(abstract_model.F_s,
-                                                                    abstract_model.P_s,
-                                                                    abstract_model.K,
-                                                                    abstract_model.T,
-                                                                    rule=service_flow_link_rule)
+        abstract_model.service_flow_link_constraint = pe.Constraint(
+            abstract_model.F_s, abstract_model.P_s, abstract_model.K, abstract_model.T, rule=service_flow_link_rule)
+
+        def task_link_rule(model, kk, t):
+            if len(model.K) > 1:
+                # output of task kk
+                lhs1 = sum(model.calA[fm, pm, kk, t] * model.Flow[fm, pm, kk, t] +
+                           model.calB[fm, pm, kk, t] * model.Storage_Service_Flow[fm, pm, kk, t] for
+                           fm in model.F_m for pm in model.P_m)
+                lhs2 = sum(model.calC[fm, pm, ft, pt, kk, t] *
+                           model.Specific_Material_Transport_Flow[fm, pm, ft, pt, kk, t] for
+                           fm in model.F_m for pm in model.P_m for ft in model.F_t for pt in model.P_t)
+
+                # inputs of tasks k - cannot connect to inputs of task kk
+                rhs1 = sum(model.calA[fm, pm, k, t] * model.Flow[fm, pm, k, t] +
+                           model.calB[fm, pm, k, t] * model.Storage_Service_Flow[fm, pm, k, t] for
+                           fm in model.F_m for pm in model.P_m for k in model.K if k != kk)
+                rhs2 = sum(model.calC[fm, pm, ft, pt, kk, t] *
+                           model.Specific_Material_Transport_Flow[fm, pm, ft, pt, kk, t] for
+                           fm in model.F_m for pm in model.P_m for ft in model.F_t for pt in model.P_t for
+                           k in model.K if k != kk)
+                return lhs1 + lhs2 >= rhs1 + rhs2
+            else:
+                return pe.Constraint.Feasible
+
+        abstract_model.task_link_constraint = pe.Constraint(
+            abstract_model.K, abstract_model.T, rule=task_link_rule)
 
     def populate(self, json_files=None, elementary_flow_ref_ids=None,
                  db_file=di.get_default_db_file()):
@@ -398,6 +423,16 @@ class GeneralSpecification(Specification):
                   for fs in user_sets['F_s'] for ps in user_sets['P_s']],
             'w': [{'index': [kpi], 'value': 0} for kpi in user_sets['KPI']],
             'u': [{'index': [obj], 'value': 1} for obj in user_sets['OBJ']],
+            'calA': [{'index': [fm, pm, k, t], 'value': 0}
+                     for fm in user_sets['F_m'] for pm in user_sets['P_m']
+                     for k in user_sets['K'] for t in user_sets['T']],
+            'calB': [{'index': [fm, pm, k, t], 'value': 0}
+                     for fm in user_sets['F_m'] for pm in user_sets['P_m']
+                     for k in user_sets['K'] for t in user_sets['T']],
+            'calC': [{'index': [fm, pm, ft, pt, k, t], 'value': 0}
+                     for fm in user_sets['F_m'] for pm in user_sets['P_m']
+                     for ft in user_sets['F_t'] for pt in user_sets['P_t']
+                     for k in user_sets['K'] for t in user_sets['T']],
         }
 
         return user_params

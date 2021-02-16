@@ -1,0 +1,120 @@
+{
+    "S": [
+        {
+            "index": [
+                "Haarlem"
+            ],
+            "value": 47
+        },
+        {
+            "index": [
+                "Eindhoven"
+            ],
+            "value": 63
+        }
+    ],
+    "D": [
+        {
+            "index": [
+                "Amsterdam"
+            ],
+            "value": 28
+        },
+        {
+            "index": [
+                "Breda"
+            ],
+            "value": 16
+        },
+        {
+            "index": [
+                "Gouda"
+            ],
+            "value": 22
+        },
+        {
+            "index": [
+                "Amersfoort"
+            ],
+            "value": 31
+        },
+        {
+            "index": [
+                "Den Bosch"
+            ],
+            "value": 12
+        }
+    ],
+    "U": [
+        {
+            "index": [
+                "Haarlem",
+                "Amsterdam"
+            ],
+            "value": 131
+        },
+        {
+            "index": [
+                "Haarlem",
+                "Breda"
+            ],
+            "value": 405
+        },
+        {
+            "index": [
+                "Haarlem",
+                "Gouda"
+            ],
+            "value": 188
+        },
+        {
+            "index": [
+                "Haarlem",
+                "Amersfoort"
+            ],
+            "value": 396
+        },
+        {
+            "index": [
+                "Haarlem",
+                "Den Bosch"
+            ],
+            "value": 485
+        },
+        {
+            "index": [
+                "Eindhoven",
+                "Amsterdam"
+            ],
+            "value": 554
+        },
+        {
+            "index": [
+                "Eindhoven",
+                "Breda"
+            ],
+            "value": 351
+        },
+        {
+            "index": [
+                "Eindhoven",
+                "Gouda"
+            ],
+            "value": 479
+        },
+        {
+            "index": [
+                "Eindhoven",
+                "Amersfoort"
+            ],
+            "value": 366
+        },
+        {
+            "index": [
+                "Eindhoven",
+                "Den Bosch"
+            ],
+            "value": 155
+        }
+    ]
+}

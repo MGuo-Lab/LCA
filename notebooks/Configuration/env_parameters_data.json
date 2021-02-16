@@ -212,11 +212,19 @@
             "index": [
                 "environment"
             ],
-            "value": 0.0
+            "value": 1.0
         },
         {
             "index": [
                 "cost"
+            ],
+            "value": 1.0
+        }
+    ],
+    "w": [
+        {
+            "index": [
+                "bf42d8f0-23fc-32f3-b159-f79bfccfec28"
             ],
             "value": 1.0
         }
