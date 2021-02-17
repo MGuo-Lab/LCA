@@ -1,5 +1,8 @@
-from qtpy import QtWidgets
+import json
+from tempfile import NamedTemporaryFile
+from pathlib import Path
 
+from PyQt5 import QtWidgets
 from qtconsole.rich_jupyter_widget import RichJupyterWidget
 from qtconsole.manager import QtKernelManager
 
@@ -17,7 +20,6 @@ def make_jupyter_widget_with_kernel():
     kernel_client = kernel_manager.client()
     kernel_client.start_channels()
 
-
     jupyter_widget = RichJupyterWidget()
     jupyter_widget.kernel_manager = kernel_manager
     jupyter_widget.kernel_client = kernel_client
@@ -27,11 +29,48 @@ def make_jupyter_widget_with_kernel():
 
 class QtConsoleWindow(QtWidgets.QMainWindow):
     """A window that contains a single Qt console."""
-    def __init__(self):
+    def __init__(self, controller=None):
         super().__init__()
+        self.controller = controller
+        self.setWindowTitle("Mola Debug Console")
+
         self.jupyter_widget = make_jupyter_widget_with_kernel()
-        self.jupyter_widget.kernel_client.execute('print("Welcome to the mola debug console")', silent=True)
+        self.kc = self.jupyter_widget.kernel_client
+        self.kc.execute('import mola.build as mb')
         self.setCentralWidget(self.jupyter_widget)
+
+        main_tool_bar = self.addToolBar("Main")
+        get_config = QtWidgets.QPushButton("Get Config")
+        get_config.clicked.connect(self.get_config_clicked)
+        build = QtWidgets.QPushButton("Build")
+        build.clicked.connect(self.build_clicked)
+        run = QtWidgets.QPushButton("Run")
+        run.clicked.connect(self.run_clicked)
+        main_tool_bar.addWidget(get_config)
+        main_tool_bar.addWidget(build)
+        main_tool_bar.addWidget(run)
+
+    def get_config_clicked(self):
+        if not isinstance(self.controller, QtWidgets.QLabel):
+            config = self.controller.get_config()
+            config_json = NamedTemporaryFile(suffix='.json', delete=False)
+            with open(config_json.name, 'w') as fp:
+                json.dump(config, fp, indent=4)
+            file_name = Path(config_json.name)
+            self.kc.execute("cfg = mb.get_config(r'" + str(file_name) + "')")
+            self.kc.execute("cfg")
+            config_json.close()
+
+    def build_clicked(self):
+        if not isinstance(self.controller, QtWidgets.QLabel):
+            self.kc.execute("model = mb.build_instance(cfg)")
+
+    def run_clicked(self):
+        if not isinstance(self.controller, QtWidgets.QLabel):
+            self.kc.execute("import pyomo.environ as pe")
+            self.kc.execute("opt = pe.SolverFactory('glpk')")
+            self.kc.execute("results = opt.solve(model)")
+            self.kc.execute("results.write()")
 
     def shutdown_kernel(self):
         print('Shutting down kernel...')

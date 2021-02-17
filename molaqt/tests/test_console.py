@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QApplication
 from molaqt.console import QtConsoleWindow
 
 
-class QtConsoleTest(TestCase):
+class TestQtConsole(TestCase):
     def test_init(self):
         app = QApplication(sys.argv)
         qt_console = QtConsoleWindow()

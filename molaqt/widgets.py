@@ -265,6 +265,9 @@ class DocWidget(QWidget):
         size = self.zoom.value()
         self.documentation.page().setZoomFactor(size / 100)
 
+    def close(self):
+        self.documentation.close()
+
 
 class ParametersEditor(QWidget):
 

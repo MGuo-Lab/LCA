@@ -300,8 +300,8 @@ class GeneralSpecification(Specification):
                 rhs1 = sum(model.calA[fm, pm, k, t] * model.Flow[fm, pm, k, t] +
                            model.calB[fm, pm, k, t] * model.Storage_Service_Flow[fm, pm, k, t] for
                            fm in model.F_m for pm in model.P_m for k in model.K if k != kk)
-                rhs2 = sum(model.calC[fm, pm, ft, pt, kk, t] *
-                           model.Specific_Material_Transport_Flow[fm, pm, ft, pt, kk, t] for
+                rhs2 = sum(model.calC[fm, pm, ft, pt, k, t] *
+                           model.Specific_Material_Transport_Flow[fm, pm, ft, pt, k, t] for
                            fm in model.F_m for pm in model.P_m for ft in model.F_t for pt in model.P_t for
                            k in model.K if k != kk)
                 return lhs1 + lhs2 >= rhs1 + rhs2

@@ -106,7 +106,7 @@ class MolaMainWindow(QMainWindow):
         self.about_widget = mw.AboutWidget(self.system)
 
     def console(self):
-        self.qt_console = QtConsoleWindow()
+        self.qt_console = QtConsoleWindow(self.manager.controller)
         self.qt_console.show()
 
     def shutdown_kernel(self):

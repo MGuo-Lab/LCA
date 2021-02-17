@@ -154,6 +154,7 @@ class ModelManager(QWidget):
         self.replace_controller(new_controller)
 
     def replace_controller(self, new_controller):
+        # TODO: remove doc
         self.splitter.replaceWidget(1, new_controller)
         self.splitter.update()
         self.splitter.setStretchFactor(1, 2)
