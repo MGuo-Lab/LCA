@@ -97,10 +97,9 @@ class MolaMainWindow(QMainWindow):
         dlg.setIcon(QMessageBox.Critical)
         dlg.show()
 
-    def general_specification_v5(self):
-        url = self.system['doc_path'].joinpath('General_Specification_v5.html').resolve().as_uri()
-        new = 2  # new tab
-        webbrowser.open(url, new=new)
+    def general_specification_v5(self, spec_file='General_Specification_v5.html'):
+        url = self.system['doc_path'].joinpath(spec_file).resolve().as_uri()
+        webbrowser.open(url, new=2)  # new tab
 
     def about(self):
         self.about_widget = mw.AboutWidget(self.system)

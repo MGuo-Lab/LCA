@@ -151,4 +151,3 @@ class StandardController(Controller):
         self.parameters = self.parameters_editor.get_parameters()
         return self.parameters
 
-

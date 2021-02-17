@@ -8,6 +8,7 @@ from PyQt5.QtCore import Qt
 import molaqt.controllers as mc
 import molaqt.dialogs as md
 import molaqt.utils as mqu
+import molaqt.widgets as mw
 
 
 class ModelManager(QWidget):
@@ -154,7 +155,7 @@ class ModelManager(QWidget):
         self.replace_controller(new_controller)
 
     def replace_controller(self, new_controller):
-        # TODO: remove doc
+        self.controller.deleteLater()  # ensures Qt webengine process gets shutdown
         self.splitter.replaceWidget(1, new_controller)
         self.splitter.update()
         self.splitter.setStretchFactor(1, 2)
