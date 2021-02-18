@@ -29,7 +29,7 @@ class NewModelDialog(QDialog):
 
         # add databases to combobox
         self.database = QComboBox(self)
-        self.db_files = {f.stem: f for f in db_files}
+        self.db_files = {f.stem: f for f in db_files if f != 'None'}
         self.database.addItems(self.db_files.keys())
         button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, self)
 

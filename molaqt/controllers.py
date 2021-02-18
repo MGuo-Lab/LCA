@@ -27,6 +27,19 @@ class Controller(QWidget):
         self.parameters = self.spec.get_default_parameters(self.sets)
         self.parameters.update(user_config['parameters'])
 
+        # if we need a db get lookups
+        lookup_sets = [n for n, d in self.spec.user_defined_sets.items() if 'lookup' in d and d['lookup']]
+        if len(lookup_sets) > 0:
+            # instantiate db connection from config
+            self.db_file = user_config['db_file']
+            self.conn = di.get_sqlite_connection(self.db_file)
+
+            # get lookups from db
+            self.lookup = dv.LookupTables(self.conn)
+        else:
+            self.db_file = None
+            self.lookup = dict()
+
     def get_config(self):
         """
         Create dict for model configuration file representing current model state
@@ -53,13 +66,6 @@ class CustomController(Controller):
     def __init__(self, user_config):
 
         super().__init__(user_config)
-
-        # instantiate db connection from config
-        self.db_file = user_config['db_file']
-        self.conn = di.get_sqlite_connection(self.db_file)
-
-        # get lookups from db
-        self.lookup = dv.LookupTables(self.conn)
 
         # add widgets for objective, network, build, run
         self.obj = mw.ObjectiveWidget(self.lookup, self.sets['KPI'])
@@ -106,13 +112,6 @@ class StandardController(Controller):
     def __init__(self, user_config):
 
         super().__init__(user_config)
-
-        # instantiate db connection from config
-        self.db_file = user_config['db_file']
-        self.conn = di.get_sqlite_connection(self.db_file)
-
-        # get lookups from db
-        self.lookup = dv.LookupTables(self.conn)
 
         # add widgets for sets, parameters, build, run
         self.sets_editor = mw.SetsEditor(self.sets, self.spec, self.lookup)

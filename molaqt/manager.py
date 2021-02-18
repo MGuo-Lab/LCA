@@ -8,7 +8,7 @@ from PyQt5.QtCore import Qt
 import molaqt.controllers as mc
 import molaqt.dialogs as md
 import molaqt.utils as mqu
-import molaqt.widgets as mw
+from molaqt.console import QtConsoleWindow
 
 
 class ModelManager(QWidget):
@@ -34,16 +34,20 @@ class ModelManager(QWidget):
 
         # context menu for db tree
         self.db_tree.setContextMenuPolicy(Qt.ActionsContextMenu)
-        self.delete_model_action = QAction("Delete model")
-        self.delete_model_action.triggered.connect(self.delete_model)
-        self.db_tree.addAction(self.delete_model_action)
+        self.duplicate_model_action = QAction("Duplicate model")
+        self.duplicate_model_action.triggered.connect(lambda: self.rename_model(copy=True))
+        self.db_tree.addAction(self.duplicate_model_action)
         self.rename_model_action = QAction("Rename model")
         self.rename_model_action.triggered.connect(self.rename_model)
         self.db_tree.addAction(self.rename_model_action)
+        self.delete_model_action = QAction("Delete model")
+        self.delete_model_action.triggered.connect(self.delete_model)
+        self.db_tree.addAction(self.delete_model_action)
 
         # find the user sqlite databases and add them to db tree
         self.db_items = {}
         db_files = list(system['data_path'].glob('*.sqlite'))
+        # TODO allow a None database for models that don't use database data
         for db_file in db_files:
             self.db_items[db_file] = QTreeWidgetItem(self.db_tree, [db_file.stem])
             self.db_items[db_file].setExpanded(True)
@@ -53,7 +57,7 @@ class ModelManager(QWidget):
         for cf in system['config_path'].glob('*.json'):
             with open(str(cf)) as fp:
                 config_json = json.load(fp)
-            if 'db_file' in config_json:
+            if 'db_file' in config_json and config_json['db_file'] is not None:
                 config_db = Path(config_json['db_file'])
                 if config_db.exists():
                     config_item.append(QTreeWidgetItem(self.db_items[config_db], [cf.stem]))
@@ -86,6 +90,11 @@ class ModelManager(QWidget):
         # open new controller widget
         self.replace_controller(new_controller)
 
+    def start_console(self):
+        index = self.db_tree.selectedItems()[0]
+        self.qt_console = QtConsoleWindow(manager=self)
+        self.qt_console.show()
+
     def delete_model(self):
         index = self.db_tree.selectedItems()[0]
         if index.parent() is not None:
@@ -105,7 +114,7 @@ class ModelManager(QWidget):
             else:
                 pass
 
-    def rename_model(self):
+    def rename_model(self, copy=False):
         index = self.db_tree.selectedItems()[0]
         if index.parent() is not None:
             db_index = index.parent()
@@ -121,10 +130,14 @@ class ModelManager(QWidget):
                 elif not isinstance(self.controller, QLabel) and not self.controller.saved:
                     QMessageBox.about(self, "Error", "Model not saved")
                 else:
-                    db_index.removeChild(index)
                     if self.controller is not None:
                         self.replace_controller(QLabel())
-                    old_config_path.rename(new_config_path)
+                    if copy:
+
+                        new_config_path.write_text(old_config_path.read_text())
+                    else:
+                        db_index.removeChild(index)
+                        old_config_path.rename(new_config_path)
                     qtw = QTreeWidgetItem(db_index, [new_model_name])
                     db_index.addChild(qtw)
                     self.db_tree.clearSelection()

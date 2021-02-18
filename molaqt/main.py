@@ -61,7 +61,10 @@ class MolaMainWindow(QMainWindow):
 
         # help
         general_specification_v5_action = QAction("&General Specification v5", self)
-        general_specification_v5_action.triggered.connect(self.general_specification_v5)
+        general_specification_v5_action.triggered.connect(
+            lambda: self.open_url(doc_file='General_Specification_v5.html'))
+        github_home_action = QAction('&Github Home', self)
+        github_home_action.triggered.connect(lambda: self.open_url(url='https://github.com/MGuo-Lab/LCA/wiki'))
         console_action = QAction("Qt Console", self)
         console_action.triggered.connect(self.console)
         self.about_action = QAction(QIcon(":Help.svg"), "&About", self)
@@ -81,6 +84,7 @@ class MolaMainWindow(QMainWindow):
 
         help_menu = main_menu.addMenu('&Help')
         help_menu.addAction(general_specification_v5_action)
+        help_menu.addAction(github_home_action)
         help_menu.addAction(console_action)
         help_menu.addAction(self.about_action)
 
@@ -97,15 +101,16 @@ class MolaMainWindow(QMainWindow):
         dlg.setIcon(QMessageBox.Critical)
         dlg.show()
 
-    def general_specification_v5(self, spec_file='General_Specification_v5.html'):
-        url = self.system['doc_path'].joinpath(spec_file).resolve().as_uri()
+    def open_url(self, doc_file=None, url=None):
+        if doc_file:
+            url = self.system['doc_path'].joinpath(doc_file).resolve().as_uri()
         webbrowser.open(url, new=2)  # new tab
 
     def about(self):
         self.about_widget = mw.AboutWidget(self.system)
 
     def console(self):
-        self.qt_console = QtConsoleWindow(self.manager.controller)
+        self.qt_console = QtConsoleWindow(self.manager)
         self.qt_console.show()
 
     def shutdown_kernel(self):
@@ -163,7 +168,10 @@ class MolaMainWindow(QMainWindow):
                     QMessageBox.about(self, "Error", "Configuration file " + str(config_file.absolute()) +
                                       " already exists")
                 else:
-                    item = QTreeWidgetItem(self.manager.db_items[database], [config_file.stem])
+                    if database:
+                        item = QTreeWidgetItem(self.manager.db_items[database], [config_file.stem])
+                    else:
+                        item = QTreeWidgetItem(self.manager.db_items['None'], [config_file.stem])
                     self.manager.db_tree.clearSelection()
                     item.setSelected(True)
                     self.manager.new_model(config_file, specification_class, controller_class, database, doc_file)
