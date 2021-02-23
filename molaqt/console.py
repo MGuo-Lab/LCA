@@ -32,11 +32,11 @@ class QtConsoleWindow(QtWidgets.QMainWindow):
     def __init__(self, manager=None):
         super().__init__()
         self.manager = manager
-        self.setWindowTitle("Mola Debug Console")
+        self.setWindowTitle("Mola Console")
 
         self.jupyter_widget = make_jupyter_widget_with_kernel()
         self.kc = self.jupyter_widget.kernel_client
-        self.kc.execute(r'import mola.build as mb')
+        self.kc.execute('import mola.build as mb')
         self.setCentralWidget(self.jupyter_widget)
 
         main_tool_bar = self.addToolBar("Main")
@@ -51,27 +51,31 @@ class QtConsoleWindow(QtWidgets.QMainWindow):
         main_tool_bar.addWidget(run)
 
     def get_config_clicked(self):
-        if self.manager is not None and not isinstance(self.manager, QtWidgets.QLabel):
+        if self.manager is not None and not isinstance(self.manager.controller, QtWidgets.QLabel):
             config = self.manager.controller.get_config()
             config_json = NamedTemporaryFile(suffix='.json', delete=False)
             with open(config_json.name, 'w') as fp:
                 json.dump(config, fp, indent=4)
             file_name = Path(config_json.name)
             self.kc.execute("cfg = mb.get_config(r'" + str(file_name) + "')", stop_on_error=False)
-            self.kc.execute("cfg", stop_on_error=False)
+            self.kc.execute("print()", silent=True)
+            self.kc.execute("'Model configuration available as dict cfg'")
             config_json.close()
         else:
-            self.kc.execute("print('Model not loaded')", silent=True)
+            self.kc.execute("'Model not loaded'")
 
     def build_clicked(self):
-        if self.manager is not None and not isinstance(self.manager, QtWidgets.QLabel):
+        if self.manager is not None and not isinstance(self.manager.controller, QtWidgets.QLabel):
             self.kc.execute(r'model = mb.build_instance(cfg)')
+            self.kc.execute("print()", silent=True)
+            self.kc.execute("'Concrete model available as object model'")
 
     def run_clicked(self):
-        if self.manager is not None and not isinstance(self.manager, QtWidgets.QLabel):
+        if self.manager is not None and not isinstance(self.manager.controller, QtWidgets.QLabel):
             self.kc.execute("import pyomo.environ as pe")
             self.kc.execute("opt = pe.SolverFactory('glpk')")
             self.kc.execute("results = opt.solve(model)")
+            self.kc.execute("print()", silent=True)
             self.kc.execute("results.write()")
 
     def shutdown_kernel(self):
