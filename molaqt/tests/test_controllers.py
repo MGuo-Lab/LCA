@@ -16,7 +16,7 @@ app = QApplication(sys.argv)
 conn = di.get_sqlite_connection()
 lookup = dv.LookupTables(conn)
 
-# json config dicts for testing
+# json config dicts for testing - the controller ensures defaults used but could replace with build_config
 orange_config = mqu.get_config('Orange_Toy_Model.json')[0]
 custom_config = mqu.get_config('test_custom_controller.json')[0]
 

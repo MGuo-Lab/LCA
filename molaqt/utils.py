@@ -58,7 +58,7 @@ def chunker(seq, size):
     for pos in range(0, len(seq), size):
         yield seq.iloc[pos:pos + size]
 
-
+# TODO: use this function in the main app rather than just for testing? or move this to testing folder
 def build_config(config_path):
     """
     Ensure that a model configuration file has defaults populated.
@@ -71,10 +71,12 @@ def build_config(config_path):
     # load specification from config file
     spec = mb.create_specification(config['specification'])
 
+    # merge defaults into config then replace config
     sets = spec.get_default_sets()
     sets.update(config['sets'])
     config['sets'] = sets
     parameters = spec.get_default_parameters(config['sets'])
-    config['parameters'].update(parameters)
+    parameters.update(config['parameters'])
+    config['parameters'] = parameters
 
     return config

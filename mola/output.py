@@ -6,40 +6,46 @@ import pandas as pd
 import pyomo.environ as pe
 from functools import singledispatch
 
-
-def get_sets_frame(model_instance):
-    sets_dfr = pd.DataFrame(
-        ([v.name, v.doc, len(v)] for v in model_instance.component_objects(pe.Set, active=True)),
-        columns=['Set', 'Description', 'Number of elements']
+# TODO remove the unneeded large database sets that affect performance here
+def get_sets_frame(model_instance, active=None):
+    sets_df = pd.DataFrame(
+        ([o.name, o.doc, [], len(o)] for o in model_instance.component_objects(pe.Set, active=active)),
+        columns=['Set', 'Description', 'Index', 'Number of elements']
     )
 
-    return sets_dfr
+    return sets_df
 
 
-def get_parameters_frame(model_instance, max_object_size=100):
+def get_parameters_frame(model_instance, max_object_size=100, active=None):
     param_df = pd.DataFrame(
         ([o.name, o.doc, len(o), [index for index in o], [pe.value(o[index]) for index in o]] for o in
-         model_instance.component_objects(pe.Param, active=True) if len(o) <= max_object_size),
-        columns=['Param', 'Description', 'Number of elements', 'Dimension', 'Value']
+         model_instance.component_objects(pe.Param, active=active) if len(o) <= max_object_size),
+        columns=['Param', 'Description', 'Number of elements', 'Index', 'Value']
     )
 
     return param_df
 
 
-def get_constraints_frame(model_instance, max_object_size=100):
+def get_constraints_frame(model_instance, explode=False, active=None):
     constraints_df = pd.DataFrame(
-        ([v.name, v.expr] for v in model_instance.component_data_objects(pe.Constraint, active=True)),
-        columns=['Constraint', 'Expression']
+        ([o.name, [index for index in o], [str(o[index].expr) for index in o]] for o in
+         model_instance.component_objects(pe.Constraint, active=active)),
+        columns=['Constraint', 'Index', 'Expression']
     )
+    if explode:
+        constraints_df = constraints_df.set_index(['Constraint']).apply(pd.Series.explode).reset_index()
 
     return constraints_df
 
 
-def get_objectives_frame(model_instance, max_object_size=100):
+def get_objectives_frame(model_instance, explode=False, active=None):
     objectives_df = pd.DataFrame(
-        ([v.name, v.expr] for v in model_instance.component_data_objects(pe.Objective, active=True)),
-        columns=['Objective', 'Expression']
+        ([o.name, [index for index in o], [str(o[index].expr) for index in o]] for o in
+         model_instance.component_objects(pe.Objective, active=active)),
+        columns=['Objective', 'Index', 'Expression']
     )
+    if explode:
+        objectives_df = objectives_df.set_index(['Objective']).apply(pd.Series.explode).reset_index()
 
     return objectives_df
 

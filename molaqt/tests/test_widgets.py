@@ -111,8 +111,6 @@ class TestLinkParameterDiagram(TestCase):
         new = 2  # new tab
         webbrowser.open(url, new=new)
 
-        if 'IGNORE_EXEC' not in os.environ:
-            app.exec()
         self.assertIsInstance(html_path, Path)
 
 

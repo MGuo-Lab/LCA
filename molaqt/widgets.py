@@ -250,10 +250,11 @@ class DocWidget(QWidget):
         self.zoom = QSlider(Qt.Horizontal)
         self.zoom.setMinimum(25)
         self.zoom.setMaximum(500)
-        self.zoom.setValue(100)
+        self.zoom.setValue(150)
         self.zoom.setTickPosition(QSlider.TicksBelow)
         self.zoom.setTickInterval(25)
         self.zoom.valueChanged.connect(self.zoom_change)
+        self.zoom_change()
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)

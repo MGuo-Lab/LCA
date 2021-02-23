@@ -1,4 +1,7 @@
 import traceback
+import io
+from contextlib import redirect_stdout
+
 import pandas as pd
 from PyQt5.QtWidgets import QWidget, QPushButton, QListWidget, QTableView, QGridLayout, QMessageBox,\
     QHeaderView, QTextEdit
@@ -30,6 +33,9 @@ class ModelBuild(QWidget):
         # add table for build content
         self.build_table = QTableView()
         self.build_table.setModel(dm.PandasModel(pd.DataFrame()))
+        self.build_table.setSelectionBehavior(QTableView.SelectRows)
+        self.build_table.setSelectionMode(QTableView.SingleSelection)
+        self.build_table.doubleClicked.connect(self.build_table_row_clicked)
 
         # arrange widgets in grid
         grid_layout = QGridLayout()
@@ -38,6 +44,23 @@ class ModelBuild(QWidget):
         grid_layout.addWidget(self.build_table, 0, 1, 2, 1)
         grid_layout.setColumnStretch(1, 2)
         self.setLayout(grid_layout)
+
+    def build_table_row_clicked(self):
+        model = self.build_table.model()
+        cpt_idx = self.build_table.selectedIndexes()
+        cpt_name = model.data(cpt_idx[0])
+        print('Build table clicked for cpt', cpt_name)
+
+        with io.StringIO() as buf, redirect_stdout(buf):
+            self.concrete_model.component(cpt_name).pprint()
+            output = buf.getvalue()
+
+        self.cpt_widget = QTextEdit()
+        self.cpt_widget.setFontFamily('Courier New')
+        self.cpt_widget.setWindowTitle("Model component")
+        self.cpt_widget.resize(800, 600)
+        self.cpt_widget.setText(output)
+        self.cpt_widget.show()
 
     def build_button_clicked(self):
         print('Build started')

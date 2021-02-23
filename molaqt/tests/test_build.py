@@ -20,6 +20,8 @@ class BuildTest(TestCase):
         model_build = mb.ModelBuild(controller)
         model_build.show()
 
+        # TODO: add testing of build viewer for each component
+
         if 'IGNORE_EXEC' not in os.environ:
             app.exec()
         self.assertIsInstance(model_build, mb.ModelBuild)
