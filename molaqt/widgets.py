@@ -650,14 +650,11 @@ class ProcessFlow(QWidget):
                                       columns=['F_m', 'P_m', 'F_t', 'P_t'])
                 df = j_link[(j_link.P_t == ref_id) & (j_link.F_t == product_flow_df.iloc[0, 0])]
                 if df.shape[0] > 0:
-                    # fm_ref_id = df['F_m'].iloc[0]
-                    pm_ref_id = df['P_m'].iloc[0]
-                    # fm_lookup = self.lookup.get('F_m', fm_ref_id)
-                    pm_lookup = self.lookup.get('P_m', pm_ref_id)
-                    product_flow_df.insert(0, 'Input Process Name', pm_lookup.iloc[0] + pm_lookup.iloc[1])
-                    product_flow_df.insert(0, 'Input Process ID', pm_ref_id)
-                    # product_flow_df.insert(0, 'Input Flow Name', fm_lookup)
-                    # product_flow_df.insert(0, 'Input Flow ID', fm_ref_id)
+                    product_flow_df = pd.concat([product_flow_df] * len(df), ignore_index=True)
+                    pm_ref_id = df['P_m'].to_list()
+                    pm_lookup = self.lookup.get_single_column('P_m', pm_ref_id).reset_index()
+                    pm_lookup.columns = ['Input Process ID', 'Input Process Name']
+                    product_flow_df = pd.concat([pm_lookup, product_flow_df], axis=1)
                 else:
                     product_flow_df.insert(0, 'Input Process Name', '')
                     product_flow_df.insert(0, 'Input Process ID', '')

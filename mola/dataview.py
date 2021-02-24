@@ -8,7 +8,9 @@ from pypika import Query, Table, Criterion
 import pypika.functions as pf
 
 from mola import Package
+from mola.dataimport import get_sqlite_connection
 
+get_sqlite_connection = get_sqlite_connection
 
 def get_df(conn, q, chunk_size=None):
     if Package.config('show.SQL'):
