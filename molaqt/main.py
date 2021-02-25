@@ -121,7 +121,6 @@ class MolaMainWindow(QMainWindow):
         choice = QMessageBox.question(self, 'Exit ' + self.system['app_name'], "Confirm exit?",
                                       QMessageBox.Yes | QMessageBox.No)
         if choice == QMessageBox.Yes:
-            print("Exit", self.app_name)
             sys.exit()
         else:
             pass
