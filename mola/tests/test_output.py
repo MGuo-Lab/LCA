@@ -40,3 +40,7 @@ class Output(TestCase):
             self.assertGreater(len(o_dfr), 0)
             ou_dfr = mo.get_entity(o, self.lookup, units=True)
             self.assertGreater(len(ou_dfr), 0)
+
+    def test_get_onset_names(self):
+        p = mo.get_onset_names(self.instance.P_m)
+        self.assertEqual(p, [])

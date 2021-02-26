@@ -51,7 +51,7 @@ def get_objectives_frame(model_instance, explode=False, active=None):
 
 
 @singledispatch
-def get_entity(cpt, drop_index=True, units=None, non_zero=False, distinct_levels=False):
+def get_entity(cpt, lookup=dict(), drop_index=True, units=None, non_zero=False, distinct_levels=False):
     sys.exit('Type not supported')
 
 
@@ -59,9 +59,13 @@ def get_entity(cpt, drop_index=True, units=None, non_zero=False, distinct_levels
 @get_entity.register(pe.pyomo.core.base.param.IndexedParam)
 def _(cpt, lookup=dict(), drop_index=True, units=None, non_zero=False, distinct_levels=False):
     v = cpt.extract_values()
-    idx = cpt._index
+    if len(v) == 0:
+        return pd.DataFrame()
 
+    idx = cpt._index
     s = pd.Series(v)
+    # TODO: use get_onset_names rather than subsets
+    # index_names = get_onset_names(cpt)
     s.index.names = [j.name for j in idx.subsets()]
     df = pd.DataFrame(s, columns=[cpt.name])
 
@@ -131,3 +135,88 @@ def _(cpt, lookup=dict(), units=None):
 
     return df
 
+
+@singledispatch
+def get_onset_names(entity):
+    """
+    Return a list of domain set names for a given model entity.
+    Modified from https://raw.githubusercontent.com/tum-ens/urbs/master/urbs/pyomoio.py
+    to use generics.
+
+    :param entity: a member entity (i.e. a Set, Param, Var, Objective, Constraint) of
+     a Pyomo ConcreteModel object
+    :return: list of domain set names for that entity
+    :examples:
+    """
+    sys.exit('Type not supported')
+
+
+@get_onset_names.register(pe.pyomo.core.base.set.Set)
+def _(entity):
+    """
+    Return a list of domain set names for a given model entity.
+    Modified from https://raw.githubusercontent.com/tum-ens/urbs/master/urbs/pyomoio.py
+    to use generics.
+
+    :param entity: a member entity (i.e. a Set, Param, Var, Objective, Constraint) of
+     a Pyomo ConcreteModel object
+    :return: list of domain set names for that entity
+    :examples:
+    """
+    # get column titles for entities from domain set names
+    labels = []
+
+    if isinstance(entity.dimen, int) and entity.dimen > 1:
+        # N-dimensional set tuples, possibly with nested set tuples within
+        if entity.domain:
+            # retrieve list of domain sets, which itself could be nested
+            domains = entity.domain.subsets()
+        else:
+            try:
+                # if no domain attribute exists, some
+                domains = entity.set_tuple
+            except AttributeError:
+                # if that fails, too, a constructed (union, difference,
+                # intersection, ...) set exists. In that case, the
+                # attribute _setA holds the domain for the base set
+                try:
+                    domains = entity._setA.domain.set_tuple
+                except AttributeError:
+                    # if that fails, too, a constructed (union, difference,
+                    # intersection, ...) set exists. In that case, the
+                    # attribute _setB holds the domain for the base set
+                    domains = entity._setB.domain.set_tuple
+
+        for domain_set in domains:
+            labels.extend(get_onset_names(domain_set))
+
+    elif isinstance(entity.dimen, int) and entity.dimen == 1:
+        # if entity.domain == 'Any':
+        #     # 1D subset; add domain name
+        #     labels.append(entity.domain.name)
+        # else:
+        # # unrestricted set; add entity name
+        labels.append(entity.name)
+    else:
+        # no domain, so no labels needed
+        pass
+
+    return labels
+
+
+@get_onset_names.register(pe.pyomo.core.base.Constraint)
+@get_onset_names.register(pe.pyomo.core.base.Objective)
+@get_onset_names.register(pe.pyomo.core.base.Var)
+@get_onset_names.register(pe.pyomo.core.base.Param)
+@get_onset_names.register(pe.pyomo.core.base.Expression)
+def _(entity):
+    # get column titles for entities from domain set names
+    labels = []
+
+    if isinstance(entity.dim(), int) and entity.dim() > 0 and entity._index:
+        labels = get_onset_names(entity._index)
+    else:
+        # zero dimensions, so no onset labels
+        pass
+
+    return labels
