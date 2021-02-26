@@ -1,6 +1,9 @@
 # Unit tests for output functions
 from unittest import TestCase
+from itertools import chain
+
 import pyomo.environ as pe
+import pandas as pd
 
 import mola.output as mo
 import mola.dataimport as di
@@ -16,11 +19,15 @@ class Output(TestCase):
 
     def test_get_entity(self):
         # output the variables with and without units
-        for v in self.instance.component_objects(pe.Var, active=True):
+        for v in self.instance.component_objects(pe.Var):
             v_dfr = mo.get_entity(v)
-            self.assertGreater(len(v_dfr), 0)
+            self.assertIsInstance(v_dfr, pd.DataFrame)
+            if len(v_dfr) > 0:
+                self.assertGreater(len(v_dfr), 0)
             u_dfr = mo.get_entity(v, self.lookup, units=True)
-            self.assertGreater(len(u_dfr), 0)
+            self.assertIsInstance(u_dfr, pd.DataFrame)
+            if len(u_dfr) > 0:
+                self.assertGreater(len(u_dfr), 0)
 
         # name the unit set for lookup
         flow_dfr = mo.get_entity(self.instance.Flow, self.lookup, units=['P_m'])
@@ -42,5 +49,8 @@ class Output(TestCase):
             self.assertGreater(len(ou_dfr), 0)
 
     def test_get_onset_names(self):
-        p = mo.get_onset_names(self.instance.P_m)
-        self.assertEqual(p, [])
+        l = list()
+        for o in chain(self.instance.component_objects(pe.Var), self.instance.component_objects(pe.Param)):
+            sets = mo.get_onset_names(o)
+            l.append(sets)
+        self.assertGreater(len(sets), 0)

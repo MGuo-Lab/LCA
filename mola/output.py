@@ -62,11 +62,8 @@ def _(cpt, lookup=dict(), drop_index=True, units=None, non_zero=False, distinct_
     if len(v) == 0:
         return pd.DataFrame()
 
-    idx = cpt._index
     s = pd.Series(v)
-    # TODO: use get_onset_names rather than subsets
-    # index_names = get_onset_names(cpt)
-    s.index.names = [j.name for j in idx.subsets()]
+    s.index.names = get_onset_names(cpt)
     df = pd.DataFrame(s, columns=[cpt.name])
 
     if units:
@@ -80,21 +77,21 @@ def _(cpt, lookup=dict(), drop_index=True, units=None, non_zero=False, distinct_
             df = df.merge(units_dfr, left_index=True, right_index=True)
 
     # join text from index onto table
-    for pyo_set in idx.subsets():
-        if not distinct_levels or len(df.index.get_level_values(pyo_set.name).unique()) > 1:
-            if pyo_set.name in lookup:
-                set_content = lookup.get_single_column(pyo_set.name)
-                set_content.index.names = [pyo_set.name]
+    for pyo_set in s.index.names:
+        if not distinct_levels or len(df.index.get_level_values(pyo_set).unique()) > 1:
+            if pyo_set in lookup:
+                set_content = lookup.get_single_column(pyo_set)
+                set_content.index.names = [pyo_set]
                 df = df.join(set_content)
             else:
-                col_names = df.columns.to_list() + [pyo_set.name]
-                df = df.reset_index(pyo_set.name, drop=False).reindex(col_names, axis=1)
+                col_names = df.columns.to_list() + [pyo_set]
+                df = df.reset_index(pyo_set, drop=False).reindex(col_names, axis=1)
 
     if drop_index:
         df = df.reset_index(drop=drop_index)
 
     if non_zero:
-        numeric_cols = df.select_dtypes('number').columns
+        numeric_cols = set(df.select_dtypes('number').columns) - set(s.index.names)
         df = df[(df[numeric_cols] > 0).any(axis=1)]
 
     return df
@@ -102,6 +99,7 @@ def _(cpt, lookup=dict(), drop_index=True, units=None, non_zero=False, distinct_
 
 @get_entity.register(pe.pyomo.core.base.objective.IndexedObjective)
 def _(cpt, lookup=dict(), drop_index=True, units=None):
+    # TODO: this only does simple indexes for now
     idx = cpt._index
     s = pd.Series({i: pe.value(cpt[i]) for i in idx})
     s.index.names = [j.name for j in idx.subsets()]
@@ -153,16 +151,6 @@ def get_onset_names(entity):
 
 @get_onset_names.register(pe.pyomo.core.base.set.Set)
 def _(entity):
-    """
-    Return a list of domain set names for a given model entity.
-    Modified from https://raw.githubusercontent.com/tum-ens/urbs/master/urbs/pyomoio.py
-    to use generics.
-
-    :param entity: a member entity (i.e. a Set, Param, Var, Objective, Constraint) of
-     a Pyomo ConcreteModel object
-    :return: list of domain set names for that entity
-    :examples:
-    """
     # get column titles for entities from domain set names
     labels = []
 
