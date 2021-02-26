@@ -18088,7 +18088,7 @@ Solver:
       Number of bounded subproblems: 0
       Number of created subproblems: 0
   Error rc: 0
-  Time: 0.017404794692993164
+  Time: 0.01694965362548828
 # ----------------------------------------------------------
 #   Solution Information
 # ----------------------------------------------------------
@@ -18423,7 +18423,7 @@ f : Transport flow
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[46]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">lemon_set_file_name</span> <span class="o">=</span> <span class="s1">&#39;lemon_set_data.json&#39;</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">lemon_set_file_name</span> <span class="o">=</span> <span class="s1">&#39;Configuration/lemon_set_data.json&#39;</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">lemon_set_file_name</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
     <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">user_sets</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
@@ -18535,8 +18535,82 @@ f : Transport flow
     &#39;3886c7a5-bb83-41d8-9b20-41c0df9742ce&#39;],
    &#39;value&#39;: 0}],
  &#39;L&#39;: [],
- &#39;w&#39;: [{&#39;index&#39;: [&#39;environment&#39;], &#39;value&#39;: 0},
-  {&#39;index&#39;: [&#39;cost&#39;], &#39;value&#39;: 0}]}</pre>
+ &#39;w&#39;: [{&#39;index&#39;: [&#39;42b1e910-3bd2-3741-85ce-a3966798440b&#39;], &#39;value&#39;: 0}],
+ &#39;u&#39;: [{&#39;index&#39;: [&#39;environment&#39;], &#39;value&#39;: 1},
+  {&#39;index&#39;: [&#39;cost&#39;], &#39;value&#39;: 1}],
+ &#39;calA&#39;: [{&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;,
+    &#39;k1&#39;,
+    &#39;t1&#39;],
+   &#39;value&#39;: 0}],
+ &#39;calB&#39;: [{&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;,
+    &#39;k1&#39;,
+    &#39;t1&#39;],
+   &#39;value&#39;: 0}],
+ &#39;calC&#39;: [{&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;,
+    &#39;0ace02fa-eca5-482d-a829-c18e46a52db4&#39;,
+    &#39;b0d5d6ec-77f4-3213-b613-2391089d5f96&#39;,
+    &#39;k1&#39;,
+    &#39;t1&#39;],
+   &#39;value&#39;: 0},
+  {&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;,
+    &#39;0ace02fa-eca5-482d-a829-c18e46a52db4&#39;,
+    &#39;13e79207-71e6-36c9-be76-716700ea1e81&#39;,
+    &#39;k1&#39;,
+    &#39;t1&#39;],
+   &#39;value&#39;: 0},
+  {&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;,
+    &#39;0ace02fa-eca5-482d-a829-c18e46a52db4&#39;,
+    &#39;3886c7a5-bb83-41d8-9b20-41c0df9742ce&#39;,
+    &#39;k1&#39;,
+    &#39;t1&#39;],
+   &#39;value&#39;: 0},
+  {&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;,
+    &#39;090f56b8-6a83-48c1-ae26-234d04771e53&#39;,
+    &#39;b0d5d6ec-77f4-3213-b613-2391089d5f96&#39;,
+    &#39;k1&#39;,
+    &#39;t1&#39;],
+   &#39;value&#39;: 0},
+  {&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;,
+    &#39;090f56b8-6a83-48c1-ae26-234d04771e53&#39;,
+    &#39;13e79207-71e6-36c9-be76-716700ea1e81&#39;,
+    &#39;k1&#39;,
+    &#39;t1&#39;],
+   &#39;value&#39;: 0},
+  {&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;,
+    &#39;090f56b8-6a83-48c1-ae26-234d04771e53&#39;,
+    &#39;3886c7a5-bb83-41d8-9b20-41c0df9742ce&#39;,
+    &#39;k1&#39;,
+    &#39;t1&#39;],
+   &#39;value&#39;: 0},
+  {&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;,
+    &#39;2741cea8-327f-4e0f-9401-b10858dc68f8&#39;,
+    &#39;b0d5d6ec-77f4-3213-b613-2391089d5f96&#39;,
+    &#39;k1&#39;,
+    &#39;t1&#39;],
+   &#39;value&#39;: 0},
+  {&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;,
+    &#39;2741cea8-327f-4e0f-9401-b10858dc68f8&#39;,
+    &#39;13e79207-71e6-36c9-be76-716700ea1e81&#39;,
+    &#39;k1&#39;,
+    &#39;t1&#39;],
+   &#39;value&#39;: 0},
+  {&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;,
+    &#39;2741cea8-327f-4e0f-9401-b10858dc68f8&#39;,
+    &#39;3886c7a5-bb83-41d8-9b20-41c0df9742ce&#39;,
+    &#39;k1&#39;,
+    &#39;t1&#39;],
+   &#39;value&#39;: 0}]}</pre>
 </div>
 
 </div>
@@ -18668,8 +18742,82 @@ f : Transport flow
     &#39;3886c7a5-bb83-41d8-9b20-41c0df9742ce&#39;],
    &#39;value&#39;: 1}],
  &#39;L&#39;: [],
- &#39;w&#39;: [{&#39;index&#39;: [&#39;environment&#39;], &#39;value&#39;: 1},
-  {&#39;index&#39;: [&#39;cost&#39;], &#39;value&#39;: 0}]}</pre>
+ &#39;w&#39;: [{&#39;index&#39;: [&#39;42b1e910-3bd2-3741-85ce-a3966798440b&#39;], &#39;value&#39;: 1}],
+ &#39;u&#39;: [{&#39;index&#39;: [&#39;environment&#39;], &#39;value&#39;: 1},
+  {&#39;index&#39;: [&#39;cost&#39;], &#39;value&#39;: 1}],
+ &#39;calA&#39;: [{&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;,
+    &#39;k1&#39;,
+    &#39;t1&#39;],
+   &#39;value&#39;: 0}],
+ &#39;calB&#39;: [{&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;,
+    &#39;k1&#39;,
+    &#39;t1&#39;],
+   &#39;value&#39;: 0}],
+ &#39;calC&#39;: [{&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;,
+    &#39;0ace02fa-eca5-482d-a829-c18e46a52db4&#39;,
+    &#39;b0d5d6ec-77f4-3213-b613-2391089d5f96&#39;,
+    &#39;k1&#39;,
+    &#39;t1&#39;],
+   &#39;value&#39;: 0},
+  {&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;,
+    &#39;0ace02fa-eca5-482d-a829-c18e46a52db4&#39;,
+    &#39;13e79207-71e6-36c9-be76-716700ea1e81&#39;,
+    &#39;k1&#39;,
+    &#39;t1&#39;],
+   &#39;value&#39;: 0},
+  {&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;,
+    &#39;0ace02fa-eca5-482d-a829-c18e46a52db4&#39;,
+    &#39;3886c7a5-bb83-41d8-9b20-41c0df9742ce&#39;,
+    &#39;k1&#39;,
+    &#39;t1&#39;],
+   &#39;value&#39;: 0},
+  {&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;,
+    &#39;090f56b8-6a83-48c1-ae26-234d04771e53&#39;,
+    &#39;b0d5d6ec-77f4-3213-b613-2391089d5f96&#39;,
+    &#39;k1&#39;,
+    &#39;t1&#39;],
+   &#39;value&#39;: 0},
+  {&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;,
+    &#39;090f56b8-6a83-48c1-ae26-234d04771e53&#39;,
+    &#39;13e79207-71e6-36c9-be76-716700ea1e81&#39;,
+    &#39;k1&#39;,
+    &#39;t1&#39;],
+   &#39;value&#39;: 0},
+  {&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;,
+    &#39;090f56b8-6a83-48c1-ae26-234d04771e53&#39;,
+    &#39;3886c7a5-bb83-41d8-9b20-41c0df9742ce&#39;,
+    &#39;k1&#39;,
+    &#39;t1&#39;],
+   &#39;value&#39;: 0},
+  {&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;,
+    &#39;2741cea8-327f-4e0f-9401-b10858dc68f8&#39;,
+    &#39;b0d5d6ec-77f4-3213-b613-2391089d5f96&#39;,
+    &#39;k1&#39;,
+    &#39;t1&#39;],
+   &#39;value&#39;: 0},
+  {&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;,
+    &#39;2741cea8-327f-4e0f-9401-b10858dc68f8&#39;,
+    &#39;13e79207-71e6-36c9-be76-716700ea1e81&#39;,
+    &#39;k1&#39;,
+    &#39;t1&#39;],
+   &#39;value&#39;: 0},
+  {&#39;index&#39;: [&#39;9891d347-28f8-434d-896a-84a19a4c68a6&#39;,
+    &#39;64867712-23c4-3be5-a50e-3631e74571a6&#39;,
+    &#39;2741cea8-327f-4e0f-9401-b10858dc68f8&#39;,
+    &#39;3886c7a5-bb83-41d8-9b20-41c0df9742ce&#39;,
+    &#39;k1&#39;,
+    &#39;t1&#39;],
+   &#39;value&#39;: 0}]}</pre>
 </div>
 
 </div>
@@ -18684,7 +18832,7 @@ f : Transport flow
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[49]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">lemon_parameter_file_name</span> <span class="o">=</span> <span class="s1">&#39;lemon_parameter_data.json&#39;</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">lemon_parameter_file_name</span> <span class="o">=</span> <span class="s1">&#39;Configuration/lemon_parameter_data.json&#39;</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">lemon_parameter_file_name</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">p</span><span class="p">:</span>
     <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">user_parameters</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
@@ -18714,7 +18862,7 @@ f : Transport flow
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">spec</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;distance_calculated&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">concrete_model</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">populate</span><span class="p">([</span><span class="s1">&#39;lemon_set_data.json&#39;</span><span class="p">,</span> <span class="s1">&#39;lemon_parameter_data.json&#39;</span><span class="p">])</span>
+<span class="n">concrete_model</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">populate</span><span class="p">([</span><span class="n">lemon_set_file_name</span><span class="p">,</span> <span class="n">lemon_parameter_file_name</span><span class="p">])</span>
 <span class="n">spec</span><span class="o">.</span><span class="n">settings</span>
 </pre></div>
 
@@ -18998,7 +19146,7 @@ Solver:
       Number of bounded subproblems: 1
       Number of created subproblems: 1
   Error rc: 0
-  Time: 0.016949176788330078
+  Time: 0.017473936080932617
 # ----------------------------------------------------------
 #   Solution Information
 # ----------------------------------------------------------
