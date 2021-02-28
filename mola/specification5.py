@@ -44,6 +44,9 @@ class Specification:
     def populate(self, db_file, json_file):
         raise NotImplementedError()
 
+    def build_network(self):
+        pass
+
     def get_default_sets(self):
         raise NotImplementedError()
 
@@ -169,7 +172,7 @@ class GeneralSpecification(Specification):
         # Variables
         abstract_model.Flow = pe.Var(abstract_model.F_m, abstract_model.P_m, abstract_model.K, abstract_model.T,
                                      within=pe.NonNegativeReals, doc='Material flow', units=pu.P_m)
-        abstract_model.Storage_Service_Flow = pe.Var(abstract_model.F_s, abstract_model.P_s, abstract_model.K,
+        abstract_model.Storage_Service_Flow = pe.Var(abstract_model.F, abstract_model.P, abstract_model.K,
                                                      abstract_model.T, within=pe.NonNegativeReals,
                                                      doc='Storage Service Flow', units=pu.P)
         abstract_model.Specific_Material_Transport_Flow = pe.Var(abstract_model.F_m, abstract_model.P_m,
