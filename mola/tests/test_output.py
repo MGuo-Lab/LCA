@@ -12,10 +12,15 @@ import mola.build as mb
 
 
 class Output(TestCase):
+    # solve test problem
     config = mb.get_config('test_model_config.json')
     instance = mb.build_instance(config)
     conn = di.get_sqlite_connection()
     lookup = dv.LookupTables(conn)
+    opt = pe.SolverFactory("glpk")
+    instance.Cost.deactivate()
+    instance.Environmental_Cost_Impact.deactivate()
+    opt.solve(instance)
 
     def test_get_entity(self):
         # output the variables with and without units

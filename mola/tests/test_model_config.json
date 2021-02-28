@@ -1,17 +1,21 @@
 {
-    "doc_path": "",
+    "settings": {
+        "distance_calculated": true,
+        "test_setting": false
+    },
+    "doc_path": "Z:\\work\\code\\Python\\LCA\\molaqt\\doc\\Toy_Problem_A2_Lemon_Fruit.html",
     "specification": "<class 'mola.specification5.GeneralSpecification'>",
-    "controller": "StandardController",
+    "controller": "<class 'molaqt.controllers.StandardController'>",
     "db_file": "C:/data/openlca/sqlite/system/CSV_juice_ecoinvent_36_apos_lci_20200206_20201029-102818.sqlite",
     "sets": {
         "F_m": [
-            "1f7bbd3e-fcd1-412d-8608-035b855ea735"
+            "9891d347-28f8-434d-896a-84a19a4c68a6"
         ],
         "F_s": [],
         "F_t": [
+            "090f56b8-6a83-48c1-ae26-234d04771e53",
             "0ace02fa-eca5-482d-a829-c18e46a52db4",
-            "4ecf1190-7028-4038-89b0-79adeb3e98cc",
-            "559d5695-102a-4beb-9f7f-3db334c9b51d"
+            "2741cea8-327f-4e0f-9401-b10858dc68f8"
         ],
         "D": [
             "d1"
@@ -23,22 +27,16 @@
             "k1"
         ],
         "P_m": [
-            "f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768",
-            "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
-            "760f1858-b0ef-3280-930e-88ebe4645061"
+            "64867712-23c4-3be5-a50e-3631e74571a6"
         ],
         "P_t": [
-            "44ad59ca-4fe0-394c-a6d9-5dea68783c23",
-            "f615ae37-fa6d-4a47-958c-23234c986400",
-            "9106bf8d-869d-425f-b8ee-0bf9a78bcf65",
-            "97aa2533-ae98-3f8f-b3e2-3acb9d66a010",
-            "b37252a8-fbb5-47cb-a3aa-1485d090bdfd",
-            "660ba3fe-d7a5-4c43-8777-27d331934edf",
-            "fe7d1840-4341-40fd-ba6d-fbba126ca7d3"
+            "13e79207-71e6-36c9-be76-716700ea1e81",
+            "b0d5d6ec-77f4-3213-b613-2391089d5f96",
+            "3886c7a5-bb83-41d8-9b20-41c0df9742ce"
         ],
         "P_s": [],
         "KPI": [
-            "061b7db5-4f56-3368-bf50-9ff0fcc8dd1f"
+            "42b1e910-3bd2-3741-85ce-a3966798440b"
         ],
         "OBJ": [
             "environment",
@@ -51,37 +49,42 @@
         "C": [
             {
                 "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                    "9891d347-28f8-434d-896a-84a19a4c68a6",
                     "k1",
                     "d1",
                     "t1"
                 ],
-                "value": 1000
+                "value": 1
+            }
+        ],
+        "U": [
+            {
+                "index": [
+                    "9891d347-28f8-434d-896a-84a19a4c68a6",
+                    "090f56b8-6a83-48c1-ae26-234d04771e53"
+                ],
+                "value": 0.001
+            },
+            {
+                "index": [
+                    "9891d347-28f8-434d-896a-84a19a4c68a6",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4"
+                ],
+                "value": 0.001
+            },
+            {
+                "index": [
+                    "9891d347-28f8-434d-896a-84a19a4c68a6",
+                    "2741cea8-327f-4e0f-9401-b10858dc68f8"
+                ],
+                "value": 0.001
             }
         ],
         "d": [
             {
                 "index": [
-                    "f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768",
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "k1",
-                    "t1"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "k1",
-                    "t1"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "760f1858-b0ef-3280-930e-88ebe4645061",
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
+                    "64867712-23c4-3be5-a50e-3631e74571a6",
+                    "9891d347-28f8-434d-896a-84a19a4c68a6",
                     "k1",
                     "t1"
                 ],
@@ -94,7 +97,7 @@
                     "k1",
                     "t1"
                 ],
-                "value": Infinity
+                "value": -0.1278
             }
         ],
         "Y": [
@@ -103,7 +106,7 @@
                     "k1",
                     "t1"
                 ],
-                "value": Infinity
+                "value": 51.5074
             }
         ],
         "Demand": [
@@ -122,576 +125,98 @@
                     "d1",
                     "k1"
                 ],
-                "value": 0
+                "value": 1000
             }
         ],
         "J": [
             {
                 "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768",
+                    "9891d347-28f8-434d-896a-84a19a4c68a6",
+                    "64867712-23c4-3be5-a50e-3631e74571a6",
+                    "090f56b8-6a83-48c1-ae26-234d04771e53",
+                    "13e79207-71e6-36c9-be76-716700ea1e81"
+                ],
+                "value": 1
+            },
+            {
+                "index": [
+                    "9891d347-28f8-434d-896a-84a19a4c68a6",
+                    "64867712-23c4-3be5-a50e-3631e74571a6",
+                    "090f56b8-6a83-48c1-ae26-234d04771e53",
+                    "b0d5d6ec-77f4-3213-b613-2391089d5f96"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "9891d347-28f8-434d-896a-84a19a4c68a6",
+                    "64867712-23c4-3be5-a50e-3631e74571a6",
+                    "090f56b8-6a83-48c1-ae26-234d04771e53",
+                    "3886c7a5-bb83-41d8-9b20-41c0df9742ce"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "9891d347-28f8-434d-896a-84a19a4c68a6",
+                    "64867712-23c4-3be5-a50e-3631e74571a6",
                     "0ace02fa-eca5-482d-a829-c18e46a52db4",
-                    "44ad59ca-4fe0-394c-a6d9-5dea68783c23"
+                    "13e79207-71e6-36c9-be76-716700ea1e81"
                 ],
                 "value": 0
             },
             {
                 "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768",
+                    "9891d347-28f8-434d-896a-84a19a4c68a6",
+                    "64867712-23c4-3be5-a50e-3631e74571a6",
                     "0ace02fa-eca5-482d-a829-c18e46a52db4",
-                    "f615ae37-fa6d-4a47-958c-23234c986400"
+                    "b0d5d6ec-77f4-3213-b613-2391089d5f96"
                 ],
-                "value": 0
+                "value": 1
             },
             {
                 "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768",
+                    "9891d347-28f8-434d-896a-84a19a4c68a6",
+                    "64867712-23c4-3be5-a50e-3631e74571a6",
                     "0ace02fa-eca5-482d-a829-c18e46a52db4",
-                    "9106bf8d-869d-425f-b8ee-0bf9a78bcf65"
+                    "3886c7a5-bb83-41d8-9b20-41c0df9742ce"
                 ],
                 "value": 0
             },
             {
                 "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768",
-                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
-                    "97aa2533-ae98-3f8f-b3e2-3acb9d66a010"
+                    "9891d347-28f8-434d-896a-84a19a4c68a6",
+                    "64867712-23c4-3be5-a50e-3631e74571a6",
+                    "2741cea8-327f-4e0f-9401-b10858dc68f8",
+                    "13e79207-71e6-36c9-be76-716700ea1e81"
                 ],
                 "value": 0
             },
             {
                 "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768",
-                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
-                    "b37252a8-fbb5-47cb-a3aa-1485d090bdfd"
+                    "9891d347-28f8-434d-896a-84a19a4c68a6",
+                    "64867712-23c4-3be5-a50e-3631e74571a6",
+                    "2741cea8-327f-4e0f-9401-b10858dc68f8",
+                    "b0d5d6ec-77f4-3213-b613-2391089d5f96"
                 ],
                 "value": 0
             },
             {
                 "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768",
-                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
-                    "660ba3fe-d7a5-4c43-8777-27d331934edf"
+                    "9891d347-28f8-434d-896a-84a19a4c68a6",
+                    "64867712-23c4-3be5-a50e-3631e74571a6",
+                    "2741cea8-327f-4e0f-9401-b10858dc68f8",
+                    "3886c7a5-bb83-41d8-9b20-41c0df9742ce"
                 ],
-                "value": 0
-            },
+                "value": 1
+            }
+        ],
+        "w": [
             {
                 "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768",
-                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
-                    "fe7d1840-4341-40fd-ba6d-fbba126ca7d3"
+                    "42b1e910-3bd2-3741-85ce-a3966798440b"
                 ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768",
-                    "4ecf1190-7028-4038-89b0-79adeb3e98cc",
-                    "44ad59ca-4fe0-394c-a6d9-5dea68783c23"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768",
-                    "4ecf1190-7028-4038-89b0-79adeb3e98cc",
-                    "f615ae37-fa6d-4a47-958c-23234c986400"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768",
-                    "4ecf1190-7028-4038-89b0-79adeb3e98cc",
-                    "9106bf8d-869d-425f-b8ee-0bf9a78bcf65"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768",
-                    "4ecf1190-7028-4038-89b0-79adeb3e98cc",
-                    "97aa2533-ae98-3f8f-b3e2-3acb9d66a010"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768",
-                    "4ecf1190-7028-4038-89b0-79adeb3e98cc",
-                    "b37252a8-fbb5-47cb-a3aa-1485d090bdfd"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768",
-                    "4ecf1190-7028-4038-89b0-79adeb3e98cc",
-                    "660ba3fe-d7a5-4c43-8777-27d331934edf"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768",
-                    "4ecf1190-7028-4038-89b0-79adeb3e98cc",
-                    "fe7d1840-4341-40fd-ba6d-fbba126ca7d3"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768",
-                    "559d5695-102a-4beb-9f7f-3db334c9b51d",
-                    "44ad59ca-4fe0-394c-a6d9-5dea68783c23"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768",
-                    "559d5695-102a-4beb-9f7f-3db334c9b51d",
-                    "f615ae37-fa6d-4a47-958c-23234c986400"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768",
-                    "559d5695-102a-4beb-9f7f-3db334c9b51d",
-                    "9106bf8d-869d-425f-b8ee-0bf9a78bcf65"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768",
-                    "559d5695-102a-4beb-9f7f-3db334c9b51d",
-                    "97aa2533-ae98-3f8f-b3e2-3acb9d66a010"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768",
-                    "559d5695-102a-4beb-9f7f-3db334c9b51d",
-                    "b37252a8-fbb5-47cb-a3aa-1485d090bdfd"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768",
-                    "559d5695-102a-4beb-9f7f-3db334c9b51d",
-                    "660ba3fe-d7a5-4c43-8777-27d331934edf"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "f22f5f6e-1bdc-3cb5-8f48-8a04d8f9b768",
-                    "559d5695-102a-4beb-9f7f-3db334c9b51d",
-                    "fe7d1840-4341-40fd-ba6d-fbba126ca7d3"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
-                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
-                    "44ad59ca-4fe0-394c-a6d9-5dea68783c23"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
-                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
-                    "f615ae37-fa6d-4a47-958c-23234c986400"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
-                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
-                    "9106bf8d-869d-425f-b8ee-0bf9a78bcf65"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
-                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
-                    "97aa2533-ae98-3f8f-b3e2-3acb9d66a010"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
-                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
-                    "b37252a8-fbb5-47cb-a3aa-1485d090bdfd"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
-                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
-                    "660ba3fe-d7a5-4c43-8777-27d331934edf"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
-                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
-                    "fe7d1840-4341-40fd-ba6d-fbba126ca7d3"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
-                    "4ecf1190-7028-4038-89b0-79adeb3e98cc",
-                    "44ad59ca-4fe0-394c-a6d9-5dea68783c23"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
-                    "4ecf1190-7028-4038-89b0-79adeb3e98cc",
-                    "f615ae37-fa6d-4a47-958c-23234c986400"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
-                    "4ecf1190-7028-4038-89b0-79adeb3e98cc",
-                    "9106bf8d-869d-425f-b8ee-0bf9a78bcf65"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
-                    "4ecf1190-7028-4038-89b0-79adeb3e98cc",
-                    "97aa2533-ae98-3f8f-b3e2-3acb9d66a010"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
-                    "4ecf1190-7028-4038-89b0-79adeb3e98cc",
-                    "b37252a8-fbb5-47cb-a3aa-1485d090bdfd"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
-                    "4ecf1190-7028-4038-89b0-79adeb3e98cc",
-                    "660ba3fe-d7a5-4c43-8777-27d331934edf"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
-                    "4ecf1190-7028-4038-89b0-79adeb3e98cc",
-                    "fe7d1840-4341-40fd-ba6d-fbba126ca7d3"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
-                    "559d5695-102a-4beb-9f7f-3db334c9b51d",
-                    "44ad59ca-4fe0-394c-a6d9-5dea68783c23"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
-                    "559d5695-102a-4beb-9f7f-3db334c9b51d",
-                    "f615ae37-fa6d-4a47-958c-23234c986400"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
-                    "559d5695-102a-4beb-9f7f-3db334c9b51d",
-                    "9106bf8d-869d-425f-b8ee-0bf9a78bcf65"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
-                    "559d5695-102a-4beb-9f7f-3db334c9b51d",
-                    "97aa2533-ae98-3f8f-b3e2-3acb9d66a010"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
-                    "559d5695-102a-4beb-9f7f-3db334c9b51d",
-                    "b37252a8-fbb5-47cb-a3aa-1485d090bdfd"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
-                    "559d5695-102a-4beb-9f7f-3db334c9b51d",
-                    "660ba3fe-d7a5-4c43-8777-27d331934edf"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "cfc3f58f-7bdf-3019-888b-c4f2dbc332e8",
-                    "559d5695-102a-4beb-9f7f-3db334c9b51d",
-                    "fe7d1840-4341-40fd-ba6d-fbba126ca7d3"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "760f1858-b0ef-3280-930e-88ebe4645061",
-                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
-                    "44ad59ca-4fe0-394c-a6d9-5dea68783c23"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "760f1858-b0ef-3280-930e-88ebe4645061",
-                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
-                    "f615ae37-fa6d-4a47-958c-23234c986400"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "760f1858-b0ef-3280-930e-88ebe4645061",
-                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
-                    "9106bf8d-869d-425f-b8ee-0bf9a78bcf65"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "760f1858-b0ef-3280-930e-88ebe4645061",
-                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
-                    "97aa2533-ae98-3f8f-b3e2-3acb9d66a010"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "760f1858-b0ef-3280-930e-88ebe4645061",
-                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
-                    "b37252a8-fbb5-47cb-a3aa-1485d090bdfd"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "760f1858-b0ef-3280-930e-88ebe4645061",
-                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
-                    "660ba3fe-d7a5-4c43-8777-27d331934edf"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "760f1858-b0ef-3280-930e-88ebe4645061",
-                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
-                    "fe7d1840-4341-40fd-ba6d-fbba126ca7d3"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "760f1858-b0ef-3280-930e-88ebe4645061",
-                    "4ecf1190-7028-4038-89b0-79adeb3e98cc",
-                    "44ad59ca-4fe0-394c-a6d9-5dea68783c23"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "760f1858-b0ef-3280-930e-88ebe4645061",
-                    "4ecf1190-7028-4038-89b0-79adeb3e98cc",
-                    "f615ae37-fa6d-4a47-958c-23234c986400"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "760f1858-b0ef-3280-930e-88ebe4645061",
-                    "4ecf1190-7028-4038-89b0-79adeb3e98cc",
-                    "9106bf8d-869d-425f-b8ee-0bf9a78bcf65"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "760f1858-b0ef-3280-930e-88ebe4645061",
-                    "4ecf1190-7028-4038-89b0-79adeb3e98cc",
-                    "97aa2533-ae98-3f8f-b3e2-3acb9d66a010"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "760f1858-b0ef-3280-930e-88ebe4645061",
-                    "4ecf1190-7028-4038-89b0-79adeb3e98cc",
-                    "b37252a8-fbb5-47cb-a3aa-1485d090bdfd"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "760f1858-b0ef-3280-930e-88ebe4645061",
-                    "4ecf1190-7028-4038-89b0-79adeb3e98cc",
-                    "660ba3fe-d7a5-4c43-8777-27d331934edf"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "760f1858-b0ef-3280-930e-88ebe4645061",
-                    "4ecf1190-7028-4038-89b0-79adeb3e98cc",
-                    "fe7d1840-4341-40fd-ba6d-fbba126ca7d3"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "760f1858-b0ef-3280-930e-88ebe4645061",
-                    "559d5695-102a-4beb-9f7f-3db334c9b51d",
-                    "44ad59ca-4fe0-394c-a6d9-5dea68783c23"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "760f1858-b0ef-3280-930e-88ebe4645061",
-                    "559d5695-102a-4beb-9f7f-3db334c9b51d",
-                    "f615ae37-fa6d-4a47-958c-23234c986400"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "760f1858-b0ef-3280-930e-88ebe4645061",
-                    "559d5695-102a-4beb-9f7f-3db334c9b51d",
-                    "9106bf8d-869d-425f-b8ee-0bf9a78bcf65"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "760f1858-b0ef-3280-930e-88ebe4645061",
-                    "559d5695-102a-4beb-9f7f-3db334c9b51d",
-                    "97aa2533-ae98-3f8f-b3e2-3acb9d66a010"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "760f1858-b0ef-3280-930e-88ebe4645061",
-                    "559d5695-102a-4beb-9f7f-3db334c9b51d",
-                    "b37252a8-fbb5-47cb-a3aa-1485d090bdfd"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "760f1858-b0ef-3280-930e-88ebe4645061",
-                    "559d5695-102a-4beb-9f7f-3db334c9b51d",
-                    "660ba3fe-d7a5-4c43-8777-27d331934edf"
-                ],
-                "value": 0
-            },
-            {
-                "index": [
-                    "1f7bbd3e-fcd1-412d-8608-035b855ea735",
-                    "760f1858-b0ef-3280-930e-88ebe4645061",
-                    "559d5695-102a-4beb-9f7f-3db334c9b51d",
-                    "fe7d1840-4341-40fd-ba6d-fbba126ca7d3"
-                ],
-                "value": 0
+                "value": 1
             }
         ],
         "u": [
@@ -699,13 +224,13 @@
                 "index": [
                     "environment"
                 ],
-                "value": 0
+                "value": 1
             },
             {
                 "index": [
                     "cost"
                 ],
-                "value": 0
+                "value": 1
             }
         ]
     }

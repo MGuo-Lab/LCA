@@ -59,6 +59,7 @@ def get_entity(cpt, lookup=dict(), drop_index=True, units=None, non_zero=False, 
 @get_entity.register(pe.pyomo.core.base.param.IndexedParam)
 def _(cpt, lookup=dict(), drop_index=True, units=None, non_zero=False, distinct_levels=False):
     v = cpt.extract_values()
+    v = {key: val for key, val in v.items() if val is not None}  # get rid of None values
     if len(v) == 0:
         return pd.DataFrame()
 
