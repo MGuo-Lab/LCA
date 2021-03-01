@@ -1,4 +1,6 @@
 import io
+import traceback
+
 from PyQt5.QtWidgets import QWidget, QPushButton, QTreeWidget, QTableView, QGridLayout, QTextEdit, \
     QTreeWidgetItem, QLabel, QHeaderView, QCheckBox, QComboBox
 import pyomo.environ as pe
@@ -6,6 +8,7 @@ import pandas as pd
 
 import mola.output as mo
 import molaqt.datamodel as md
+from molaqt.dialogs import critical_error_box
 
 
 class ModelRun(QWidget):
@@ -91,21 +94,26 @@ class ModelRun(QWidget):
         print('Run button clicked')
         if self._concrete_model is not None:
             opt = pe.SolverFactory("glpk")
-            self.results = opt.solve(self.concrete_model)
 
-            self.run_tree.clear()
-            self.run_table.setModel(md.PandasModel(pd.DataFrame()))
-            var_item = QTreeWidgetItem(self.run_tree, ['Variables'])
-            for var in self._concrete_model.component_objects(pe.Var, active=True):
-                QTreeWidgetItem(var_item, [var.name])
+            try:
+                self.results = opt.solve(self.concrete_model)
 
-            objective_item = QTreeWidgetItem(self.run_tree, ['Objective'])
-            for obj in self._concrete_model.component_objects(pe.Objective):
-                if obj.active:
-                    QTreeWidgetItem(objective_item, [obj.name])
+                self.run_tree.clear()
+                self.run_table.setModel(md.PandasModel(pd.DataFrame()))
+                var_item = QTreeWidgetItem(self.run_tree, ['Variables'])
+                for var in self._concrete_model.component_objects(pe.Var, active=True):
+                    QTreeWidgetItem(var_item, [var.name])
 
-            log_item = QTreeWidgetItem(self.run_tree, ['Log'])
-            self.run_tree.expandAll()
+                objective_item = QTreeWidgetItem(self.run_tree, ['Objective'])
+                for obj in self._concrete_model.component_objects(pe.Objective):
+                    if obj.active:
+                        QTreeWidgetItem(objective_item, [obj.name])
+
+                log_item = QTreeWidgetItem(self.run_tree, ['Log'])
+                self.run_tree.expandAll()
+            except Exception as e:
+                self.dlg = critical_error_box("Uncaught exception for model run", str(e), traceback.format_exc())
+                self.dlg.show()
         else:
             print("No successful build")
 

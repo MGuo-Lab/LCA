@@ -1,0 +1,1659 @@
+{
+    "settings": {
+        "distance_calculated": false,
+        "test_setting": false
+    },
+    "doc_path": "Z:/work/code/Python/LCA/molaqt/doc/Toy_Problem_F1_Oil_Production.html",
+    "specification": "<class 'mola.specification5.GeneralSpecification'>",
+    "controller": "<class 'molaqt.controllers.StandardController'>",
+    "db_file": "C:\\data\\openlca\\sqlite\\system\\CSV_juice_ecoinvent_36_apos_lci_20200206_20201029-102818.sqlite",
+    "sets": {
+        "F_m": [
+            "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+            "291fc06d-1b3e-4077-aabb-346b588ed24b"
+        ],
+        "F_s": [],
+        "F_t": [
+            "774bc814-70cf-4389-8bf8-e6435174c72e",
+            "0ace02fa-eca5-482d-a829-c18e46a52db4"
+        ],
+        "D": [
+            "d1"
+        ],
+        "T": [
+            "t1"
+        ],
+        "K": [
+            "Petroleum Extraction and Transport",
+            "Diesel Production and Transport"
+        ],
+        "P_m": [
+            "81d22f90-89fc-3f04-845e-97615867d8f9",
+            "c1827905-bfad-3fa1-b00b-1303f970ae92",
+            "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+            "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce"
+        ],
+        "P_t": [
+            "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+            "f615ae37-fa6d-4a47-958c-23234c986400"
+        ],
+        "P_s": [],
+        "KPI": [
+            "bf42d8f0-23fc-32f3-b159-f79bfccfec28"
+        ],
+        "OBJ": [
+            "environment",
+            "cost"
+        ],
+        "F": [],
+        "P": []
+    },
+    "parameters": {
+        "C": [
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "Petroleum Extraction and Transport",
+                    "d1",
+                    "t1"
+                ],
+                "value": 0.001
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "Diesel Production and Transport",
+                    "d1",
+                    "t1"
+                ],
+                "value": 0.0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "Petroleum Extraction and Transport",
+                    "d1",
+                    "t1"
+                ],
+                "value": 0.0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "Diesel Production and Transport",
+                    "d1",
+                    "t1"
+                ],
+                "value": 0.001
+            }
+        ],
+        "U": [
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e"
+                ],
+                "value": 0.001
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4"
+                ],
+                "value": 0.001
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e"
+                ],
+                "value": 0.001
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4"
+                ],
+                "value": 0.001
+            }
+        ],
+        "d": [
+            {
+                "index": [
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 600
+            },
+            {
+                "index": [
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 200
+            },
+            {
+                "index": [
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 400
+            },
+            {
+                "index": [
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 500
+            }
+        ],
+        "X": [
+            {
+                "index": [
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": Infinity
+            },
+            {
+                "index": [
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": Infinity
+            }
+        ],
+        "Y": [
+            {
+                "index": [
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": Infinity
+            },
+            {
+                "index": [
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": Infinity
+            }
+        ],
+        "Demand": [
+            {
+                "index": [
+                    "d1",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "d1",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            }
+        ],
+        "Total_Demand": [
+            {
+                "index": [
+                    "d1",
+                    "Petroleum Extraction and Transport"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "d1",
+                    "Diesel Production and Transport"
+                ],
+                "value": 5000
+            }
+        ],
+        "J": [
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e"
+                ],
+                "value": 1
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "f615ae37-fa6d-4a47-958c-23234c986400"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "f615ae37-fa6d-4a47-958c-23234c986400"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e"
+                ],
+                "value": 1
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "f615ae37-fa6d-4a47-958c-23234c986400"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "f615ae37-fa6d-4a47-958c-23234c986400"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e"
+                ],
+                "value": 1
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "f615ae37-fa6d-4a47-958c-23234c986400"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "f615ae37-fa6d-4a47-958c-23234c986400"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "f615ae37-fa6d-4a47-958c-23234c986400"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "f615ae37-fa6d-4a47-958c-23234c986400"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "f615ae37-fa6d-4a47-958c-23234c986400"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "f615ae37-fa6d-4a47-958c-23234c986400"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "f615ae37-fa6d-4a47-958c-23234c986400"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "f615ae37-fa6d-4a47-958c-23234c986400"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "f615ae37-fa6d-4a47-958c-23234c986400"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "f615ae37-fa6d-4a47-958c-23234c986400"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e"
+                ],
+                "value": 1
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "f615ae37-fa6d-4a47-958c-23234c986400"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "f615ae37-fa6d-4a47-958c-23234c986400"
+                ],
+                "value": 1
+            }
+        ],
+        "w": [
+            {
+                "index": [
+                    "bf42d8f0-23fc-32f3-b159-f79bfccfec28"
+                ],
+                "value": 1
+            }
+        ],
+        "u": [
+            {
+                "index": [
+                    "environment"
+                ],
+                "value": 1
+            },
+            {
+                "index": [
+                    "cost"
+                ],
+                "value": 1
+            }
+        ],
+        "calA": [
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 4
+            }
+        ],
+        "calB": [
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            }
+        ],
+        "calC": [
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 1
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 1
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 1
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Petroleum Extraction and Transport",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "291fc06d-1b3e-4077-aabb-346b588ed24b",
+                    "5d9ef634-f3ca-4ec5-8315-4c07d736b4ce",
+                    "0ace02fa-eca5-482d-a829-c18e46a52db4",
+                    "f615ae37-fa6d-4a47-958c-23234c986400",
+                    "Diesel Production and Transport",
+                    "t1"
+                ],
+                "value": 0
+            }
+        ],
+        "Arc": [
+            {
+                "index": [
+                    "Petroleum Extraction and Transport",
+                    "Diesel Production and Transport"
+                ],
+                "value": 1
+            },
+            {
+                "index": [
+                    "Diesel Production and Transport",
+                    "Petroleum Extraction and Transport"
+                ],
+                "value": 0
+            }
+        ]
+    }
+}

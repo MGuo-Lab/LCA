@@ -328,6 +328,7 @@ class ParametersEditor(QWidget):
             new_parameter_widget = ParameterWidget(param, self.par[param], self.spec, self.lookup)
         else:
             new_parameter_widget = QLabel('Not available')
+        self.parameter_widget.deleteLater()
         self.grid_layout.replaceWidget(self.parameter_widget, new_parameter_widget)
         self.parameter_widget = new_parameter_widget
         self.grid_layout.update()
@@ -390,10 +391,11 @@ class LinkingParameterWidget(QWidget):
         param_doc_str = name + ': ' + spec.user_defined_parameters[name]['doc'] + ' (Linking)'
         param_doc_label = QLabel(param_doc_str)
 
-        # table of parameters (affects table!)
+        # table of parameters
         self.parameter_table = QTableView()
-        index_sets = self.spec.user_defined_parameters[name]['index']
-        self.parameter_table.setModel(md.ParameterModel(table, index_sets, lookup, spec))
+        self.index_sets = self.spec.user_defined_parameters[name]['index']
+        model = md.ParameterModel(table, self.index_sets, lookup, spec)
+        self.parameter_table.setModel(model)
         self.parameter_table.setColumnHidden(0, True)
 
         # dict to map link number to table row in sets enumeration
@@ -413,14 +415,15 @@ class LinkingParameterWidget(QWidget):
         self.remove_link.clicked.connect(self.remove_link_clicked)
         self.visualise.clicked.connect(self.visualise_clicked)
 
-        # set dropdowns
+        # set dropdowns without assuming sets are unique
         set_layout = QGridLayout()
-        self.set_combobox = dict()
-        for i, index in enumerate(spec.user_defined_parameters[name]['index']):
-            self.set_combobox[index] = QComboBox()
-            self.set_combobox[index].addItems(table[index].unique())
+        self.set_combobox = pd.Series(dtype=object)
+        self.mapped_df = mqu.ref_id_to_text(self.index_sets, table["Index"].to_list(), spec, lookup)
+        for i, index in enumerate(self.index_sets):
+            self.set_combobox = self.set_combobox.append(pd.Series(QComboBox(), index=[index]))
+            self.set_combobox[i].addItems(self.mapped_df.iloc[:, i].unique())
             set_layout.addWidget(QLabel(index + ": "), i, 0)
-            set_layout.addWidget(self.set_combobox[index], i, 1)
+            set_layout.addWidget(self.set_combobox[i], i, 1)
         set_layout.setColumnStretch(1, 2)
 
         # set dropdown to first link if there is one
@@ -453,11 +456,14 @@ class LinkingParameterWidget(QWidget):
             print('Link', link_key, ':', link_row)
 
             # set text from ref id lookup for each combobox
-            for ref_id, set_name in zip(link_ref_ids, self.spec.user_defined_parameters[self.name]['index']):
-                ref_id_text = self.lookup.get_single_column(set_name, ref_id)[0]
-                index = self.set_combobox[set_name].findText(ref_id_text, Qt.MatchFixedString)
+            for i, ref_id in enumerate(link_ref_ids):
+                if 'lookup' in self.spec.user_defined_sets[self.index_sets[i]]:
+                    ref_id_text = self.lookup.get_single_column(self.index_sets[i], ref_id)[0]
+                else:
+                    ref_id_text = ref_id
+                index = self.set_combobox[i].findText(ref_id_text, Qt.MatchFixedString)
                 if index >= 0:
-                    self.set_combobox[set_name].setCurrentIndex(index)
+                    self.set_combobox[i].setCurrentIndex(index)
                     self.parameter_table.selectRow(table_row_num)
 
     def add_link_clicked(self):
@@ -469,11 +475,10 @@ class LinkingParameterWidget(QWidget):
             new_link_num = 0
 
         # get the combobox selections
-        selected_item = {set_name: cb.currentText() for set_name, cb in self.set_combobox.items()}
-        df = self.table[selected_item.keys()]
+        selected_item = pd.Series([cb.currentText() for cb in self.set_combobox], index=self.set_combobox.index)
 
         # update table
-        row_match = (df == pd.Series(selected_item)).all(1)
+        row_match = (self.mapped_df == selected_item).all(1)
         if len(row_match) > 0:
             table_row = row_match.index[row_match][0]
             if self.table.at[table_row, 'Value'] == 1:
@@ -497,11 +502,10 @@ class LinkingParameterWidget(QWidget):
 
     def visualise_clicked(self):
         print('visualising links')
-        index_sets = self.spec.user_defined_parameters[self.name]['index']
-        parameter_diagram = LinkParameterDiagram(self.table, index_sets, self.lookup)
+        parameter_diagram = LinkParameterDiagram(self.table, self.name, self.spec, self.lookup)
         html_path = parameter_diagram.get_html_path()
         url = html_path.resolve().as_uri()
-        webbrowser.open(url, new=2) # new tab
+        webbrowser.open(url, new=2)  # new tab
 
 
 class AboutWidget(QWidget):
@@ -843,35 +847,67 @@ class ConfigurationWidget(QWidget):
 
 class LinkParameterDiagram:
 
-    def __init__(self, table, index_sets, lookup, node_lookup='P'):
+    def __init__(self, table, param, spec, lookup):
         """
         Generates HTML pyvis charts that visualise the connections represented by a linking parameter.
 
-        Assumes product flows are odd sets and processes are even sets in the ordering of the
-        linking parameter.
+        Assumes node and edge sets given in the Specification.
 
         :param DataFrame table: the link parameter enumeration table
-        :param list index_sets: names of set that index the parameter
+        :param str param: parameter name
+        :param Specification spec: object
         :param LookupTables lookup: cache of lookup tables
-        :param str node_lookup: name of set which denotes nodes
         """
 
         self.table = table
-        self.index_sets = index_sets
-        self.node_sets = index_sets[1::2]
-        self.edge_sets = index_sets[0::2]
+        self.g = Network(width='100%', height=800, heading='Link Parameter Diagram for ' + param)
 
-        # bring the index into the DataFrame
+        # set node and edge set if available
+        index_sets = spec.user_defined_parameters[param]['index']
+        if 'nodes' in spec.user_defined_parameters[param]:
+            self.node_sets = spec.user_defined_parameters[param]['nodes']
+        else:
+            print("Cannot find meta information for parameter", param)
+            return
+        if 'edges' in spec.user_defined_parameters[param]:
+            self.edge_sets = spec.user_defined_parameters[param]['edges']
+        else:
+            self.edge_sets = []
+            print("Cannot find meta information for parameter", param)
+            # return
+
+        # bring the index into the DataFrame and ensure unique column names
         df = pd.DataFrame(table["Index"].to_list(), columns=index_sets)
+        if len(df) == 0:
+            return
+        # cols = pd.Series(df.columns)
+        # set_col_map = {s: [s] for s in self.node_sets}
+        # for dup in cols[cols.duplicated()].unique():
+        #     new_cols = [dup + '_' + str(i) for i in range(sum(cols == dup))]
+        #     cols[cols[cols == dup].index.values.tolist()] = new_cols
+        #     set_col_map[dup] = new_cols
+        #
+        # df.columns = cols
 
         # nodes
-        self.g = Network(width='100%', height=800, heading='Link Parameter Diagram')
         # self.g.show_buttons()
-        nodes = [ref_id for n in self.node_sets for ref_id in df[n].unique()]
-        titles = lookup.get_single_column(node_lookup, nodes)[node_lookup]
+        nodes = []
+        titles = []
+        colors = []
+        levels = []
+        b = 1  # boolean to alterate over columns of DataFrame
+        for col in self.node_sets:
+            n = df.columns[col]
+            b = 1 - b
+            for ref_id in df.iloc[:, col].unique():
+                nodes.append(ref_id + '_' + str(col))
+                colors.append('#FF9999' if b == 0 else '#9999FF')
+                levels.append(b)
+                if 'lookup' in spec.user_defined_sets[n]:
+                    titles.append(lookup.get_single_column(n, ref_id)[n])
+                else:
+                    titles.append(ref_id)
         titles = [t.replace('|', '\n') for t in titles]
-        colors = ['#FF9999' if n in df['P_m'].unique() else '#9999FF' for n in nodes]
-        levels = [i for i, n in enumerate(self.node_sets) for ref_id in df[n].unique()]
         nodes += ['output']
         titles += ['output']
         colors += ['black']
@@ -910,28 +946,19 @@ class LinkParameterDiagram:
         edge_boundary = self.node_sets + ['output']
         for index, row in self.table.iterrows():
             if row['Value']:
-                row_index = {s: row['Index'][i] for i, s in enumerate(self.index_sets)}
+                row_index = [idx + '_' + str(i) for i, idx in enumerate(row['Index'])]
                 for i, (a, b) in enumerate(zip(edge_boundary, edge_boundary[1:])):
-                    if b == 'output':
-                        self.g.add_edge(row_index[a], 'output', title=row_index[self.edge_sets[i]])
-                    else:
-                        self.g.add_edge(row_index[a], row_index[b], title=row_index[self.edge_sets[i]])
-
-        # layout
-        # layout = QVBoxLayout(self)
-        # layout.setContentsMargins(0, 0, 0, 0)
-        # layout.addWidget(self.viewer)
-        # self.setLayout(layout)
+                    self.g.add_edge(
+                        row_index[a],
+                        'output' if b == 'output' else row_index[b],
+                        title='to' if i >= len(self.edge_sets) else row_index[self.edge_sets[i]]
+                    )
 
     def get_html_path(self):
-        # write html to temp file
+        """ Write html to temp file """
         temp_html = NamedTemporaryFile(suffix='.html', delete=False)
         self.g.write_html(temp_html.name)
         temp_html.close()
-        # url = QUrl.fromLocalFile(temp_html.name)
-        # self.viewer.load(url)
-        # self.viewer.setZoomFactor(1.0)
-
         return Path(temp_html.name)
 
 

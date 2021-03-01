@@ -9,6 +9,7 @@ import pandas as pd
 import pyomo.environ as pe
 from pyomo.environ import units as pu
 import pyomo.dataportal as pyod
+import pyomo.network as pn
 
 import mola.sqlgenerator as sq
 import mola.dataimport as di
@@ -29,7 +30,7 @@ pu.load_definitions_from_strings([
 
 
 class Specification:
-    """Specification of a Pyomo model for configuration in a GUI"""
+    """ Abstract Specification of a Pyomo model for configuration in a GUI """
     name: str
     user_defined_sets: dict
     db_sets: dict
@@ -41,20 +42,25 @@ class Specification:
         if type(self) is Specification:
             raise NotImplementedError()
 
-    def populate(self, db_file, json_file):
-        raise NotImplementedError()
-
     def build_network(self):
+        """ Dynamically build model network using Ports and Arcs """
+        pass
+
+    def populate(self, json_files: list, db_file: str):
+        """ Make abstract model concrete using db_file and json files """
         pass
 
     def get_default_sets(self):
-        raise NotImplementedError()
+        """ Returns a dict of default sets """
+        pass
 
     def get_default_parameters(self):
-        raise NotImplementedError()
+        """ Returns a dict of default parameters in index/value form """
+        pass
 
     def get_dummy_data(self):
-        raise NotImplementedError()
+        """ Not required. Returns a dict of sets and parameters that act as dummy data """
+        pass
 
 
 class GeneralSpecification(Specification):
@@ -87,18 +93,20 @@ class GeneralSpecification(Specification):
         'Demand': {'index': ['D', 'K', 'T'], 'doc': 'Specific demand', 'unit': pu.D},
         'Total_Demand': {'index': ['D', 'K'], 'doc': 'Total demand', 'unit': pu.D},
         'L': {'index': ['F_m', 'P_m', 'F_s', 'P_s'], 'doc': 'Binary conversion factor between service flows',
-              'within': 'Binary', 'nodes': ['P_m', 'P_t'], 'edges': ['F_m', 'F_t']},
+              'within': 'Binary', 'nodes': [1, 3], 'edges': [0, 2]},
         'X': {'index': ['K', 'T'], 'doc': 'Longitude', 'unit': pu.degree},
         'Y': {'index': ['K', 'T'], 'doc': 'Latitude', 'unit': pu.degree},
         'd': {'index': ['P_m', 'F_m', 'K', 'T'], 'doc': 'Distance', 'unit': pu.km},
         'J': {'index': ['F_m', 'P_m', 'F_t', 'P_t'],
               'doc': 'Binary conversion factor between material and transport flows', 'within': 'Binary',
-              'nodes': ['P_m', 'P_t'], 'edges': ['F_m', 'F_t']},
+              'nodes': [1, 3], 'edges': [0, 2]},
         'w': {'index': ['KPI'], 'doc': 'Environmental objective weights', 'unit': pu.KPI_ref/pu.KPI},
         'u': {'index': ['OBJ'], 'doc': 'Objective weights', 'unit': pu.Output/pu.OBJ},
-        'calA': {'index': ['F_m', 'P_m', 'K', 'T'], 'doc': 'Material flow task link'},
-        'calB': {'index': ['F_m', 'P_m', 'K', 'T'], 'doc': 'Service flow task link'},
-        'calC': {'index': ['F_m', 'P_m', 'F_t', 'P_t', 'K', 'T'], 'doc': 'Transport flow task link'},
+        'calA': {'index': ['F_m', 'P_m', 'K', 'T'], 'doc': 'Material flow task coefficient'},
+        'calB': {'index': ['F_m', 'P_m', 'K', 'T'], 'doc': 'Service flow task coefficient'},
+        'calC': {'index': ['F_m', 'P_m', 'F_t', 'P_t', 'K', 'T'], 'doc': 'Transport flow task coefficient'},
+        'Arc': {'index': ['K', 'K'], 'doc': 'Arc to link tasks at specific times',
+                'within': 'Binary', 'nodes': [0, 1]},
     }
     # db parameters need to be constructed explicitly
     controllers = {"Standard": "StandardController"}
@@ -289,8 +297,15 @@ class GeneralSpecification(Specification):
         abstract_model.service_flow_link_constraint = pe.Constraint(
             abstract_model.F_s, abstract_model.P_s, abstract_model.K, abstract_model.T, rule=service_flow_link_rule)
 
-        def task_link_rule(model, kk, t):
-            if len(model.K) > 1:
+        def task_chain_rule(model, kk, t):
+            """ Constraint for task linked in a chain """
+            non_zero_A = any([model.calA[fm, pm, kk, t] > 0 for fm in model.F_m for pm in model.P_m])
+            non_zero_B = any([model.calB[fm, pm, kk, t] > 0 for fm in model.F_m for pm in model.P_m])
+            non_zero_C = any([model.calC[fm, pm, ft, pt, kk, t] > 0 for fm in model.F_m for pm in model.P_m
+                              for ft in model.F_t for pt in model.P_t])
+
+            if kk != model.K.first() and (non_zero_A or non_zero_B or non_zero_C):
+
                 # output of task kk
                 lhs1 = sum(model.calA[fm, pm, kk, t] * model.Flow[fm, pm, kk, t] +
                            model.calB[fm, pm, kk, t] * model.Storage_Service_Flow[fm, pm, kk, t] for
@@ -299,20 +314,34 @@ class GeneralSpecification(Specification):
                            model.Specific_Material_Transport_Flow[fm, pm, ft, pt, kk, t] for
                            fm in model.F_m for pm in model.P_m for ft in model.F_t for pt in model.P_t)
 
-                # inputs of tasks k - cannot connect to inputs of task kk
+                # inputs of previous task k
+                k = model.K.prev(kk)
                 rhs1 = sum(model.calA[fm, pm, k, t] * model.Flow[fm, pm, k, t] +
                            model.calB[fm, pm, k, t] * model.Storage_Service_Flow[fm, pm, k, t] for
-                           fm in model.F_m for pm in model.P_m for k in model.K if k != kk)
+                           fm in model.F_m for pm in model.P_m)
                 rhs2 = sum(model.calC[fm, pm, ft, pt, k, t] *
                            model.Specific_Material_Transport_Flow[fm, pm, ft, pt, k, t] for
-                           fm in model.F_m for pm in model.P_m for ft in model.F_t for pt in model.P_t for
-                           k in model.K if k != kk)
+                           fm in model.F_m for pm in model.P_m for ft in model.F_t for pt in model.P_t)
                 return lhs1 + lhs2 >= rhs1 + rhs2
             else:
                 return pe.Constraint.Feasible
 
-        abstract_model.task_link_constraint = pe.Constraint(
-            abstract_model.K, abstract_model.T, rule=task_link_rule)
+        abstract_model.task_chain_constraint = pe.Constraint(
+            abstract_model.K, abstract_model.T, rule=task_chain_rule)
+
+        def port_rule(model, k, t):
+            port = dict()
+            rhs1 = sum(model.calA[fm, pm, k, t] * model.Flow[fm, pm, k, t] +
+                       model.calB[fm, pm, k, t] * model.Storage_Service_Flow[fm, pm, k, t] for
+                       fm in model.F_m for pm in model.P_m)
+            rhs2 = sum(model.calC[fm, pm, ft, pt, k, t] *
+                       model.Specific_Material_Transport_Flow[fm, pm, ft, pt, k, t] for
+                       fm in model.F_m for pm in model.P_m for ft in model.F_t for pt in model.P_t)
+            port['flow'] = rhs1 + rhs2
+            return port
+
+        abstract_model.port = pn.Port(abstract_model.K, abstract_model.T, rule=port_rule)
+
 
     def populate(self, json_files=None, elementary_flow_ref_ids=None,
                  db_file=di.get_default_db_file()):
@@ -378,6 +407,9 @@ class GeneralSpecification(Specification):
         # use DataPortal to build concrete instance
         model_instance = self.abstract_model.create_instance(olca_dp)
 
+        # by default the task chain constraint is deactivated
+        model_instance.task_chain_constraint.deactivate()
+
         return model_instance
 
     def get_default_sets(self, d=None):
@@ -436,6 +468,8 @@ class GeneralSpecification(Specification):
                      for fm in user_sets['F_m'] for pm in user_sets['P_m']
                      for ft in user_sets['F_t'] for pt in user_sets['P_t']
                      for k in user_sets['K'] for t in user_sets['T']],
+            'Arc': [{'index': [k1, k2], 'value': 0}
+                    for k1 in user_sets['K'] for k2 in user_sets['K'] if k1 != k2],
         }
 
         return user_params
@@ -527,7 +561,8 @@ class SimpleSpecification(Specification):
         'Total_Demand': {'index': ['D'], 'doc': 'Total demand', 'unit': pu.D},
         'd': {'index': ['P', 'F_m'], 'doc': 'Distance', 'unit': pu.km},
         'J': {'index': ['F_m', 'P_m', 'F_t', 'P_t'],
-              'doc': 'Binary conversion factor between material and transport flows', 'within': 'Binary'},
+              'doc': 'Binary conversion factor between material and transport flows', 'within': 'Binary',
+              'nodes': [1, 3], 'edges': [0, 2]},
     }
     # db parameters need to be constructed explicitly
     controllers = {"Customised": "CustomController", "Standard": "StandardController"}

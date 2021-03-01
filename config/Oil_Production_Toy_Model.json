@@ -1,0 +1,278 @@
+{
+    "settings": {
+        "distance_calculated": false,
+        "test_setting": false
+    },
+    "doc_path": "Z:/work/code/Python/LCA/molaqt/doc/Toy_Problem_F1_Oil_Production.html",
+    "specification": "<class 'mola.specification5.GeneralSpecification'>",
+    "controller": "<class 'molaqt.controllers.StandardController'>",
+    "db_file": "C:\\data\\openlca\\sqlite\\system\\CSV_juice_ecoinvent_36_apos_lci_20200206_20201029-102818.sqlite",
+    "sets": {
+        "F_m": [
+            "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5"
+        ],
+        "F_s": [],
+        "F_t": [
+            "774bc814-70cf-4389-8bf8-e6435174c72e"
+        ],
+        "D": [
+            "d1"
+        ],
+        "T": [
+            "t1"
+        ],
+        "K": [
+            "k1"
+        ],
+        "P_m": [
+            "81d22f90-89fc-3f04-845e-97615867d8f9",
+            "c1827905-bfad-3fa1-b00b-1303f970ae92",
+            "cd177b7d-e908-3e69-b40c-4827b4abaa4d"
+        ],
+        "P_t": [
+            "8d82d02e-f52f-41f9-aa10-ae607746b04e"
+        ],
+        "P_s": [],
+        "KPI": [
+            "bf42d8f0-23fc-32f3-b159-f79bfccfec28"
+        ],
+        "OBJ": [
+            "environment",
+            "cost"
+        ],
+        "F": [],
+        "P": []
+    },
+    "parameters": {
+        "C": [
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "k1",
+                    "d1",
+                    "t1"
+                ],
+                "value": 0.001
+            }
+        ],
+        "U": [
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e"
+                ],
+                "value": 0.001
+            }
+        ],
+        "d": [
+            {
+                "index": [
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "k1",
+                    "t1"
+                ],
+                "value": 600
+            },
+            {
+                "index": [
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "k1",
+                    "t1"
+                ],
+                "value": 200
+            },
+            {
+                "index": [
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "k1",
+                    "t1"
+                ],
+                "value": 400
+            }
+        ],
+        "X": [
+            {
+                "index": [
+                    "k1",
+                    "t1"
+                ],
+                "value": Infinity
+            }
+        ],
+        "Y": [
+            {
+                "index": [
+                    "k1",
+                    "t1"
+                ],
+                "value": Infinity
+            }
+        ],
+        "Demand": [
+            {
+                "index": [
+                    "d1",
+                    "k1",
+                    "t1"
+                ],
+                "value": 0
+            }
+        ],
+        "Total_Demand": [
+            {
+                "index": [
+                    "d1",
+                    "k1"
+                ],
+                "value": 10000
+            }
+        ],
+        "J": [
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e"
+                ],
+                "value": 1
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e"
+                ],
+                "value": 1
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e"
+                ],
+                "value": 1
+            }
+        ],
+        "w": [
+            {
+                "index": [
+                    "bf42d8f0-23fc-32f3-b159-f79bfccfec28"
+                ],
+                "value": 1
+            }
+        ],
+        "u": [
+            {
+                "index": [
+                    "environment"
+                ],
+                "value": 1
+            },
+            {
+                "index": [
+                    "cost"
+                ],
+                "value": 1
+            }
+        ],
+        "calA": [
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "k1",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "k1",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "k1",
+                    "t1"
+                ],
+                "value": 0
+            }
+        ],
+        "calB": [
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "k1",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "k1",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "k1",
+                    "t1"
+                ],
+                "value": 0
+            }
+        ],
+        "calC": [
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "81d22f90-89fc-3f04-845e-97615867d8f9",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "k1",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "c1827905-bfad-3fa1-b00b-1303f970ae92",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "k1",
+                    "t1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "e6aad2de-0b1b-49c3-a0c4-797ba34d87e5",
+                    "cd177b7d-e908-3e69-b40c-4827b4abaa4d",
+                    "774bc814-70cf-4389-8bf8-e6435174c72e",
+                    "8d82d02e-f52f-41f9-aa10-ae607746b04e",
+                    "k1",
+                    "t1"
+                ],
+                "value": 0
+            }
+        ]
+    }
+}

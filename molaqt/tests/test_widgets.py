@@ -101,15 +101,16 @@ class TestLinkParameterDiagram(TestCase):
     pars = mb.build_parameters(model_config['sets'], model_config['parameters'], spec)
 
     def test_init(self):
-        # convert parameter json to DataFrame
-        df = pd.DataFrame(self.pars['J'])
-        index_sets = self.spec.user_defined_parameters['J']['index']
+        param = 'Arc'
 
-        link_diagram = mw.LinkParameterDiagram(df, index_sets, lookup)
+        # convert parameter json to DataFrame
+        df = pd.DataFrame(self.pars[param])
+        df['Value'] = 1
+        link_diagram = mw.LinkParameterDiagram(df, param, self.spec, lookup)
+
         html_path = link_diagram.get_html_path()
         url = html_path.resolve().as_uri()
-        new = 2  # new tab
-        webbrowser.open(url, new=new)
+        webbrowser.open(url, new=2)  # new tab
 
         self.assertIsInstance(html_path, Path)
 

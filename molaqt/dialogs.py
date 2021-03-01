@@ -1,6 +1,8 @@
 from pathlib import Path
+
 from PyQt5.QtWidgets import QDialog, QLineEdit, QDialogButtonBox, QFormLayout, QFileDialog
-from PyQt5.QtWidgets import QComboBox, QApplication, QPushButton, QHBoxLayout, QWidget
+from PyQt5.QtWidgets import QComboBox, QMessageBox, QPushButton, QHBoxLayout, QWidget, QTextEdit
+
 import mola.specification5 as ms
 import molaqt.controllers as mqc
 
@@ -113,3 +115,13 @@ class RenameModelDialog(QDialog):
         button_box.rejected.connect(self.reject)
 
 
+def critical_error_box(title, text, detailed_text=None):
+    dlg = QMessageBox()
+    dlg.setWindowTitle(title)
+    dlg.setText(text)
+    dlg.setDetailedText(detailed_text)
+    details_box = dlg.findChild(QTextEdit)
+    details_box.setFixedSize(600, 400)
+    dlg.setIcon(QMessageBox.Critical)
+
+    return dlg

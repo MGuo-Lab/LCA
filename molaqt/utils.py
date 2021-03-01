@@ -1,6 +1,8 @@
 from pathlib import Path
 import json
 
+import pandas as pd
+
 import mola.build as mb
 
 
@@ -80,3 +82,22 @@ def build_config(config_path):
     config['parameters'] = parameters
 
     return config
+
+
+def ref_id_to_text(index_sets, ref_id, spec, lookup):
+    """
+    Convert a list of ref ids tuples from a parameter to text via lookup tables.
+    :param list[str] index_sets: index set names
+    :param list ref_id: ref id tuples
+    :param Specification spec: object
+    :param LookupTables lookup: object
+    :return: DataFrame
+    """
+
+    df = pd.DataFrame(ref_id, columns=index_sets)
+    lookup_sets = [n for n, d in spec.user_defined_sets.items() if 'lookup' in d and d['lookup']]
+    for k in index_sets:
+        if k in lookup_sets and k in lookup:
+            df[k] = df[k].map(lookup.get_single_column(k)[k])
+
+    return df
