@@ -105,7 +105,7 @@ class GeneralSpecification(Specification):
         'calA': {'index': ['F_m', 'P_m', 'K', 'T'], 'doc': 'Material flow task coefficient'},
         'calB': {'index': ['F_m', 'P_m', 'K', 'T'], 'doc': 'Service flow task coefficient'},
         'calC': {'index': ['F_m', 'P_m', 'F_t', 'P_t', 'K', 'T'], 'doc': 'Transport flow task coefficient'},
-        'Arc': {'index': ['K', 'K'], 'doc': 'Arc to link tasks at specific times',
+        'Arc': {'index': ['K', 'K'], 'doc': 'Arc to link tasks',
                 'within': 'Binary', 'nodes': [0, 1]},
     }
     # db parameters need to be constructed explicitly
@@ -319,7 +319,9 @@ class GeneralSpecification(Specification):
                 d['destination'] = model.task_port[from_k, t]
             return d
 
-        abstract_model.task_arc = pn.Arc(abstract_model.K, abstract_model.K, abstract_model.T,
+        abstract_model.task_link = pe.Set(within=abstract_model.K * abstract_model.K)
+
+        abstract_model.task_arc = pn.Arc(abstract_model.task_link, abstract_model.T,
                                          rule=task_arc_rule)
 
 
@@ -384,11 +386,13 @@ class GeneralSpecification(Specification):
         olca_dp.load(filename=db_file, using='sqlite3', query=sq.build_location(process_ref_ids=p_m),
                      param=(self.abstract_model.XI, self.abstract_model.YI))
 
+        # Generate task edges TODO: use an indexed set rather than a parameter
+        edges = [(k1, k2) for k1 in olca_dp.data('K') for k2 in olca_dp.data('K')
+                 if 'Arc' in olca_dp.keys() and olca_dp.data('Arc')[k1, k2]]
+        olca_dp.__setitem__('task_link', edges)
+
         # use DataPortal to build concrete instance
         model_instance = self.abstract_model.create_instance(olca_dp)
-
-        # by default the task chain constraint is deactivated
-        # model_instance.task_chain_constraint.deactivate()
 
         # Generate the constraints for the tasks
         pe.TransformationFactory("network.expand_arcs").apply_to(model_instance)
@@ -452,7 +456,7 @@ class GeneralSpecification(Specification):
                      for ft in user_sets['F_t'] for pt in user_sets['P_t']
                      for k in user_sets['K'] for t in user_sets['T']],
             'Arc': [{'index': [k1, k2], 'value': 0}
-                    for k1 in user_sets['K'] for k2 in user_sets['K'] if k1 != k2],
+                    for k1 in user_sets['K'] for k2 in user_sets['K']],
         }
 
         return user_params
