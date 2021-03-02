@@ -297,39 +297,7 @@ class GeneralSpecification(Specification):
         abstract_model.service_flow_link_constraint = pe.Constraint(
             abstract_model.F_s, abstract_model.P_s, abstract_model.K, abstract_model.T, rule=service_flow_link_rule)
 
-        def task_chain_rule(model, kk, t):
-            """ Constraint for task linked in a chain """
-            non_zero_A = any([model.calA[fm, pm, kk, t] > 0 for fm in model.F_m for pm in model.P_m])
-            non_zero_B = any([model.calB[fm, pm, kk, t] > 0 for fm in model.F_m for pm in model.P_m])
-            non_zero_C = any([model.calC[fm, pm, ft, pt, kk, t] > 0 for fm in model.F_m for pm in model.P_m
-                              for ft in model.F_t for pt in model.P_t])
-
-            if kk != model.K.first() and (non_zero_A or non_zero_B or non_zero_C):
-
-                # output of task kk
-                lhs1 = sum(model.calA[fm, pm, kk, t] * model.Flow[fm, pm, kk, t] +
-                           model.calB[fm, pm, kk, t] * model.Storage_Service_Flow[fm, pm, kk, t] for
-                           fm in model.F_m for pm in model.P_m)
-                lhs2 = sum(model.calC[fm, pm, ft, pt, kk, t] *
-                           model.Specific_Material_Transport_Flow[fm, pm, ft, pt, kk, t] for
-                           fm in model.F_m for pm in model.P_m for ft in model.F_t for pt in model.P_t)
-
-                # inputs of previous task k
-                k = model.K.prev(kk)
-                rhs1 = sum(model.calA[fm, pm, k, t] * model.Flow[fm, pm, k, t] +
-                           model.calB[fm, pm, k, t] * model.Storage_Service_Flow[fm, pm, k, t] for
-                           fm in model.F_m for pm in model.P_m)
-                rhs2 = sum(model.calC[fm, pm, ft, pt, k, t] *
-                           model.Specific_Material_Transport_Flow[fm, pm, ft, pt, k, t] for
-                           fm in model.F_m for pm in model.P_m for ft in model.F_t for pt in model.P_t)
-                return lhs1 + lhs2 >= rhs1 + rhs2
-            else:
-                return pe.Constraint.Feasible
-
-        abstract_model.task_chain_constraint = pe.Constraint(
-            abstract_model.K, abstract_model.T, rule=task_chain_rule)
-
-        def port_rule(model, k, t):
+        def task_port_rule(model, k, t):
             port = dict()
             rhs1 = sum(model.calA[fm, pm, k, t] * model.Flow[fm, pm, k, t] +
                        model.calB[fm, pm, k, t] * model.Storage_Service_Flow[fm, pm, k, t] for
@@ -340,7 +308,19 @@ class GeneralSpecification(Specification):
             port['flow'] = rhs1 + rhs2
             return port
 
-        abstract_model.port = pn.Port(abstract_model.K, abstract_model.T, rule=port_rule)
+        abstract_model.task_port = pn.Port(abstract_model.K, abstract_model.T, rule=task_port_rule)
+
+        def task_arc_rule(model, from_k, to_k, t):
+            d = dict()
+            d['source'] = model.task_port[from_k, t]
+            if from_k != to_k and model.Arc[from_k, to_k]:
+                d['destination'] = model.task_port[to_k, t]
+            else:
+                d['destination'] = model.task_port[from_k, t]
+            return d
+
+        abstract_model.task_arc = pn.Arc(abstract_model.K, abstract_model.K, abstract_model.T,
+                                         rule=task_arc_rule)
 
 
     def populate(self, json_files=None, elementary_flow_ref_ids=None,
@@ -408,7 +388,10 @@ class GeneralSpecification(Specification):
         model_instance = self.abstract_model.create_instance(olca_dp)
 
         # by default the task chain constraint is deactivated
-        model_instance.task_chain_constraint.deactivate()
+        # model_instance.task_chain_constraint.deactivate()
+
+        # Generate the constraints for the tasks
+        pe.TransformationFactory("network.expand_arcs").apply_to(model_instance)
 
         return model_instance
 

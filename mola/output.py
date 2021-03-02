@@ -2,11 +2,13 @@
 Convert pyomo output to DataFrames
 """
 import sys
-import pandas as pd
-import pyomo.environ as pe
 from functools import singledispatch
 
-# TODO remove the unneeded large database sets that affect performance here
+import pandas as pd
+import pyomo.environ as pe
+import pyomo.network as pn
+
+# TODO remove the unneeded large database sets that affect performance here, and turn into a generic
 def get_sets_frame(model_instance, active=None):
     sets_df = pd.DataFrame(
         ([o.name, o.doc, [], len(o)] for o in model_instance.component_objects(pe.Set, active=active)),
@@ -36,6 +38,30 @@ def get_constraints_frame(model_instance, explode=False, active=None):
         constraints_df = constraints_df.set_index(['Constraint']).apply(pd.Series.explode).reset_index()
 
     return constraints_df
+
+
+def get_ports_frame(model_instance, explode=False, active=None):
+    ports_df = pd.DataFrame(
+        ([o.name, [index for index in o], [str(v) for index in o for v in o[index].iter_vars()]] for o in
+         model_instance.component_objects(pn.Port, active=active)),
+        columns=['Port', 'Index', 'Variable']
+    )
+    if explode:
+        ports_df = ports_df.set_index(['Port']).apply(pd.Series.explode).reset_index()
+
+    return ports_df
+
+
+def get_arcs_frame(model_instance, explode=False, active=None):
+    arcs_df = pd.DataFrame(
+        ([o.name, [index for index in o], [str(p) for index in o for p in o[index].ports]] for o in
+         model_instance.component_objects(pn.Arc, active=active)),
+        columns=['Arc', 'Index', 'Expression']
+    )
+    if explode:
+        arcs_df = arcs_df.set_index(['Arc']).apply(pd.Series.explode).reset_index()
+
+    return arcs_df
 
 
 def get_objectives_frame(model_instance, explode=False, active=None):

@@ -27,7 +27,7 @@ class ModelBuild(QWidget):
 
         # add list widget for user-defined sets
         self.build_list = QListWidget()
-        self.build_items = ['Sets', 'Parameters', 'Constraints', 'Objectives']
+        self.build_items = ['Sets', 'Parameters', 'Constraints', 'Objectives', 'Ports', 'Arcs']
         self.build_list.itemClicked.connect(self.build_item_clicked)
 
         # add table for build content
@@ -52,7 +52,8 @@ class ModelBuild(QWidget):
         print('Build table clicked for cpt', cpt_name)
 
         with io.StringIO() as buf, redirect_stdout(buf):
-            self.concrete_model.component(cpt_name).pprint()
+            if self.concrete_model.component(cpt_name):
+                self.concrete_model.component(cpt_name).pprint()
             output = buf.getvalue()
 
         self.cpt_widget = QTextEdit()
@@ -90,11 +91,14 @@ class ModelBuild(QWidget):
                 df = mo.get_constraints_frame(self.concrete_model)
             elif item.text() == 'Objectives':
                 df = mo.get_objectives_frame(self.concrete_model)
+            elif item.text() == 'Ports':
+                df = mo.get_ports_frame(self.concrete_model)
+            elif item.text() == 'Arcs':
+                df = mo.get_arcs_frame(self.concrete_model)
             else:
-                df = pd.DataFrame({'a': [1]})
+                df = pd.DataFrame()
             self.build_table.setModel(dm.PandasModel(df))
             self.build_table.resizeColumnsToContents()
-            # self.build_table.resizeRowsToContents()
             self.build_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
     def dialog_critical(self, title, text, detailed_text=None):
