@@ -77,6 +77,12 @@ def build_config(config_path):
     sets = spec.get_default_sets()
     sets.update(config['sets'])
     config['sets'] = sets
+
+    indexed_sets = spec.get_default_indexed_sets(config['sets'])
+    if 'indexed_sets' in config:
+        indexed_sets.update(config['indexed_sets'])
+    config['indexed_sets'] = indexed_sets
+
     parameters = spec.get_default_parameters(config['sets'])
     parameters.update(config['parameters'])
     config['parameters'] = parameters

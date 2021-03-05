@@ -28,14 +28,20 @@ def get_config(json_file_name):
     # get the default sets and parameters from the specification
     spec = create_specification(config['specification'])
     sets = spec.get_default_sets()
-    parameters = spec.get_default_parameters(sets)
 
-    # update defaults with saved sets and parameters to ensure consistency
+    # update defaults with saved sets
     sets.update(config['sets'])
+
+    # Update indexed_sets and parameters with new sets and save index sets and parameters to ensure consistency
+    indexed_sets = spec.get_default_indexed_sets(sets)
+    parameters = spec.get_default_parameters(sets)
+    if 'indexed_sets' in config:
+        indexed_sets.update(config['indexed_sets'])
     parameters.update(config['parameters'])
 
     # copy back to config dict
     config['sets'] = sets
+    config['indexed_sets'] = indexed_sets
     config['parameters'] = parameters
 
     return config
@@ -127,9 +133,45 @@ def build_parameters(sets, parameters, spec, index_value=False):
             par[p] = pd.DataFrame({'Index': [], 'Value': []})
 
     if index_value:
-        par = mu.get_index_value_parameters(par)
+        par = mu.get_index_value(par)
 
     return par
+
+
+def build_indexed_sets(sets, indexed_sets, spec):
+    """
+    Build a dictionary of DataFrames of default parameters from sets using existing indexed set members.
+
+    :param dict sets: sets for optimisation
+    :param dict indexed_sets: parameters
+    :param Specification spec: Specification object
+    :return: dict of DataFrames
+    """
+    ind_sets = {}
+    for s, element_list in spec.get_default_indexed_sets(sets).items():
+        if 'within' in spec.user_defined_indexed_sets[s]:
+            within = spec.user_defined_indexed_sets[s]['within'][0]
+        else:
+            within = None
+        row_list = []
+        print(spec.user_defined_indexed_sets[s]['doc'])
+        for el in element_list:
+            m = el['members']
+            # update if indexed set was already defined as long as it respects domain
+            if s in indexed_sets:
+                for item in indexed_sets[s]:
+                    if item['index'] == el['index']:
+                        m = set(item['members'])
+                        if within:
+                            m = list(set(sets[within]).intersection(m))
+            new_row = pd.DataFrame({'Index': [el['index']], 'Members': [m]}, index=[0])
+            row_list.append(new_row)
+        if len(row_list) > 0:
+            ind_sets[s] = pd.concat(row_list, ignore_index=True)
+        else:
+            ind_sets[s] = pd.DataFrame({'Index': [], 'Members': []})
+
+    return ind_sets
 
 
 def map_units(unit=None):

@@ -122,9 +122,9 @@ class SetsEditor(QWidget):
 
     def __init__(self, sets, spec, lookup):
         """
-        Widget to edit optimisation sets.
+        Widget to edit optimisation sets. The sets are edited in place by this widget.
 
-        :param list sets: sets modified in place by this widget
+        :param list sets: sets in index-value form
         :param Specification spec: object
         :param LookupTables lookup: object
         """
@@ -145,7 +145,6 @@ class SetsEditor(QWidget):
 
         # add list widget for user-defined sets
         self.sets_list = QListWidget()
-        self.sets = sets
         self.user_defined_sets = user_defined_sets
         self.sets_list.addItems(self.user_defined_sets)
         self.sets_list.itemClicked.connect(self.set_clicked)
@@ -181,13 +180,12 @@ class SetsEditor(QWidget):
         current_set = self.sets_list.currentItem().text()
         if current_set not in self.lookup_sets:
             text, ok = QInputDialog.getText(self, 'Add Element', 'Name:')
-            if ok and len(text)>0:
+            if ok and len(text) > 0:
                 self.sets[current_set].append(str(text))
                 self.set_table.setModel(md.SetModel(self.sets[current_set]))
                 self.dirty = True
                 print("Added element", text)
         else:
-            # QMessageBox.about(self, "Error", "Use lookup for this set")
             lookup_widget = LookupWidget(self.lookup, current_set)
             ok = lookup_widget.exec_()
             if ok:
@@ -234,6 +232,173 @@ class SetsEditor(QWidget):
         return model
 
 
+class IndexedSetsEditor(QWidget):
+
+    def __init__(self, indexed_sets, sets, spec, lookup):
+        """
+        Widget to edit a copy of the indexed sets.
+        Use the get_indexed_sets method to get an up-to-date copy.
+
+        :param list indexed_sets: index sets in index-value form
+        :param sets: sets in index-value form
+        :param Specification spec: object
+        :param LookupTables lookup: object
+        """
+
+        super().__init__()
+        self.indexed_sets = indexed_sets
+        self.sets = sets
+        self.spec = spec
+        self.lookup = lookup
+
+        # build a dictionary of DataFrames of default indexed sets from current set contents
+        self.indexed_sets_df = mb.build_indexed_sets(sets, indexed_sets, spec)
+
+        # only allow user-defined indexed sets to be changed
+        user_defined_indexed_sets = {k: indexed_sets[k] for k in spec.user_defined_indexed_sets.keys()}
+
+        # flag to indicate data changes
+        self.dirty = False
+
+        # add list widget for user-defined indexed sets
+        self.indexed_sets_list = QListWidget()
+        self.user_defined_indexed_sets = user_defined_indexed_sets
+        self.indexed_sets_list.addItems(self.user_defined_indexed_sets)
+        self.indexed_sets_list.itemClicked.connect(self.indexed_set_clicked)
+        self.indexed_sets_list.setCurrentItem(self.indexed_sets_list.item(0))
+
+        # dropdown for each index
+        first_indexed_set = next(iter(self.user_defined_indexed_sets))
+        self.box_layout = QHBoxLayout()
+        self.box_layout.addWidget(QLabel("Indices: "))
+        indices = self.spec.user_defined_indexed_sets[first_indexed_set]['index']
+        self.idx_combobox = {}
+        for set_name in indices:
+            self.idx_combobox[set_name] = QComboBox()
+            self.idx_combobox[set_name].addItems(self.sets[set_name])
+            self.idx_combobox[set_name].currentIndexChanged.connect(self.idx_changed)
+            self.box_layout.addWidget(self.idx_combobox[set_name])
+
+        # add table for indexed set content
+        self.indexed_set_table = QTableView()
+        indexed_set_model = self.get_model(first_indexed_set)
+        self.indexed_set_table.setModel(indexed_set_model)
+        self.indexed_set_table.setContextMenuPolicy(Qt.ActionsContextMenu)
+        self.remove_action = QAction("Remove from indexed set", None)
+        self.remove_action.triggered.connect(self.remove_from_indexed_set)
+        self.indexed_set_table.addAction(self.remove_action)
+        self.indexed_set_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
+
+        # buttons
+        self.rebuild_button = QPushButton("Rebuild")
+        self.rebuild_button.clicked.connect(self.rebuild_clicked)
+        self.add_element_button = QPushButton("Add new element")
+        self.add_element_button.clicked.connect(self.add_element_clicked)
+
+        # doc label
+        self.indexed_set_label = QLabel(first_indexed_set + ': ' +
+                                        spec.user_defined_indexed_sets[first_indexed_set]['doc'])
+
+        # arrange widgets in grid
+        grid_layout = QGridLayout()
+        grid_layout.addWidget(QLabel("Indexed Sets"), 0, 0)
+        grid_layout.addWidget(self.rebuild_button, 0, 1)
+        grid_layout.addWidget(self.indexed_sets_list, 1, 0, 2, 2)
+        grid_layout.addWidget(self.indexed_set_label, 0, 2)
+        grid_layout.addWidget(self.add_element_button, 0, 3)
+        grid_layout.addLayout(self.box_layout, 1, 2, 1, 2)
+        grid_layout.addWidget(self.indexed_set_table, 2, 2, 1, 2)
+        grid_layout.setColumnStretch(2, 2)
+        self.setLayout(grid_layout)
+
+    def rebuild_clicked(self):
+        print("Clicked rebuild button")
+
+        # get parameters state in index value form
+        index_sets = mu.get_index_value(self.indexed_sets_df, value_key='members')
+
+        # rebuild parameters as a dict of DataFrames
+        self.indexed_sets_df = mb.build_indexed_sets(self.sets, index_sets, self.spec)
+
+        # update display
+        self.indexed_set_clicked(self.indexed_sets_list.selectedItems()[0])
+
+    def add_element_clicked(self):
+        set_name = self.indexed_sets_list.currentItem().text()
+        if 'within' in self.spec.user_defined_indexed_sets[set_name]:
+            within = self.spec.user_defined_indexed_sets[set_name]['within'][0]
+            text, ok = QInputDialog.getItem(self, "Add Element",
+                                            "Name:", self.sets[within], 0, False)
+        else:
+            within = None
+            text, ok = QInputDialog.getText(self, 'Add Element', 'Name:')
+
+        if ok and len(text) > 0 and within and text in self.sets[within]:
+            df = self.indexed_sets_df[set_name]
+            indices = [v.currentText() for v in self.idx_combobox.values()]
+            match_idx = df[df['Index'].apply(lambda x: indices == x)].index
+            # append to DataFrame in place ensuring we have a set
+            current_members = self.indexed_sets_df[set_name].loc[match_idx, 'Members'].iloc[0]
+            new_members = list(set(current_members + [str(text)]))
+            self.indexed_sets_df[set_name].loc[match_idx, 'Members'] = [new_members]
+            set_df = pd.DataFrame({set_name: new_members})
+            self.indexed_set_table.setModel(md.PandasModel(set_df))
+            self.dirty = True
+            print("Added element", text)
+
+    def remove_from_indexed_set(self):
+        current_set = self.indexed_sets_list.currentItem().text()
+        df = self.indexed_sets_df[current_set]
+        indices = [v.currentText() for v in self.idx_combobox.values()]
+        match_idx = df[df['Index'].apply(lambda x: indices == x)].index
+        members = self.indexed_sets_df[current_set].loc[match_idx, 'Members'][0]
+        rows = [i.row() for i in self.indexed_set_table.selectedIndexes()]
+        for row in sorted(rows, reverse=True):
+            del members[row]
+        self.indexed_sets_df[current_set].loc[match_idx, 'Members'] = [members]
+        model = self.get_model(current_set)
+        self.dirty = True
+        self.indexed_set_table.setModel(model)
+        print('Removed from set', rows)
+
+    def indexed_set_clicked(self, item):
+        set_name = item.text()
+        print("Clicked set list with", set_name)
+
+        # update comboboxes
+        indices = self.spec.user_defined_indexed_sets[set_name]['index']
+        for cb in self.idx_combobox.values():
+            self.box_layout.removeWidget(cb)
+            cb.deleteLater()
+        self.idx_combobox = {}
+        for idx in indices:
+            self.idx_combobox[idx] = QComboBox()
+            self.idx_combobox[idx].addItems(self.sets[idx])
+            self.idx_combobox[idx].currentIndexChanged.connect(self.idx_changed)
+            self.box_layout.addWidget(self.idx_combobox[idx])
+        self.box_layout.update()
+
+        # get set contents
+        self.indexed_set_label.setText(set_name + ': ' + self.spec.user_defined_indexed_sets[set_name]['doc'])
+        model = self.get_model(set_name)
+        self.indexed_set_table.setModel(model)
+
+    def get_model(self, set_name):
+        df = self.indexed_sets_df[set_name]
+        indices = [v.currentText() for v in self.idx_combobox.values()]
+        match_df = df[df['Index'].apply(lambda x: indices == x)]
+        members = match_df['Members'].iloc[0] if len(match_df) > 0 else []
+        set_df = pd.DataFrame({set_name: members})
+        model = md.PandasModel(set_df)
+
+        return model
+
+    def idx_changed(self):
+        item = self.indexed_sets_list.currentItem()
+        indexed_set_model = self.get_model(item.text())
+        self.indexed_set_table.setModel(indexed_set_model)
+
+
 class DocWidget(QWidget):
 
     def __init__(self, doc_path):
@@ -275,7 +440,7 @@ class ParametersEditor(QWidget):
         up-to-date copy.
 
         :param list sets: optimisation sets
-        :param list parameters: optimisation parameters modified in place by this widget
+        :param list parameters: optimisation parameters
         :param Specification spec: object
         :param LookupTables lookup: object
         """
@@ -335,17 +500,15 @@ class ParametersEditor(QWidget):
 
     def rebuild_clicked(self):
         print("Clicked rebuild button")
-        p = self.get_parameters()
-        # TODO fix the logic here
-        # self.par = {k: v for k, v in mb.build_parameters(self.sets, p, self.spec).items() if k in p}
-        self.par = mb.build_parameters(self.sets, p, self.spec)
-        self.parameter_clicked(self.parameters_list.selectedItems()[0])
 
-    def get_parameters(self):
-        """Turn dict of dataframes into a dict of lists of index value dicts"""
-        param = {p: list(df.apply(lambda g: {'index': g[0], 'value': g[1]}, axis=1))
-                 for p, df in self.par.items() if len(df) > 0}
-        return param
+        # get parameters state in index value form
+        p = mu.get_index_value(self.par)
+
+        # rebuild parameters as a dict of DataFrames
+        self.par = mb.build_parameters(self.sets, p, self.spec)
+
+        # update display
+        self.parameter_clicked(self.parameters_list.selectedItems()[0])
 
 
 class ParameterWidget(QWidget):
@@ -696,7 +859,7 @@ class ProcessFlow(QWidget):
                 if len(flow_ids) > 0:
                     self.sets['F_m'].extend([fid for fid in flow_ids if fid not in self.sets['F_m']])
                 params = mb.build_parameters(self.sets, self.get_parameters(), self.spec)
-                self.parameters = mu.get_index_value_parameters(params)
+                self.parameters = mu.get_index_value(params)
                 self.process_tree.resizeColumnToContents(1)
 
     def remove_process(self):
@@ -735,7 +898,7 @@ class ProcessFlow(QWidget):
 
         # rebuild sets and parameters
         params = mb.build_parameters(self.sets, self.get_parameters(), self.spec)
-        self.parameters = mu.get_index_value_parameters(params)
+        self.parameters = mu.get_index_value(params)
         self.process_tree.resizeColumnToContents(1)
 
     def add_transport_process_clicked(self):
@@ -762,7 +925,7 @@ class ProcessFlow(QWidget):
                 if len(flow_ids) > 0:
                     self.sets['F_t'].extend([fid for fid in flow_ids if fid not in self.sets['F_t']])
                 params = mb.build_parameters(self.sets, self.get_parameters(), self.spec)
-                self.parameters = mu.get_index_value_parameters(params)
+                self.parameters = mu.get_index_value(params)
                 self.process_tree.resizeColumnToContents(1)
 
     def material_transport_link(self, link: bool):

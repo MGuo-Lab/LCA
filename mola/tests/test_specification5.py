@@ -11,13 +11,14 @@ import json
 
 class TestScheduleSpecification(TestCase):
     spec = sp.GeneralSpecification()
-    with open('test_model_config.json') as fp:
-        config = json.load(fp)
+    # with open('test_model_config.json') as fp:
+    #     config = json.load(fp)
+    config = mb.get_config('test_model_config.json')
 
     def test_populate(self):
         # from a model config file write out sets and parameters to two temporary files
         # for the DataPortal in populate
-        # TODO: put this in a separate function as reuse in build_instance
+        # TODO: put this in a separate function and reuse in build_instance
         sets_json = NamedTemporaryFile(suffix='.json', delete=False)
         parameters_json = NamedTemporaryFile(suffix='.json', delete=False)
         with open(sets_json.name, 'w') as fp:

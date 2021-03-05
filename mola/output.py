@@ -8,7 +8,21 @@ import pandas as pd
 import pyomo.environ as pe
 import pyomo.network as pn
 
-# TODO remove the unneeded large database sets that affect performance here, and turn into a generic
+
+def get_frame(model, cpt_type, active=None, max_object_size=100, explode=False):
+    if cpt_type == pe.Set:
+        return get_sets_frame(model, active=active)
+    elif cpt_type == pe.Param:
+        return get_parameters_frame(model, max_object_size=100, active=active)
+    elif cpt_type == pe.Constraint:
+        return get_constraints_frame(model, explode=False, active=active)
+    elif cpt_type == pe.Objective:
+        return get_objectives_frame(model, explode=False, active=active)
+    else:
+        sys.exit('Type not supported')
+
+
+# TODO remove the unneeded large database sets that affect performance here
 def get_sets_frame(model_instance, active=None):
     sets_df = pd.DataFrame(
         ([o.name, o.doc, [], len(o)] for o in model_instance.component_objects(pe.Set, active=active)),

@@ -5,15 +5,17 @@ import pandas as pd
 import json
 
 
-def get_index_value_parameters(parameter):
+def get_index_value(df_dict, value_key='value'):
     """
-    Turn dict of dataframes into a dict of lists of index value dicts
-    :param dict parameter:
+    Turn dict of DataFrames into a dict of lists of index value dicts.
+
+    :param dict df_dict: dictionary of DataFrames
+    :param str value_key: name of value key in dicts
     :return: dict
     """
-    def f(g): return {'index': g[0], 'value': g[1]}
-    param = {p: list(df.apply(f, axis=1)) for p, df in parameter.items() if len(df) > 0}
-    return param
+    def f(g): return {'index': g[0], value_key: g[1]}
+    d = {k: list(df.apply(f, axis=1)) for k, df in df_dict.items() if len(df) > 0}
+    return d
 
 
 def unnest(df, explode):

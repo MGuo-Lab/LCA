@@ -42,6 +42,18 @@ class Widgets(TestCase):
             app.exec()
         self.assertIsInstance(sets_editor, mw.SetsEditor)
 
+    def test_indexed_sets_editor(self):
+        setting = mqu.system_settings(testing=True)
+        config_path = setting['config_path'].joinpath('Kondili_State_Task.json')
+        config = mqu.build_config(config_path)
+        spec = mb.create_specification(config['specification'])
+        indexed_sets_editor = mw.IndexedSetsEditor(config['indexed_sets'], config['sets'], spec, lookup)
+        indexed_sets_editor.show()
+
+        if 'IGNORE_EXEC' not in os.environ:
+            app.exec()
+        self.assertIsInstance(indexed_sets_editor, mw.IndexedSetsEditor)
+
     def test_parameters_editor(self):
         parameters_editor = mw.ParametersEditor(self.model_config['sets'], self.model_config['parameters'], self.spec,
                                                 lookup)

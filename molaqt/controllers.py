@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QTabWidget, QWidget, QHBoxLayout
 import mola.dataimport as di
 import mola.dataview as dv
 import mola.build as mb
+import mola.utils as mu
 import molaqt.build as mqb
 import molaqt.run as mr
 import molaqt.widgets as mw
@@ -24,6 +25,9 @@ class Controller(QWidget):
         # merge user sets and parameters into spec defaults
         self.sets = self.spec.get_default_sets()
         self.sets.update(user_config['sets'])
+        self.indexed_sets = self.spec.get_default_indexed_sets(self.sets)
+        if 'indexed_sets' in user_config:
+            self.indexed_sets.update(user_config['indexed_sets'])
         self.parameters = self.spec.get_default_parameters(self.sets)
         self.parameters.update(user_config['parameters'])
 
@@ -44,6 +48,7 @@ class Controller(QWidget):
         Create dict for model configuration file representing current model state
         :return: dict
         """
+        self.update_state()
         config = {
             'settings': self.spec.settings,
             'doc_path': self.user_config['doc_path'],
@@ -51,13 +56,15 @@ class Controller(QWidget):
             'controller': self.user_config['controller'],
             'db_file': self.db_file,
             'sets': self.sets,
-            'parameters': self.get_parameters(),
+            'indexed_sets': self.indexed_sets,
+            'parameters': self.parameters,
         }
 
         return config
 
-    def get_parameters(self):
-        return super.get_parameters()
+    def update_state(self):
+        """ Each controller must implement this method to update its state from memory """
+        pass
 
 
 class CustomController(Controller):
@@ -98,12 +105,11 @@ class CustomController(Controller):
         layout.addWidget(self.tabs)
         self.setLayout(layout)
 
-    def get_parameters(self):
-        self.parameters = self.parameters_editor.get_parameters()
+    def update_state(self):
+        self.parameters = mu.get_index_value(self.parameters_editor.par)
         # TODO: only allow process_flow to alter J
         p = self.process_flow.get_parameters()
         self.parameters.update({'J': p['J']})
-        return self.parameters
 
 
 class StandardController(Controller):
@@ -114,6 +120,8 @@ class StandardController(Controller):
 
         # add widgets for sets, parameters, build, run
         self.sets_editor = mw.SetsEditor(self.sets, self.spec, self.lookup)
+        if hasattr(self.spec, 'user_defined_indexed_sets'):
+            self.indexed_sets_editor = mw.IndexedSetsEditor(self.indexed_sets, self.sets, self.spec, self.lookup)
         self.parameters_editor = mw.ParametersEditor(self.sets, self.parameters,
                                                      self.spec, self.lookup)
         self.model_run = mr.ModelRun(self.lookup)
@@ -136,6 +144,8 @@ class StandardController(Controller):
         self.tabs.addTab(self.documentation, "Documentation")
         self.tabs.addTab(self.configure, "Configure")
         self.tabs.addTab(self.sets_editor, "Sets")
+        if hasattr(self.spec, 'user_defined_indexed_sets'):
+            self.tabs.addTab(self.indexed_sets_editor, "Indexed Sets")
         self.tabs.addTab(self.parameters_editor, "Parameters")
         self.tabs.addTab(self.model_build, "Build")
         self.tabs.addTab(self.model_run, "Run")
@@ -145,7 +155,9 @@ class StandardController(Controller):
         layout.addWidget(self.tabs)
         self.setLayout(layout)
 
-    def get_parameters(self):
-        self.parameters = self.parameters_editor.get_parameters()
-        return self.parameters
+    def update_state(self):
+        self.parameters = mu.get_index_value(self.parameters_editor.par)
+        if hasattr(self.spec, 'user_defined_indexed_sets'):
+            self.indexed_sets = mu.get_index_value(self.indexed_sets_editor.indexed_sets_df,
+                                                   value_key='members')
 

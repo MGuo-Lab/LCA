@@ -34,6 +34,8 @@ class Specification:
     name: str
     user_defined_sets: dict
     db_sets: dict
+    user_defined_indexed_sets: dict
+    db_indexed_sets: dict
     user_defined_parameters: dict
     controllers: dict
     default_settings: dict
@@ -52,15 +54,19 @@ class Specification:
 
     def get_default_sets(self):
         """ Returns a dict of default sets """
-        pass
+        return {}
 
-    def get_default_parameters(self):
+    def get_default_indexed_sets(self, sets):
+        """ Returns a dict of default indexed sets """
+        return {}
+
+    def get_default_parameters(self, sets):
         """ Returns a dict of default parameters in index/value form """
-        pass
+        return {}
 
     def get_dummy_data(self):
         """ Not required. Returns a dict of sets and parameters that act as dummy data """
-        pass
+        return {}
 
 
 class GeneralSpecification(Specification):
@@ -299,13 +305,14 @@ class GeneralSpecification(Specification):
 
         def task_port_rule(model, k, t):
             port = dict()
-            rhs1 = sum(model.calA[fm, pm, k, t] * model.Flow[fm, pm, k, t] +
-                       model.calB[fm, pm, k, t] * model.Storage_Service_Flow[fm, pm, k, t] for
-                       fm in model.F_m for pm in model.P_m)
-            rhs2 = sum(model.calC[fm, pm, ft, pt, k, t] *
-                       model.Specific_Material_Transport_Flow[fm, pm, ft, pt, k, t] for
-                       fm in model.F_m for pm in model.P_m for ft in model.F_t for pt in model.P_t)
-            port['flow'] = rhs1 + rhs2
+            if len(model.calA) > 0:
+                rhs1 = sum(model.calA[fm, pm, k, t] * model.Flow[fm, pm, k, t] +
+                           model.calB[fm, pm, k, t] * model.Storage_Service_Flow[fm, pm, k, t] for
+                           fm in model.F_m for pm in model.P_m)
+                rhs2 = sum(model.calC[fm, pm, ft, pt, k, t] *
+                           model.Specific_Material_Transport_Flow[fm, pm, ft, pt, k, t] for
+                           fm in model.F_m for pm in model.P_m for ft in model.F_t for pt in model.P_t)
+                port['flow'] = rhs1 + rhs2
             return port
 
         abstract_model.task_port = pn.Port(abstract_model.K, abstract_model.T, rule=task_port_rule)
@@ -888,6 +895,122 @@ class AIMMSExampleSpecification(Specification):
             'D': [{'index': [c], 'value': 0} for c in user_sets['C']],
             'U': [{'index': [p, c], 'value': 0}
                   for p in user_sets['P'] for c in user_sets['C']],
+        }
+
+        return user_params
+
+
+class KondiliSpecification(Specification):
+    """
+    A Mola Specification class containing the abstract state task model in Kondili et al. 1993.
+    """
+    name = "Kondili Specification"
+    user_defined_sets = {
+        'States': {'doc': 'States'},
+        'I': {'doc': 'Tasks'},
+        'J': {'doc': 'Units'},
+    }
+    user_defined_indexed_sets = {
+        'S_I': {'index': ['I'], 'doc': 'States that feed task i', 'within': ['States']},
+        'S_bar_I': {'index': ['I'], 'doc': 'States produced by task i', 'within': ['States']},
+        'K_I': {'index': ['I'], 'doc': 'Units capable of performing task i', 'within': ['J']},
+        'T_S': {'index': ['States'], 'doc': 'Tasks receiving material from state s', 'within': ['I']},
+    }
+    user_defined_parameters = {
+        'C': {'index': ['States'], 'doc': 'Maximum storage capacity dedicated to state s'},
+    }
+    # db parameters need to be constructed explicitly
+    controllers = {"Standard": "StandardController"}
+    default_settings = {
+    }
+
+    def __init__(self):
+
+        # instance object to hold just the setting values
+        self.settings = {k: v['value'] for k, v in self.default_settings.items()}
+
+        # setup abstract model
+        abstract_model = self.abstract_model = pe.AbstractModel()
+
+        # user-defined sets
+        for var, d in self.user_defined_sets.items():
+            abstract_model.add_component(var, pe.Set(doc=d['doc']))
+
+        # user-defined parameters
+        for param, val in self.user_defined_parameters.items():
+            idx = [abstract_model.component(i) for i in val['index']]
+            abstract_model.add_component(param, pe.Param(*idx, doc=val['doc'], within=pe.Reals))
+
+
+    def populate(self, json_files=None, elementary_flow_ref_ids=None, db_file=None):
+
+        olca_dp = pyod.DataPortal()
+
+        # user data
+        for json_file in json_files:
+            if json_file:
+                olca_dp.load(filename=json_file)
+
+        # use DataPortal to build concrete instance
+        model_instance = self.abstract_model.create_instance(olca_dp)
+
+        return model_instance
+
+    def get_default_sets(self, d=None):
+        user_sets = {
+            'States': ['Feed A', 'Feed B', 'Feed C', 'Hot A', 'Int BC', 'Int AB', 'Impure E', 'Product 1', 'Product 2'],
+            'I': ['Heating', 'Reaction 1', 'Reaction 2', 'Reaction 3', 'Separation'],
+            'J': ['Heater', 'Reactor 1', 'Reactor 2', 'Still']
+        }
+        if d is not None:
+            user_sets.update(d)
+
+        return user_sets
+
+    def get_default_indexed_sets(self, user_sets, d=None):
+        map_S_I = {
+            'Heating': ['Feed A'],
+            'Reaction 1': ['Feed B', 'Feed C'],
+            'Reaction 2': ['Hot A', 'Int BC'],
+            'Reaction 3': ['Int AB', 'Feed C'],
+            'Separation': ['Impure E']
+        }
+        map_S_bar_I = {
+            'Heating': ['Hot A'],
+            'Reaction 1': ['Int BC'],
+            'Reaction 2': ['Product 1', 'Int AB'],
+            'Reaction 3': ['Impure E'],
+            'Separation': ['Product 2', 'Int AB']
+        }
+        map_K_I = {
+            'Heating': ['Heater'],
+            'Reaction 1': ['Reactor 1', 'Reactor 2'],
+            'Reaction 2': ['Reactor 1', 'Reactor 2'],
+            'Reaction 3': ['Reactor 1', 'Reactor 2'],
+            'Separation': ['Still']
+        }
+        map_T_S = {}
+        for s, tasks in map_S_I.items():
+            for i in tasks:
+                map_T_S.setdefault(i, []).append(s)
+        user_indexed_sets = {
+            'S_I': [{'index': [i], 'members': map_S_I[i]} for i in user_sets['I']],
+            'S_bar_I': [{'index': [i], 'members': map_S_bar_I} for i in user_sets['I']],
+            'K_I': [{'index': [i], 'members': map_K_I[i]} for i in user_sets['I']],
+            'T_S': [{'index': [s], 'members': map_T_S[s]} for s in map_T_S.keys()],
+        }
+        if d is not None:
+            user_indexed_sets.update(d)
+
+        return user_indexed_sets
+
+    def get_default_parameters(self, user_sets):
+        map_C = {
+            'Feed A': float('inf'), 'Feed B': float('inf'), 'Feed C': float('inf'),
+            'Hot A': 100, 'Int BC': 150, 'Int AB': 200, 'Impure E': 100,
+            'Product 1': float('inf'), 'Product 2': float('inf')}
+        user_params = {
+            'C': [{'index': [s], 'value': map_C[s]} for s in user_sets['States']],
         }
 
         return user_params
