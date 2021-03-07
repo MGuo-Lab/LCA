@@ -8,7 +8,7 @@ from PyQt5.QtCore import Qt, QUrl, pyqtSlot
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QGridLayout, QTableView, QHeaderView, QLineEdit, QDialog, \
     QAbstractItemView, QComboBox, QDialogButtonBox, QPushButton, QWidget, QListWidget, QAction, QLabel, QInputDialog,\
-    QVBoxLayout, QSlider, QCheckBox, QApplication, QHBoxLayout, QMessageBox, QSplitter, QTreeWidgetItemIterator, \
+    QVBoxLayout, QSlider, QCheckBox, QApplication, QHBoxLayout, QMessageBox, QSplitter, \
     QSizePolicy
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from pyvis.network import Network
@@ -791,10 +791,9 @@ class ProcessFlow(QWidget):
 
     def visualise_material_transport_clicked(self):
         param_name = 'J'
-        index_sets = self.spec.user_defined_parameters[param_name]['index']
         params = mb.build_parameters(self.sets, self.get_parameters(), self.spec)
         df = pd.DataFrame(params[param_name])
-        parameter_diagram = LinkParameterDiagram(df, index_sets, self.lookup)
+        parameter_diagram = LinkParameterDiagram(df, param_name, self.spec, self.lookup)
         html_path = parameter_diagram.get_html_path()
         url = html_path.resolve().as_uri()
         webbrowser.open(url, new=2)  # new tab

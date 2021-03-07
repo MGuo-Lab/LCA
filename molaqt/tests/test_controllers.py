@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QApplication
 
 import mola.dataimport as di
 import mola.dataview as dv
+import mola.build as mb
 import molaqt.controllers as mc
 import molaqt.utils as mqu
 
@@ -16,9 +17,10 @@ app = QApplication(sys.argv)
 conn = di.get_sqlite_connection()
 lookup = dv.LookupTables(conn)
 
-# json config dicts for testing - the controller ensures defaults used but could replace with build_config
-orange_config = mqu.get_config('Orange_Toy_Model.json')[0]
-custom_config = mqu.get_config('test_custom_controller.json')[0]
+# json config dicts for testing - the controller also ensures defaults used
+setting = mqu.system_settings(testing=True)
+orange_config = mb.get_config(setting['config_path'].joinpath('Orange_Toy_Model.json'))
+custom_config = mb.get_config(setting['config_path'].joinpath('test_custom_controller.json'))
 
 
 class TestCustomController(TestCase):

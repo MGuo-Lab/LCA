@@ -15,6 +15,7 @@ import mola.build as mb
 import molaqt.widgets as mw
 
 app = QApplication(sys.argv)
+setting = mqu.system_settings(testing=True)
 
 # get lookups from db - TODO: mock this db
 conn = di.get_sqlite_connection()
@@ -22,7 +23,8 @@ lookup = dv.LookupTables(conn)
 
 
 class Widgets(TestCase):
-    model_config, spec = mqu.get_config('Orange_Toy_Model.json')
+    model_config = mb.get_config(setting['config_path'].joinpath('Orange_Toy_Model.json'))
+    spec = mb.create_specification(model_config['specification'])
 
     def test_lookup_widget(self):
         lookup_widget = mw.LookupWidget(lookup, 'P_m')
@@ -44,8 +46,8 @@ class Widgets(TestCase):
 
     def test_indexed_sets_editor(self):
         setting = mqu.system_settings(testing=True)
-        config_path = setting['config_path'].joinpath('Kondili_State_Task.json')
-        config = mqu.build_config(config_path)
+        config_path = setting['config_path'].joinpath('Kondili_State_Task_Network.json')
+        config = mb.get_config(config_path)
         spec = mb.create_specification(config['specification'])
         indexed_sets_editor = mw.IndexedSetsEditor(config['indexed_sets'], config['sets'], spec, lookup)
         indexed_sets_editor.show()
@@ -92,7 +94,8 @@ class Widgets(TestCase):
 
 
 class TestProcessFlow(TestCase):
-    model_config, spec = mqu.get_config('test_custom_controller.json', testing=True)
+    model_config = mb.get_config(setting['config_path'].joinpath('test_custom_controller.json'))
+    spec = mb.create_specification(model_config['specification'])
 
     def test_init(self):
         process_flow = mw.ProcessFlow(self.model_config['sets'], self.model_config['parameters'],
@@ -106,14 +109,14 @@ class TestProcessFlow(TestCase):
 
 
 class TestLinkParameterDiagram(TestCase):
-
-    model_config, spec = mqu.get_config('Orange_Toy_Model.json', testing=True)
+    model_config = mb.get_config(setting['config_path'].joinpath('Orange_Toy_Model.json'))
+    spec = mb.create_specification(model_config['specification'])
 
     # rebuild parameters
     pars = mb.build_parameters(model_config['sets'], model_config['parameters'], spec)
 
     def test_init(self):
-        param = 'Arc'
+        param = 'J'
 
         # convert parameter json to DataFrame
         df = pd.DataFrame(self.pars[param])
@@ -128,8 +131,7 @@ class TestLinkParameterDiagram(TestCase):
 
 
 class TestObjectiveWidget(TestCase):
-
-    model_config = mqu.get_config('test_custom_controller.json', testing=True)[0]
+    model_config = mb.get_config(setting['config_path'].joinpath('test_custom_controller.json'))
 
     def test_init(self):
         obj_widget = mw.ObjectiveWidget(lookup, self.model_config['sets']['KPI'])

@@ -15,7 +15,7 @@ import mola.utils as mu
 def get_config(json_file_name):
     """
     Returns a well-formed model configuration dictionary from json_file_name by
-    ensuring that parameters are rebuilt from sets.
+    ensuring that parameters and indexed sets are rebuilt from sets.
 
     :param json_file_name: path to json configuration file
     :return: config dict

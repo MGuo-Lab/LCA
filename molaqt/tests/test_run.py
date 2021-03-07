@@ -22,7 +22,7 @@ class ModelRunTest(TestCase):
 
         setting = mqu.system_settings(testing=True)
         config_path = setting['config_path'].joinpath('Lemon_Toy_Model.json')
-        config = mqu.build_config(config_path)
+        config = mb.get_config(config_path)
         instance = mb.build_instance(config)
 
         # get lookups from db

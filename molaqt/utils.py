@@ -19,20 +19,6 @@ def get_new_config(specification_class, database_path, doc_file, controller_clas
     return new_config
 
 
-# TODO: remove this and use mola version?
-def get_config(json_file_name, testing=True):
-    setting = system_settings(testing=testing)
-    config_path = setting['config_path'].joinpath(json_file_name)
-
-    # load configuration file
-    with open(str(config_path)) as jf:
-        model_config = json.load(jf)
-
-    spec = mb.create_specification(model_config['specification'])
-
-    return model_config, spec
-
-
 def system_settings(development=False, testing=False):
     d = dict()
     d['app_name'] = 'molaqt'
@@ -59,35 +45,6 @@ def system_settings(development=False, testing=False):
 def chunker(seq, size):
     for pos in range(0, len(seq), size):
         yield seq.iloc[pos:pos + size]
-
-# TODO: use this function in the main app rather than just for testing? or move this to testing folder
-def build_config(config_path):
-    """
-    Ensure that a model configuration file has defaults populated.
-    :param config_path: path to configuration file
-    :return: configuration dict
-    """
-    with open(str(config_path)) as fp:
-        config = json.load(fp)
-
-    # load specification from config file
-    spec = mb.create_specification(config['specification'])
-
-    # merge defaults into config then replace config
-    sets = spec.get_default_sets()
-    sets.update(config['sets'])
-    config['sets'] = sets
-
-    indexed_sets = spec.get_default_indexed_sets(config['sets'])
-    if 'indexed_sets' in config:
-        indexed_sets.update(config['indexed_sets'])
-    config['indexed_sets'] = indexed_sets
-
-    parameters = spec.get_default_parameters(config['sets'])
-    parameters.update(config['parameters'])
-    config['parameters'] = parameters
-
-    return config
 
 
 def ref_id_to_text(index_sets, ref_id, spec, lookup):
