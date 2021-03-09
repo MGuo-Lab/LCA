@@ -71,7 +71,7 @@ class Specification:
 
 class GeneralSpecification(Specification):
     """
-    Miao pyomo specification
+    General pyomo specification
     """
     name = "General Specification"
     user_defined_sets = {
@@ -130,8 +130,8 @@ class GeneralSpecification(Specification):
         abstract_model = self.abstract_model = pe.AbstractModel()
 
         # user-defined sets
-        for var, d in self.user_defined_sets.items():
-            abstract_model.add_component(var, pe.Set(doc=d['doc']))
+        for s, d in self.user_defined_sets.items():
+            abstract_model.add_component(s, pe.Set(doc=d['doc']))
 
         abstract_model.F = abstract_model.F_m | abstract_model.F_t | abstract_model.F_s
         abstract_model.P = abstract_model.P_m | abstract_model.P_t | abstract_model.P_s
@@ -532,7 +532,7 @@ class GeneralSpecification(Specification):
 
 class SimpleSpecification(Specification):
     """
-    Alex pyomo specification
+    Simple pyomo specification
     """
     name = "Simple Specification"
     user_defined_sets = {
@@ -574,8 +574,8 @@ class SimpleSpecification(Specification):
         abstract_model = self.abstract_model = pe.AbstractModel()
 
         # user-defined sets
-        for var, d in self.user_defined_sets.items():
-            abstract_model.add_component(var, pe.Set(doc=d['doc']))
+        for s, d in self.user_defined_sets.items():
+            abstract_model.add_component(s, pe.Set(doc=d['doc']))
 
         abstract_model.F = abstract_model.F_m | abstract_model.F_t
         abstract_model.P = abstract_model.P_m | abstract_model.P_t
@@ -918,6 +918,7 @@ class KondiliSpecification(Specification):
     }
     user_defined_parameters = {
         'C': {'index': ['States'], 'doc': 'Maximum storage capacity dedicated to state s'},
+        'T': {'doc': 'Time horizon'},
     }
     # db parameters need to be constructed explicitly
     controllers = {"Standard": "StandardController"}
@@ -938,8 +939,11 @@ class KondiliSpecification(Specification):
 
         # user-defined parameters
         for param, val in self.user_defined_parameters.items():
-            idx = [abstract_model.component(i) for i in val['index']]
-            abstract_model.add_component(param, pe.Param(*idx, doc=val['doc'], within=pe.Reals))
+            if 'index' in val:
+                idx = [abstract_model.component(i) for i in val['index']]
+                abstract_model.add_component(param, pe.Param(*idx, doc=val['doc'], within=pe.Reals))
+            else:
+                abstract_model.add_component(param, pe.Param(doc=val['doc'], within=pe.Reals))
 
 
     def populate(self, json_files=None, elementary_flow_ref_ids=None, db_file=None):
@@ -1011,6 +1015,7 @@ class KondiliSpecification(Specification):
             'Product 1': float('inf'), 'Product 2': float('inf')}
         user_params = {
             'C': [{'index': [s], 'value': map_C[s]} for s in user_sets['States']],
+            'T': [{'value': 10.0}],
         }
 
         return user_params

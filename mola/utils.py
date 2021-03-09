@@ -7,14 +7,23 @@ import json
 
 def get_index_value(df_dict, value_key='value'):
     """
-    Turn dict of DataFrames into a dict of lists of index value dicts.
+    Turn dict of DataFrames into a dict of lists of (index) value dicts.
 
     :param dict df_dict: dictionary of DataFrames
     :param str value_key: name of value key in dicts
     :return: dict
     """
-    def f(g): return {'index': g[0], value_key: g[1]}
-    d = {k: list(df.apply(f, axis=1)) for k, df in df_dict.items() if len(df) > 0}
+    def fiv(g): return {'index': g[0], value_key: g[1]}
+    def fv(g): return {value_key: g[0]}
+    d = {}
+    for k, df in df_dict.items():
+        if len(df) > 0:
+            # index value df
+            if df.shape[1] == 2:
+                d[k] = list(df.apply(fiv, axis=1))
+            # scalar df
+            else:
+                d[k] = list(df.apply(fv, axis=1))
     return d
 
 

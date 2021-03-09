@@ -57,8 +57,11 @@ class Widgets(TestCase):
         self.assertIsInstance(indexed_sets_editor, mw.IndexedSetsEditor)
 
     def test_parameters_editor(self):
-        parameters_editor = mw.ParametersEditor(self.model_config['sets'], self.model_config['parameters'], self.spec,
-                                                lookup)
+        setting = mqu.system_settings(testing=True)
+        config_path = setting['config_path'].joinpath('Kondili_State_Task_Network.json')
+        config = mb.get_config(config_path)
+        spec = mb.create_specification(config['specification'])
+        parameters_editor = mw.ParametersEditor(config['sets'], config['parameters'], spec, lookup)
         parameters_editor.resize(800, 600)
         parameters_editor.show()
 

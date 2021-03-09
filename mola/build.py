@@ -121,11 +121,15 @@ def build_parameters(sets, parameters, spec, index_value=False):
             # update if parameter was already defined
             if p in parameters:
                 for item in parameters[p]:
-                    if item['index'] == el['index']:
+                    if 'index' in item:
+                        if item['index'] == el['index']:
+                            v = item['value']
+                    else:
                         v = item['value']
-            # new_index = pd.DataFrame([el['index']], columns=spec.user_defined_parameters[p]['index'])
-            # pd.MultiIndex.from_frame(new_index)
-            new_row = pd.DataFrame({'Index': [el['index']], 'Value': v}, index=[0])
+            if 'index' in el:
+                new_row = pd.DataFrame({'Index': [el['index']], 'Value': v}, index=[0])
+            else:
+                new_row = pd.DataFrame({'Value': v}, index=[0])
             row_list.append(new_row)
         if len(row_list) > 0:
             par[p] = pd.concat(row_list, ignore_index=True)

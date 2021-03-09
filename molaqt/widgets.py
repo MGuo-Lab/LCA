@@ -528,9 +528,14 @@ class ParameterWidget(QWidget):
 
         # table of parameters
         self.parameter_table = QTableView()
-        index_sets = spec.user_defined_parameters[name]['index']
-        self.parameter_table.setModel(md.ParameterModel(table, index_sets, lookup, spec))
-        self.parameter_table.setColumnHidden(0, True)
+        if 'index' in spec.user_defined_parameters[name]:
+            index_sets = spec.user_defined_parameters[name]['index']
+            model = md.ParameterModel(table, index_sets, lookup, spec)
+            self.parameter_table.setModel(model)
+            self.parameter_table.setColumnHidden(0, True)
+        else:
+            model = md.SimpleParameterModel(table)
+            self.parameter_table.setModel(model)
         self.parameter_table.resizeColumnsToContents()
 
         # arrange widgets
