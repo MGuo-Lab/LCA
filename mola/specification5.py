@@ -427,7 +427,7 @@ class GeneralSpecification(Specification):
 
         return user_sets
 
-    def get_default_parameters(self, user_sets):
+    def get_default_parameters(self, user_sets, user_indexed_sets=[]):
         user_params = {
             'C': [{'index': [fm, k, d, t], 'value': 0}
                   for fm in user_sets['F_m'] for d in user_sets['D'] for k in user_sets['K']
@@ -748,7 +748,7 @@ class SimpleSpecification(Specification):
 
         return user_sets
 
-    def get_default_parameters(self, user_sets):
+    def get_default_parameters(self, user_sets, user_indexed_sets=[]):
         user_params = {
             'C': [{'index': [fm, d], 'value': 0}
                   for fm in user_sets['F_m'] for d in user_sets['D']],
@@ -889,7 +889,7 @@ class AIMMSExampleSpecification(Specification):
 
         return user_sets
 
-    def get_default_parameters(self, user_sets):
+    def get_default_parameters(self, user_sets, user_indexed_sets=[]):
         user_params = {
             'S': [{'index': [p], 'value': 0} for p in user_sets['P']],
             'D': [{'index': [c], 'value': 0} for c in user_sets['C']],
@@ -911,14 +911,19 @@ class KondiliSpecification(Specification):
         'J': {'doc': 'Units'},
     }
     user_defined_indexed_sets = {
-        'S_I': {'index': ['I'], 'doc': 'States that feed task i', 'within': ['States']},
-        'S_bar_I': {'index': ['I'], 'doc': 'States produced by task i', 'within': ['States']},
-        'K_I': {'index': ['I'], 'doc': 'Units capable of performing task i', 'within': ['J']},
-        'T_S': {'index': ['States'], 'doc': 'Tasks receiving material from state s', 'within': ['I']},
+        'SI': {'index': ['I'], 'doc': 'States that feed task i', 'within': ['States']},
+        'S_barI': {'index': ['I'], 'doc': 'States produced by task i', 'within': ['States']},
+        'KI': {'index': ['I'], 'doc': 'Units capable of performing task i', 'within': ['J']},
+        'TS': {'index': ['States'], 'doc': 'Tasks receiving material from state s', 'within': ['I']},
     }
     user_defined_parameters = {
         'C': {'index': ['States'], 'doc': 'Maximum storage capacity dedicated to state s'},
         'T': {'doc': 'Time horizon'},
+        'M': {'doc': 'Allocation constraint parameter'},
+        'P': {'index': ['States', 'I'], 'doc': 'Processing time for the output of task i to state s'},
+        # 'rho': {'index': ['S_I'], 'doc': 'Proportion of input of task i from state s'},
+        # 'rho_bar': {'index': ['S_bar_I'], 'doc': 'Proportion of output of task i to state s'},
+        # 'P': {'index': ['S_bar_I'], 'doc': 'Processing time for the output of task i to state s'},
     }
     # db parameters need to be constructed explicitly
     controllers = {"Standard": "StandardController"}
@@ -934,11 +939,17 @@ class KondiliSpecification(Specification):
         abstract_model = self.abstract_model = pe.AbstractModel()
 
         # user-defined sets
-        for var, d in self.user_defined_sets.items():
-            abstract_model.add_component(var, pe.Set(doc=d['doc']))
+        for s, d in self.user_defined_sets.items():
+            abstract_model.add_component(s, pe.Set(doc=d['doc']))
+
+        # user-defined indexed sets
+        for s, val in self.user_defined_indexed_sets.items():
+            idx = [abstract_model.component(i) for i in val['index']]
+            abstract_model.add_component(s, pe.Set(*idx, doc=val['doc'], within=val['within']))
 
         # user-defined parameters
         for param, val in self.user_defined_parameters.items():
+            print(param)
             if 'index' in val:
                 idx = [abstract_model.component(i) for i in val['index']]
                 abstract_model.add_component(param, pe.Param(*idx, doc=val['doc'], within=pe.Reals))
@@ -998,24 +1009,27 @@ class KondiliSpecification(Specification):
             for i in tasks:
                 map_T_S.setdefault(i, []).append(s)
         user_indexed_sets = {
-            'S_I': [{'index': [i], 'members': map_S_I[i]} for i in user_sets['I']],
-            'S_bar_I': [{'index': [i], 'members': map_S_bar_I} for i in user_sets['I']],
-            'K_I': [{'index': [i], 'members': map_K_I[i]} for i in user_sets['I']],
-            'T_S': [{'index': [s], 'members': map_T_S[s]} for s in map_T_S.keys()],
+            'SI': [{'index': [i], 'members': map_S_I.setdefault(i, [])} for i in user_sets['I']],
+            'S_barI': [{'index': [i], 'members': map_S_bar_I.setdefault(i, [])} for i in user_sets['I']],
+            'KI': [{'index': [i], 'members': map_K_I.setdefault(i, [])} for i in user_sets['I']],
+            'TS': [{'index': [s], 'members': map_T_S.setdefault(s, [])} for s in map_T_S.keys()],
         }
         if d is not None:
             user_indexed_sets.update(d)
 
         return user_indexed_sets
 
-    def get_default_parameters(self, user_sets):
+    def get_default_parameters(self, user_sets, user_indexed_sets=[]):
         map_C = {
             'Feed A': float('inf'), 'Feed B': float('inf'), 'Feed C': float('inf'),
             'Hot A': 100, 'Int BC': 150, 'Int AB': 200, 'Impure E': 100,
             'Product 1': float('inf'), 'Product 2': float('inf')}
+        # map_S_I = {sb['index'][0]: sb['members'] for sb in user_indexed_sets['S_barI']}
         user_params = {
             'C': [{'index': [s], 'value': map_C[s]} for s in user_sets['States']],
-            'T': [{'value': 10.0}],
+            'T': 10.0,
+            'M': 40.0,
+            #'P': [{'index': [sb, i], 'value': 0} for i in user_sets['I'] for sb in map_S_I[i]],
         }
 
         return user_params

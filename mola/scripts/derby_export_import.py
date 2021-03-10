@@ -4,10 +4,10 @@ import zipfile
 import mola.dataimport as di
 
 # configuration
-# db = 'ecoinvent_36_apos_lci_20200206'
+db = 'ecoinvent_36_apos_lci_20200206'
 # db = 'juice_ecoinvent_36_apos_lci_20200206'
 # db = 'ecoinvent_371_apos_lci_methods_205_20210105'
-db = 'ecoinvent_371_apos_lci_20210105_36_methods'
+# db = 'ecoinvent_371_apos_lci_20210105_36_methods'
 csv_path = Path('C:/data/openlca/CSV/system')
 db_dir = csv_path.joinpath(db)
 sqlite_dir = Path('C:/data/openlca/sqlite/system')

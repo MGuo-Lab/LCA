@@ -4,164 +4,119 @@ channels:
   - defaults
 dependencies:
   - appdirs=1.4.4=pyh9f0ad1d_0
-  - argon2-cffi=20.1.0=py37hcc03f2d_2
-  - async_generator=1.10=py_0
   - backcall=0.2.0=pyh9f0ad1d_0
   - backports=1.0=py_2
   - backports.functools_lru_cache=1.6.1=py_0
-  - bleach=3.3.0=pyh44b312d_0
   - ca-certificates=2020.12.5=h5b45459_0
   - certifi=2020.12.5=py37h03978a9_1
-  - cffi=1.14.4=py37hd8e9650_1
+  - colorama=0.4.4=pyh9f0ad1d_0
   - decorator=4.4.2=py_0
-  - defusedxml=0.6.0=py_0
-  - entrypoints=0.3=pyhd8ed1ab_1003
-  - glpk=4.65=hdc00fd2_2
+  - et_xmlfile=1.0.1=py_1001
+  - glpk=4.65=h8ffe710_1003
   - icu=64.2=he025d50_1
-  - importlib-metadata=3.4.0=py37h03978a9_0
-  - importlib_metadata=3.4.0=hd8ed1ab_0
-  - importlib_resources=5.1.0=py37h03978a9_0
+  - importlib_metadata=3.7.2=hd8ed1ab_0
+  - importlib_resources=5.1.2=py37h03978a9_0
   - intel-openmp=2020.3=h57928b3_311
-  - ipykernel=5.4.2=py37h7b7c402_0
   - ipython_genutils=0.2.0=py_1
-  - ipywidgets=7.6.3=pyhd3deb0d_0
   - jaydebeapi=1.2.3=py_0
-  - jedi=0.18.0=py37h03978a9_2
+  - jdcal=1.4.1=py_0
   - jinja2=2.11.3=pyh44b312d_0
   - jpeg=9d=h8ffe710_0
   - jpype1=1.2.1=py37h8c56517_0
   - jsonpickle=1.4.1=pyh9f0ad1d_0
-  - jsonschema=3.2.0=py_2
-  - jupyter=1.0.0=py37_7
   - jupyter_client=6.1.11=pyhd8ed1ab_1
-  - jupyter_console=6.2.0=py_0
-  - jupyter_contrib_core=0.3.3=py_2
-  - jupyter_contrib_nbextensions=0.5.1=py37hc8dfbb8_1
   - jupyter_core=4.7.1=py37h03978a9_0
-  - jupyter_highlight_selected_word=0.2.0=py37h03978a9_1002
-  - jupyter_latex_envs=1.4.6=py37hc8dfbb8_1001
-  - jupyter_nbextensions_configurator=0.4.1=py37hc8dfbb8_2
-  - jupyterlab_pygments=0.1.2=pyh9f0ad1d_0
-  - jupyterlab_widgets=1.0.0=pyhd8ed1ab_1
   - libblas=3.9.0=8_mkl
   - libcblas=3.9.0=8_mkl
-  - libiconv=1.16=he774522_0
   - liblapack=3.9.0=8_mkl
   - libpng=1.6.37=h1d00b33_2
   - libsodium=1.0.18=h8d14728_1
-  - libxml2=2.9.10=hf5bbc77_3
-  - libxslt=1.1.33=h65864e5_2
-  - lxml=4.6.2=py37hd07aab1_1
-  - m2w64-gcc-libgfortran=5.3.0=6
-  - m2w64-gcc-libs=5.3.0=7
-  - m2w64-gcc-libs-core=5.3.0=7
-  - m2w64-gmp=6.1.0=2
-  - m2w64-libwinpthread-git=5.0.0.4634.697f757=2
   - markupsafe=1.1.1=py37hcc03f2d_3
-  - mistune=0.8.4=py37hcc03f2d_1003
   - mkl=2020.4=hb70f87d_311
-  - msys2-conda-epoch=20160418=1
-  - nbconvert=6.0.7=py37h03978a9_3
   - networkx=2.5=py_0
   - nose=1.3.7=py_1006
-  - notebook=6.2.0=py37h03978a9_0
-  - numpy=1.20.0=py37hd20adf4_0
-  - openssl=1.1.1i=h8ffe710_0
-  - packaging=20.9=pyh44b312d_0
-  - pandas=1.1.3=py37ha925a31_0
-  - pandoc=2.11.4=h8ffe710_0
+  - numpy=1.20.1=py37hd20adf4_0
+  - openpyxl=3.0.5=py_0
+  - openssl=1.1.1j=h8ffe710_0
+  - pandas=1.1.2=py37ha925a31_0
   - pickleshare=0.7.5=py_1003
   - pint=0.16.1=py_0
   - pip=21.0.1=pyhd8ed1ab_0
-  - prometheus_client=0.9.0=pyhd3deb0d_0
-  - prompt_toolkit=3.0.14=hd8ed1ab_0
-  - pycparser=2.20=pyh9f0ad1d_2
-  - pyomo=5.7.3=py37hf2a7229_0
+  - pygments=2.8.1=pyhd8ed1ab_0
   - pyparsing=2.4.7=pyh9f0ad1d_0
   - pyqt=5.9.2=py37h6538335_4
-  - pyrsistent=0.17.3=py37hcc03f2d_2
   - python=3.7.9=h60c2a47_0
   - python-dateutil=2.8.1=py_0
   - python_abi=3.7=1_cp37m
   - pytz=2021.1=pyhd8ed1ab_0
   - pyutilib=6.0.0=pyh9f0ad1d_0
-  - pyvis=0.1.8.2=pyh9f0ad1d_0
-  - pywinpty=0.5.7=py37hc8dfbb8_1
-  - pyyaml=5.4.1=py37hcc03f2d_0
-  - qgrid=1.3.1=py37_0
+  - pyvis=0.1.9=pyhd8ed1ab_0
   - qt=5.9.7=h506e8af_3
   - qtconsole=5.0.2=pyhd8ed1ab_0
   - qtpy=1.9.0=py_0
-  - send2trash=1.5.0=py_0
   - setuptools=49.6.0=py37h03978a9_3
   - sip=4.19.8=py37h6538335_1000
   - six=1.15.0=pyh9f0ad1d_0
-  - sqlalchemy=1.3.19=py37he774522_0
   - sqlite=3.34.0=h8ffe710_0
-  - testpath=0.4.4=py_0
   - tornado=6.1=py37hcc03f2d_1
+  - traitlets=5.0.5=py_0
   - typing_extensions=3.7.4.3=py_0
-  - vc=14.2=hb210afc_2
-  - vs2015_runtime=14.28.29325=h5e1d092_0
+  - vc=14.2=hb210afc_4
+  - vs2015_runtime=14.28.29325=h5e1d092_4
   - wcwidth=0.2.5=pyh9f0ad1d_2
   - wheel=0.36.2=pyhd3deb0d_0
-  - widgetsnbextension=3.5.1=py37h03978a9_4
   - wincertstore=0.2=py37h03978a9_1006
-  - winpty=0.4.3=4
-  - yaml=0.2.5=he774522_0
-  - zeromq=4.3.3=h0e60522_3
+  - xlrd=1.2.0=py37_0
+  - zeromq=4.3.4=h0e60522_0
+  - zipp=3.4.1=pyhd8ed1ab_0
   - zlib=1.2.11=h62dcd97_1010
   - pip:
-    - altair==4.1.0
-    - astor==0.8.1
-    - attrs==20.2.0
-    - base58==2.0.1
-    - blinker==1.4
-    - boto3==1.15.15
-    - botocore==1.18.15
-    - cachetools==4.1.1
+    - argon2-cffi==20.1.0
+    - async-generator==1.10
+    - attrs==20.3.0
+    - bleach==3.2.1
+    - cffi==1.14.3
     - chardet==3.0.4
-    - colorama==0.4.3
-    - cycler==0.10.0
-    - enum-compat==0.0.3
-    - future==0.18.2
+    - defusedxml==0.6.0
+    - entrypoints==0.3
     - idna==2.10
-    - ipython==7.18.1
+    - importlib-metadata==3.0.0
+    - ipykernel==5.3.4
+    - ipython==7.19.0
     - ipython-genutils==0.2.0
-    - jmespath==0.10.0
-    - kiwisolver==1.2.0
-    - matplotlib==3.3.2
-    - nbclient==0.5.0
-    - nbformat==5.0.7
-    - nest-asyncio==1.4.1
-    - numexpr==2.7.1
-    - olca-ipc==0.0.9
-    - pandocfilters==1.4.2
+    - ipywidgets==7.5.1
+    - jedi==0.17.2
+    - jsonschema==3.2.0
+    - jupyter-client==6.1.7
+    - jupyter-core==4.7.0
+    - jupyterlab-pygments==0.1.2
+    - mistune==0.8.4
+    - nbclient==0.5.1
+    - nbconvert==6.0.7
+    - nbformat==5.0.8
+    - nest-asyncio==1.4.3
+    - notebook==6.1.5
+    - olca-ipc==0.0.10
+    - packaging==20.4
+    - pandocfilters==1.4.3
     - parso==0.7.1
-    - pathtools==0.1.2
-    - pillow==7.2.0
     - ply==3.11
-    - prompt-toolkit==3.0.7
-    - protobuf==3.13.0
-    - pyarrow==1.0.1
-    - pydeck==0.5.0b1
-    - pygeodesy==20.12.30
-    - pygments==2.7.1
-    - pypika==0.47.4
-    - pywin32==228
-    - pyzmq==19.0.2
+    - prometheus-client==0.9.0
+    - prompt-toolkit==3.0.8
+    - pycparser==2.20
+    - pygeodesy==21.1.12
+    - pyomo==5.7.1
+    - pypika==0.42.1
+    - pyrsistent==0.17.3
+    - pywin32==300
+    - pywinpty==0.5.7
+    - pyzmq==20.0.0
+    - qgrid==1.3.1
     - requests==2.24.0
-    - s3transfer==0.3.3
-    - streamlit==0.68.0
+    - send2trash==1.5.0
     - terminado==0.9.1
-    - toml==0.10.1
-    - traitlets==5.0.4
-    - tzlocal==2.1
+    - testpath==0.4.4
     - urllib3==1.25.10
-    - validators==0.18.1
-    - watchdog==0.10.3
     - webencodings==0.5.1
-    - xlrd==1.2.0
-    - zipp==3.3.0
-prefix: C:\Users\Paul\Anaconda3\envs\LCA
-
+    - widgetsnbextension==3.5.1
+prefix: C:\Users\Paul\anaconda3\envs\LCA

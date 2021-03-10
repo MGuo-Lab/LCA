@@ -28,7 +28,7 @@ class Controller(QWidget):
         self.indexed_sets = self.spec.get_default_indexed_sets(self.sets)
         if 'indexed_sets' in user_config:
             self.indexed_sets.update(user_config['indexed_sets'])
-        self.parameters = self.spec.get_default_parameters(self.sets)
+        self.parameters = self.spec.get_default_parameters(self.sets, self.indexed_sets)
         self.parameters.update(user_config['parameters'])
 
         # if we need a db get lookups

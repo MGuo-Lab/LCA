@@ -1,5 +1,7 @@
 # Mathematical Optimisation of Life-Cycle Assessment Models
 
+## Repository Structure
+
 General information on the project is contained in the 
 [wiki](https://github.com/MGuo-Lab/LCA/wiki). The code repository contains two Python
 packages and a collection of Jupyter Notebooks.
@@ -17,4 +19,10 @@ its Python implementation. There are also notebooks containing Toy optimisation 
 `mola` package. Specific links are provided on the [wiki](https://github.com/MGuo-Lab/LCA/wiki).
  
  
- 
+## Installation
+
+### OpenLCA Data
+
+### Conda environment
+
+### Configuration files

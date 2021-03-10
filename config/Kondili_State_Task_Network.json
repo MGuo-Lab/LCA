@@ -1,0 +1,68 @@
+{
+    "settings": {},
+    "doc_path": "",
+    "specification": "<class 'mola.specification5.KondiliSpecification'>",
+    "controller": "<class 'molaqt.controllers.StandardController'>",
+    "db_file": "C:\\data\\openlca\\sqlite\\system\\CSV_juice_ecoinvent_36_apos_lci_20200206_20201029-102818.sqlite",
+    "sets": {},
+    "parameters": {
+        "C": [
+            {
+                "index": [
+                    "Feed A"
+                ],
+                "value": Infinity
+            },
+            {
+                "index": [
+                    "Feed B"
+                ],
+                "value": Infinity
+            },
+            {
+                "index": [
+                    "Feed C"
+                ],
+                "value": Infinity
+            },
+            {
+                "index": [
+                    "Hot A"
+                ],
+                "value": 100.0
+            },
+            {
+                "index": [
+                    "Int BC"
+                ],
+                "value": 150.0
+            },
+            {
+                "index": [
+                    "Int AB"
+                ],
+                "value": 200.0
+            },
+            {
+                "index": [
+                    "Impure E"
+                ],
+                "value": 100.0
+            },
+            {
+                "index": [
+                    "Product 1"
+                ],
+                "value": Infinity
+            },
+            {
+                "index": [
+                    "Product 2"
+                ],
+                "value": Infinity
+            }
+        ],
+        "T": 10.0,
+        "M": 40.0
+    }
+}

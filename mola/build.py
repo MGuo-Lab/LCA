@@ -114,28 +114,24 @@ def build_parameters(sets, parameters, spec, index_value=False):
     """
     par = {}
     for p, element_list in spec.get_default_parameters(sets).items():
-        row_list = []
         print(spec.user_defined_parameters[p]['doc'])
-        for el in element_list:
-            v = el['value']
-            # update if parameter was already defined
-            if p in parameters:
-                for item in parameters[p]:
-                    if 'index' in item:
+        if 'index' in spec.user_defined_parameters[p]:
+            row_list = []
+            for el in element_list:
+                v = el['value']
+                # update if parameter was already defined
+                if p in parameters:
+                    for item in parameters[p]:
                         if item['index'] == el['index']:
                             v = item['value']
-                    else:
-                        v = item['value']
-            if 'index' in el:
                 new_row = pd.DataFrame({'Index': [el['index']], 'Value': v}, index=[0])
+                row_list.append(new_row)
+            if len(row_list) > 0:
+                par[p] = pd.concat(row_list, ignore_index=True)
             else:
-                new_row = pd.DataFrame({'Value': v}, index=[0])
-            row_list.append(new_row)
-        if len(row_list) > 0:
-            par[p] = pd.concat(row_list, ignore_index=True)
+                par[p] = pd.DataFrame({'Index': [], 'Value': []})
         else:
-            par[p] = pd.DataFrame({'Index': [], 'Value': []})
-
+            par[p] = pd.DataFrame([parameters[p]], columns=['Value'])
     if index_value:
         par = mu.get_index_value(par)
 

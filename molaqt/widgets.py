@@ -351,7 +351,7 @@ class IndexedSetsEditor(QWidget):
         df = self.indexed_sets_df[current_set]
         indices = [v.currentText() for v in self.idx_combobox.values()]
         match_idx = df[df['Index'].apply(lambda x: indices == x)].index
-        members = self.indexed_sets_df[current_set].loc[match_idx, 'Members'][0]
+        members = self.indexed_sets_df[current_set].loc[match_idx, 'Members'].iloc[0]
         rows = [i.row() for i in self.indexed_set_table.selectedIndexes()]
         for row in sorted(rows, reverse=True):
             del members[row]
