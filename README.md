@@ -4,7 +4,7 @@
 
 General information on the project is contained in the 
 [wiki](https://github.com/MGuo-Lab/LCA/wiki). There is an 
-[Installation Guide](https://github.com/MGuo-Lab/LCA/INSTALL.md) for Windows.
+[Installation Guide](https://github.com/MGuo-Lab/LCA/blob/main/INSTALL.md) for Windows.
 
 The code repository contains two Python
 packages and a collection of Jupyter Notebooks.

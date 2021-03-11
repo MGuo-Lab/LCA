@@ -34,10 +34,10 @@ git clone https://github.com/MGuo-Lab/LCA.git
 ```
 This should create a folder `LCA` containing the contents of the Github repository.
 
-## Pycharm
+## PyCharm
 
 Open PyCharm and create a new PurePython project with Location `c:\dev\LCA`. Select a new environment using conda
-and called `LCA`. Make sure you select Python 3.7 for the environment and don't
+and call it `LCA`. Make sure you select Python 3.7 for the environment and don't
 create a new `main.py` file. Tell PyCharm you want to use existing sources and then the PyCharm IDE should open with 
 the LCA project contents.
 
@@ -78,7 +78,7 @@ to appear.
 
 # Notebooks
 
-In order that Jupyter notebooks can locate modules there should be junction called `mola` in
+In order that Jupyter notebooks can locate modules there should be a junction called `mola` in
 the notebooks folder that points to `LCA\mola`. Make sure the existing `mola` directory in the notebooks directory is
 removed first.
 
@@ -89,7 +89,7 @@ cd c:\dev\LCA
 mklink /j c:\dev\LCA\notebooks\mola c:\dev\LCA\mola
 ```
 
-Be careful if you try and delete this link because may delete the target `mola` folder!
+Be careful if you try and delete this link because it may delete the target `mola` folder!
 
 In order to open a notebook go the Anaconda Prompt and type
 
@@ -98,4 +98,5 @@ conda activate LCA
 jupyer notebook
 ```
 
-You can then navigate to the notebook using the browser window.
+You can then navigate to the notebook using the browser window. They should execute
+and load the mola package as required.
