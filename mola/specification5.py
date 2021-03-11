@@ -923,7 +923,6 @@ class KondiliSpecification(Specification):
         'P': {'index': ['States', 'I'], 'doc': 'Processing time for the output of task i to state s'},
         # 'rho': {'index': ['S_I'], 'doc': 'Proportion of input of task i from state s'},
         # 'rho_bar': {'index': ['S_bar_I'], 'doc': 'Proportion of output of task i to state s'},
-        # 'P': {'index': ['S_bar_I'], 'doc': 'Processing time for the output of task i to state s'},
     }
     # db parameters need to be constructed explicitly
     controllers = {"Standard": "StandardController"}
@@ -1024,12 +1023,16 @@ class KondiliSpecification(Specification):
             'Feed A': float('inf'), 'Feed B': float('inf'), 'Feed C': float('inf'),
             'Hot A': 100, 'Int BC': 150, 'Int AB': 200, 'Impure E': 100,
             'Product 1': float('inf'), 'Product 2': float('inf')}
-        # map_S_I = {sb['index'][0]: sb['members'] for sb in user_indexed_sets['S_barI']}
+        # ensure the indexed sets are well-defined using their dataframe representation
+        # map_S_I = {sb['index'][0]: sb['members'] for sb in user_indexed_sets['S_barI']
+        #            if sb['index'][0] in user_sets['I'] and sb['members'] in user_sets['States']}
+        indexed_sets = mb.build_indexed_sets(user_sets, user_indexed_sets, self, index_value=True)
         user_params = {
-            'C': [{'index': [s], 'value': map_C[s]} for s in user_sets['States']],
+            'C': [{'index': [s], 'value': map_C.setdefault(s, 0)} for s in user_sets['States']],
             'T': 10.0,
             'M': 40.0,
-            #'P': [{'index': [sb, i], 'value': 0} for i in user_sets['I'] for sb in map_S_I[i]],
+            'P': [{'index': [member] + item['index'], 'value': 0} for item in indexed_sets['S_barI']
+                  for member in item['members']],
         }
 
         return user_params

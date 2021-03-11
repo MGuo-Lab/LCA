@@ -237,7 +237,7 @@ class IndexedSetsEditor(QWidget):
     def __init__(self, indexed_sets, sets, spec, lookup):
         """
         Widget to edit a copy of the indexed sets.
-        Use the get_indexed_sets method to get an up-to-date copy.
+        Use the method get_indexed_sets to get an up-to-date copy.
 
         :param list indexed_sets: index sets in index-value form
         :param sets: sets in index-value form
@@ -398,6 +398,9 @@ class IndexedSetsEditor(QWidget):
         indexed_set_model = self.get_model(item.text())
         self.indexed_set_table.setModel(indexed_set_model)
 
+    def get_indexed_sets(self):
+        return mu.get_index_value(self.indexed_sets_df, value_key='members')
+
 
 class DocWidget(QWidget):
 
@@ -434,24 +437,25 @@ class DocWidget(QWidget):
 
 class ParametersEditor(QWidget):
 
-    def __init__(self, sets, parameters, spec, lookup):
+    def __init__(self, sets, parameters, spec, lookup, get_indexed_sets=lambda: []):
         """
-        Widget to modify a copy of the parameters list. Use the get_parameters method to obtain an
-        up-to-date copy.
+        Widget to modify a copy of the parameters list.
 
         :param list sets: optimisation sets
         :param list parameters: optimisation parameters
         :param Specification spec: object
         :param LookupTables lookup: object
+        :param function get_indexed_sets: call-back to get current optimisation indexed sets
         """
 
         super().__init__()
         self.spec = spec
         self.sets = sets
+        self.get_indexed_sets = get_indexed_sets
         self.lookup = lookup
 
         # build a dictionary of DataFrames of default parameters from sets
-        self.par = mb.build_parameters(sets, parameters, spec)
+        self.par = mb.build_parameters(sets, parameters, spec, indexed_sets=self.get_indexed_sets())
 
         # list widget for user-defined parameters
         self.parameters_list = QListWidget()
@@ -505,7 +509,7 @@ class ParametersEditor(QWidget):
         p = mu.get_index_value(self.par)
 
         # rebuild parameters as a dict of DataFrames
-        self.par = mb.build_parameters(self.sets, p, self.spec)
+        self.par = mb.build_parameters(self.sets, p, self.spec, indexed_sets=self.get_indexed_sets())
 
         # update display
         self.parameter_clicked(self.parameters_list.selectedItems()[0])

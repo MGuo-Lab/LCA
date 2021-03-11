@@ -4,7 +4,227 @@
     "specification": "<class 'mola.specification5.KondiliSpecification'>",
     "controller": "<class 'molaqt.controllers.StandardController'>",
     "db_file": "C:\\data\\openlca\\sqlite\\system\\CSV_juice_ecoinvent_36_apos_lci_20200206_20201029-102818.sqlite",
-    "sets": {},
+    "sets": {
+        "States": [
+            "Feed A",
+            "Feed B",
+            "Feed C",
+            "Hot A",
+            "Int BC",
+            "Int AB",
+            "Impure E",
+            "Product 1",
+            "Product 2"
+        ],
+        "I": [
+            "Heating",
+            "Reaction 1",
+            "Reaction 2",
+            "Reaction 3",
+            "Separation"
+        ],
+        "J": [
+            "Heater",
+            "Reactor 1",
+            "Reactor 2",
+            "Still"
+        ]
+    },
+    "indexed_sets": {
+        "SI": [
+            {
+                "index": [
+                    "Heating"
+                ],
+                "members": [
+                    "Feed A"
+                ]
+            },
+            {
+                "index": [
+                    "Reaction 1"
+                ],
+                "members": [
+                    "Feed C",
+                    "Feed B"
+                ]
+            },
+            {
+                "index": [
+                    "Reaction 2"
+                ],
+                "members": [
+                    "Hot A",
+                    "Int BC"
+                ]
+            },
+            {
+                "index": [
+                    "Reaction 3"
+                ],
+                "members": [
+                    "Feed C",
+                    "Int AB"
+                ]
+            },
+            {
+                "index": [
+                    "Separation"
+                ],
+                "members": [
+                    "Impure E"
+                ]
+            }
+        ],
+        "S_barI": [
+            {
+                "index": [
+                    "Heating"
+                ],
+                "members": [
+                    "Hot A"
+                ]
+            },
+            {
+                "index": [
+                    "Reaction 1"
+                ],
+                "members": [
+                    "Int BC"
+                ]
+            },
+            {
+                "index": [
+                    "Reaction 2"
+                ],
+                "members": [
+                    "Product 1",
+                    "Int AB"
+                ]
+            },
+            {
+                "index": [
+                    "Reaction 3"
+                ],
+                "members": [
+                    "Impure E"
+                ]
+            },
+            {
+                "index": [
+                    "Separation"
+                ],
+                "members": [
+                    "Product 2",
+                    "Int AB"
+                ]
+            }
+        ],
+        "KI": [
+            {
+                "index": [
+                    "Heating"
+                ],
+                "members": [
+                    "Heater"
+                ]
+            },
+            {
+                "index": [
+                    "Reaction 1"
+                ],
+                "members": [
+                    "Reactor 2",
+                    "Reactor 1"
+                ]
+            },
+            {
+                "index": [
+                    "Reaction 2"
+                ],
+                "members": [
+                    "Reactor 2",
+                    "Reactor 1"
+                ]
+            },
+            {
+                "index": [
+                    "Reaction 3"
+                ],
+                "members": [
+                    "Reactor 2",
+                    "Reactor 1"
+                ]
+            },
+            {
+                "index": [
+                    "Separation"
+                ],
+                "members": [
+                    "Still"
+                ]
+            }
+        ],
+        "TS": [
+            {
+                "index": [
+                    "Feed A"
+                ],
+                "members": [
+                    "Heating"
+                ]
+            },
+            {
+                "index": [
+                    "Feed B"
+                ],
+                "members": [
+                    "Reaction 1"
+                ]
+            },
+            {
+                "index": [
+                    "Feed C"
+                ],
+                "members": [
+                    "Reaction 1",
+                    "Reaction 3"
+                ]
+            },
+            {
+                "index": [
+                    "Hot A"
+                ],
+                "members": [
+                    "Reaction 2"
+                ]
+            },
+            {
+                "index": [
+                    "Int BC"
+                ],
+                "members": [
+                    "Reaction 2"
+                ]
+            },
+            {
+                "index": [
+                    "Int AB"
+                ],
+                "members": [
+                    "Reaction 3"
+                ]
+            },
+            {
+                "index": [
+                    "Impure E"
+                ],
+                "members": [
+                    "Separation"
+                ]
+            }
+        ]
+    },
     "parameters": {
         "C": [
             {
@@ -63,6 +283,57 @@
             }
         ],
         "T": 10.0,
-        "M": 40.0
+        "M": 40.0,
+        "P": [
+            {
+                "index": [
+                    "Hot A",
+                    "Heating"
+                ],
+                "value": 1
+            },
+            {
+                "index": [
+                    "Int BC",
+                    "Reaction 1"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "Product 1",
+                    "Reaction 2"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "Int AB",
+                    "Reaction 2"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "Impure E",
+                    "Reaction 3"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "Product 2",
+                    "Separation"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
+                    "Int AB",
+                    "Separation"
+                ],
+                "value": 0
+            }
+        ]
     }
 }

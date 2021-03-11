@@ -102,18 +102,19 @@ def create_specification(spec_class, settings=None):
     return spec
 
 
-def build_parameters(sets, parameters, spec, index_value=False):
+def build_parameters(sets, parameters, spec, index_value=False, indexed_sets=[]):
     """
     Build a dictionary of DataFrames of default parameters from sets using existing parameter values.
 
     :param dict sets: sets for optimisation
     :param dict parameters: parameters
     :param Specification spec: Specification object
-    :param boolean index_value: return output in index-value form # TODO: make use of this functionality
+    :param boolean index_value: return output in index-value form
+    :param dict indexed_sets: indexed sets for optimisation
     :return: dict of DataFrames or dict of index-value dicts
     """
     par = {}
-    for p, element_list in spec.get_default_parameters(sets).items():
+    for p, element_list in spec.get_default_parameters(sets, user_indexed_sets=indexed_sets).items():
         print(spec.user_defined_parameters[p]['doc'])
         if 'index' in spec.user_defined_parameters[p]:
             row_list = []
@@ -138,13 +139,14 @@ def build_parameters(sets, parameters, spec, index_value=False):
     return par
 
 
-def build_indexed_sets(sets, indexed_sets, spec):
+def build_indexed_sets(sets, indexed_sets, spec, index_value=False):
     """
     Build a dictionary of DataFrames of default parameters from sets using existing indexed set members.
 
     :param dict sets: sets for optimisation
     :param dict indexed_sets: parameters
     :param Specification spec: Specification object
+    :param boolean index_value: return output in index-value form
     :return: dict of DataFrames
     """
     ind_sets = {}
@@ -170,6 +172,9 @@ def build_indexed_sets(sets, indexed_sets, spec):
             ind_sets[s] = pd.concat(row_list, ignore_index=True)
         else:
             ind_sets[s] = pd.DataFrame({'Index': [], 'Members': []})
+
+    if index_value:
+        ind_sets = mu.get_index_value(ind_sets, value_key='members')
 
     return ind_sets
 

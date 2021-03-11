@@ -122,8 +122,14 @@ class StandardController(Controller):
         self.sets_editor = mw.SetsEditor(self.sets, self.spec, self.lookup)
         if hasattr(self.spec, 'user_defined_indexed_sets'):
             self.indexed_sets_editor = mw.IndexedSetsEditor(self.indexed_sets, self.sets, self.spec, self.lookup)
-        self.parameters_editor = mw.ParametersEditor(self.sets, self.parameters,
-                                                     self.spec, self.lookup)
+            self.parameters_editor = mw.ParametersEditor(self.sets, self.parameters,
+                                                         self.spec, self.lookup,
+                                                         self.indexed_sets_editor.get_indexed_sets)
+        else:
+            self.parameters_editor = mw.ParametersEditor(self.sets, self.parameters,
+                                                         self.spec, self.lookup)
+
+
         self.model_run = mr.ModelRun(self.lookup)
         self.model_build = mqb.ModelBuild(self)
 
