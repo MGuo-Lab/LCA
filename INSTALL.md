@@ -98,5 +98,5 @@ conda activate LCA
 jupyer notebook
 ```
 
-You can then navigate to the notebook using the browser window. They should execute
+You can then navigate to a notebook using the browser window. It should execute
 and load the mola package as required.

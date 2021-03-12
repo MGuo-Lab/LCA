@@ -102,7 +102,7 @@ def create_specification(spec_class, settings=None):
     return spec
 
 
-def build_parameters(sets, parameters, spec, index_value=False, indexed_sets=[]):
+def build_parameters(sets, parameters, spec, index_value=False, indexed_sets=dict()):
     """
     Build a dictionary of DataFrames of default parameters from sets using existing parameter values.
 
@@ -114,8 +114,9 @@ def build_parameters(sets, parameters, spec, index_value=False, indexed_sets=[])
     :return: dict of DataFrames or dict of index-value dicts
     """
     par = {}
-    for p, element_list in spec.get_default_parameters(sets, user_indexed_sets=indexed_sets).items():
-        print(spec.user_defined_parameters[p]['doc'])
+    default_parameters = spec.get_default_parameters(sets, user_indexed_sets=indexed_sets)
+    for p, element_list in default_parameters.items():
+        print(p + ': ' + spec.user_defined_parameters[p]['doc'])
         if 'index' in spec.user_defined_parameters[p]:
             row_list = []
             for el in element_list:
@@ -139,42 +140,39 @@ def build_parameters(sets, parameters, spec, index_value=False, indexed_sets=[])
     return par
 
 
-def build_indexed_sets(sets, indexed_sets, spec, index_value=False):
+def build_indexed_sets(sets, indexed_sets, spec):
     """
     Build a dictionary of DataFrames of default parameters from sets using existing indexed set members.
+    Indexed sets are currently stored as dicts which means there can be only one indexing set.
 
     :param dict sets: sets for optimisation
     :param dict indexed_sets: parameters
     :param Specification spec: Specification object
-    :param boolean index_value: return output in index-value form
     :return: dict of DataFrames
     """
     ind_sets = {}
-    for s, element_list in spec.get_default_indexed_sets(sets).items():
-        if 'within' in spec.user_defined_indexed_sets[s]:
-            within = spec.user_defined_indexed_sets[s]['within'][0]
+    for default_set, default_dict in spec.get_default_indexed_sets(sets).items():
+        if 'within' in spec.user_defined_indexed_sets[default_set]:
+            within = spec.user_defined_indexed_sets[default_set]['within'][0]
         else:
             within = None
         row_list = []
-        print(spec.user_defined_indexed_sets[s]['doc'])
-        for el in element_list:
-            m = el['members']
-            # update if indexed set was already defined as long as it respects domain
-            if s in indexed_sets:
-                for item in indexed_sets[s]:
-                    if item['index'] == el['index']:
-                        m = set(item['members'])
+        print(default_set + ': ' + spec.user_defined_indexed_sets[default_set]['doc'])
+        for ind, members in default_dict.items():
+            m = members
+            # update members if indexed set was already defined as long as it respects domain
+            if default_set in indexed_sets:
+                for k, v in indexed_sets[default_set].items():
+                    if k == ind:
+                        m = set(v)
                         if within:
                             m = list(set(sets[within]).intersection(m))
-            new_row = pd.DataFrame({'Index': [el['index']], 'Members': [m]}, index=[0])
+            new_row = pd.DataFrame({'Index': [ind], 'Members': [m]}, index=[0])
             row_list.append(new_row)
         if len(row_list) > 0:
-            ind_sets[s] = pd.concat(row_list, ignore_index=True)
+            ind_sets[default_set] = pd.concat(row_list, ignore_index=True)
         else:
-            ind_sets[s] = pd.DataFrame({'Index': [], 'Members': []})
-
-    if index_value:
-        ind_sets = mu.get_index_value(ind_sets, value_key='members')
+            ind_sets[default_set] = pd.DataFrame({'Index': [], 'Members': []})
 
     return ind_sets
 

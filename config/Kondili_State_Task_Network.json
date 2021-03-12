@@ -21,7 +21,8 @@
             "Reaction 1",
             "Reaction 2",
             "Reaction 3",
-            "Separation"
+            "Separation",
+            "a"
         ],
         "J": [
             "Heater",
@@ -31,199 +32,97 @@
         ]
     },
     "indexed_sets": {
-        "SI": [
-            {
-                "index": [
-                    "Heating"
-                ],
-                "members": [
-                    "Feed A"
-                ]
-            },
-            {
-                "index": [
-                    "Reaction 1"
-                ],
-                "members": [
-                    "Feed C",
-                    "Feed B"
-                ]
-            },
-            {
-                "index": [
-                    "Reaction 2"
-                ],
-                "members": [
-                    "Hot A",
-                    "Int BC"
-                ]
-            },
-            {
-                "index": [
-                    "Reaction 3"
-                ],
-                "members": [
-                    "Feed C",
-                    "Int AB"
-                ]
-            },
-            {
-                "index": [
-                    "Separation"
-                ],
-                "members": [
-                    "Impure E"
-                ]
-            }
-        ],
-        "S_barI": [
-            {
-                "index": [
-                    "Heating"
-                ],
-                "members": [
-                    "Hot A"
-                ]
-            },
-            {
-                "index": [
-                    "Reaction 1"
-                ],
-                "members": [
-                    "Int BC"
-                ]
-            },
-            {
-                "index": [
-                    "Reaction 2"
-                ],
-                "members": [
-                    "Product 1",
-                    "Int AB"
-                ]
-            },
-            {
-                "index": [
-                    "Reaction 3"
-                ],
-                "members": [
-                    "Impure E"
-                ]
-            },
-            {
-                "index": [
-                    "Separation"
-                ],
-                "members": [
-                    "Product 2",
-                    "Int AB"
-                ]
-            }
-        ],
-        "KI": [
-            {
-                "index": [
-                    "Heating"
-                ],
-                "members": [
-                    "Heater"
-                ]
-            },
-            {
-                "index": [
-                    "Reaction 1"
-                ],
-                "members": [
-                    "Reactor 2",
-                    "Reactor 1"
-                ]
-            },
-            {
-                "index": [
-                    "Reaction 2"
-                ],
-                "members": [
-                    "Reactor 2",
-                    "Reactor 1"
-                ]
-            },
-            {
-                "index": [
-                    "Reaction 3"
-                ],
-                "members": [
-                    "Reactor 2",
-                    "Reactor 1"
-                ]
-            },
-            {
-                "index": [
-                    "Separation"
-                ],
-                "members": [
-                    "Still"
-                ]
-            }
-        ],
-        "TS": [
-            {
-                "index": [
-                    "Feed A"
-                ],
-                "members": [
-                    "Heating"
-                ]
-            },
-            {
-                "index": [
-                    "Feed B"
-                ],
-                "members": [
-                    "Reaction 1"
-                ]
-            },
-            {
-                "index": [
-                    "Feed C"
-                ],
-                "members": [
-                    "Reaction 1",
-                    "Reaction 3"
-                ]
-            },
-            {
-                "index": [
-                    "Hot A"
-                ],
-                "members": [
-                    "Reaction 2"
-                ]
-            },
-            {
-                "index": [
-                    "Int BC"
-                ],
-                "members": [
-                    "Reaction 2"
-                ]
-            },
-            {
-                "index": [
-                    "Int AB"
-                ],
-                "members": [
-                    "Reaction 3"
-                ]
-            },
-            {
-                "index": [
-                    "Impure E"
-                ],
-                "members": [
-                    "Separation"
-                ]
-            }
-        ]
+        "SI": {
+            "Heating": [
+                "Feed A"
+            ],
+            "Reaction 1": [
+                "Feed B",
+                "Feed C"
+            ],
+            "Reaction 2": [
+                "Hot A",
+                "Int BC"
+            ],
+            "Reaction 3": [
+                "Feed C",
+                "Int AB"
+            ],
+            "Separation": [
+                "Impure E"
+            ],
+            "a": [
+                "Feed A"
+            ]
+        },
+        "S_barI": {
+            "Heating": [
+                "Hot A",
+                "Feed A"
+            ],
+            "Reaction 1": [
+                "Int BC"
+            ],
+            "Reaction 2": [
+                "Product 1",
+                "Int AB"
+            ],
+            "Reaction 3": [
+                "Impure E"
+            ],
+            "Separation": [
+                "Product 2",
+                "Int AB"
+            ],
+            "a": [
+                "Feed A"
+            ]
+        },
+        "KI": {
+            "Heating": [
+                "Heater"
+            ],
+            "Reaction 1": [
+                "Reactor 2",
+                "Reactor 1"
+            ],
+            "Reaction 2": [
+                "Reactor 2",
+                "Reactor 1"
+            ],
+            "Reaction 3": [
+                "Reactor 2",
+                "Reactor 1"
+            ],
+            "Separation": [
+                "Still"
+            ],
+            "a": []
+        },
+        "TS": {
+            "Feed A": [
+                "Heating"
+            ],
+            "Feed B": [
+                "Reaction 1"
+            ],
+            "Feed C": [
+                "Reaction 3",
+                "Reaction 1"
+            ],
+            "Hot A": [
+                "Reaction 2"
+            ],
+            "Int BC": [
+                "Reaction 2"
+            ],
+            "Int AB": [
+                "Reaction 3"
+            ],
+            "Impure E": [
+                "Separation"
+            ]
+        }
     },
     "parameters": {
         "C": [
@@ -294,6 +193,13 @@
             },
             {
                 "index": [
+                    "Feed A",
+                    "Heating"
+                ],
+                "value": 0
+            },
+            {
+                "index": [
                     "Int BC",
                     "Reaction 1"
                 ],
@@ -333,6 +239,13 @@
                     "Separation"
                 ],
                 "value": 0
+            },
+            {
+                "index": [
+                    "Feed A",
+                    "a"
+                ],
+                "value": 1
             }
         ]
     }

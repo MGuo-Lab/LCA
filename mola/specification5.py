@@ -1007,11 +1007,12 @@ class KondiliSpecification(Specification):
         for s, tasks in map_S_I.items():
             for i in tasks:
                 map_T_S.setdefault(i, []).append(s)
+
         user_indexed_sets = {
-            'SI': [{'index': [i], 'members': map_S_I.setdefault(i, [])} for i in user_sets['I']],
-            'S_barI': [{'index': [i], 'members': map_S_bar_I.setdefault(i, [])} for i in user_sets['I']],
-            'KI': [{'index': [i], 'members': map_K_I.setdefault(i, [])} for i in user_sets['I']],
-            'TS': [{'index': [s], 'members': map_T_S.setdefault(s, [])} for s in map_T_S.keys()],
+            'SI': {i: map_S_I.setdefault(i, []) for i in user_sets['I']},
+            'S_barI': {i: map_S_bar_I.setdefault(i, []) for i in user_sets['I']},
+            'KI': {i: map_K_I.setdefault(i, []) for i in user_sets['I']},
+            'TS': {s: map_T_S.setdefault(s, []) for s in map_T_S.keys()},
         }
         if d is not None:
             user_indexed_sets.update(d)
@@ -1024,15 +1025,13 @@ class KondiliSpecification(Specification):
             'Hot A': 100, 'Int BC': 150, 'Int AB': 200, 'Impure E': 100,
             'Product 1': float('inf'), 'Product 2': float('inf')}
         # ensure the indexed sets are well-defined using their dataframe representation
-        # map_S_I = {sb['index'][0]: sb['members'] for sb in user_indexed_sets['S_barI']
-        #            if sb['index'][0] in user_sets['I'] and sb['members'] in user_sets['States']}
-        indexed_sets = mb.build_indexed_sets(user_sets, user_indexed_sets, self, index_value=True)
+        indexed_sets = mb.build_indexed_sets(user_sets, user_indexed_sets, self)
         user_params = {
             'C': [{'index': [s], 'value': map_C.setdefault(s, 0)} for s in user_sets['States']],
             'T': 10.0,
             'M': 40.0,
-            'P': [{'index': [member] + item['index'], 'value': 0} for item in indexed_sets['S_barI']
-                  for member in item['members']],
+            'P': [{'index': [member, row['Index']], 'value': 0} for i, row in indexed_sets['S_barI'].iterrows()
+                  for member in row['Members']],
         }
 
         return user_params

@@ -164,6 +164,5 @@ class StandardController(Controller):
     def update_state(self):
         self.parameters = mu.get_index_value(self.parameters_editor.par)
         if hasattr(self.spec, 'user_defined_indexed_sets'):
-            self.indexed_sets = mu.get_index_value(self.indexed_sets_editor.indexed_sets_df,
-                                                   value_key='members')
+            self.indexed_sets = self.indexed_sets_editor.get_indexed_sets()
 

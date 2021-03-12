@@ -239,8 +239,8 @@ class IndexedSetsEditor(QWidget):
         Widget to edit a copy of the indexed sets.
         Use the method get_indexed_sets to get an up-to-date copy.
 
-        :param list indexed_sets: index sets in index-value form
-        :param sets: sets in index-value form
+        :param list indexed_sets: optimisation index sets
+        :param sets: optimisation sets
         :param Specification spec: object
         :param LookupTables lookup: object
         """
@@ -315,10 +315,10 @@ class IndexedSetsEditor(QWidget):
         print("Clicked rebuild button")
 
         # get parameters state in index value form
-        index_sets = mu.get_index_value(self.indexed_sets_df, value_key='members')
+        # index_sets = mu.get_index_value(self.indexed_sets_df, value_key='members')
 
         # rebuild parameters as a dict of DataFrames
-        self.indexed_sets_df = mb.build_indexed_sets(self.sets, index_sets, self.spec)
+        self.indexed_sets_df = mb.build_indexed_sets(self.sets, self.indexed_sets, self.spec)
 
         # update display
         self.indexed_set_clicked(self.indexed_sets_list.selectedItems()[0])
@@ -336,7 +336,7 @@ class IndexedSetsEditor(QWidget):
         if ok and len(text) > 0 and within and text in self.sets[within]:
             df = self.indexed_sets_df[set_name]
             indices = [v.currentText() for v in self.idx_combobox.values()]
-            match_idx = df[df['Index'].apply(lambda x: indices == x)].index
+            match_idx = df[df['Index'].apply(lambda x: indices[0] == x)].index  # only allowing one index set here
             # append to DataFrame in place ensuring we have a set
             current_members = self.indexed_sets_df[set_name].loc[match_idx, 'Members'].iloc[0]
             new_members = list(set(current_members + [str(text)]))
@@ -399,7 +399,11 @@ class IndexedSetsEditor(QWidget):
         self.indexed_set_table.setModel(indexed_set_model)
 
     def get_indexed_sets(self):
-        return mu.get_index_value(self.indexed_sets_df, value_key='members')
+        d = {}
+        for s, df in self.indexed_sets_df.items():
+            d[s] = df.set_index('Index')['Members'].to_dict()
+
+        return d
 
 
 class DocWidget(QWidget):
