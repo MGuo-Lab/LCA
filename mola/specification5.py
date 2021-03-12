@@ -914,15 +914,16 @@ class KondiliSpecification(Specification):
         'SI': {'index': ['I'], 'doc': 'States that feed task i', 'within': ['States']},
         'S_barI': {'index': ['I'], 'doc': 'States produced by task i', 'within': ['States']},
         'KI': {'index': ['I'], 'doc': 'Units capable of performing task i', 'within': ['J']},
-        'TS': {'index': ['States'], 'doc': 'Tasks receiving material from state s', 'within': ['I']},
     }
     user_defined_parameters = {
+        'H': {'doc': 'Time horizon'},
         'C': {'index': ['States'], 'doc': 'Maximum storage capacity dedicated to state s'},
-        'T': {'doc': 'Time horizon'},
         'M': {'doc': 'Allocation constraint parameter'},
         'P': {'index': ['States', 'I'], 'doc': 'Processing time for the output of task i to state s'},
-        # 'rho': {'index': ['S_I'], 'doc': 'Proportion of input of task i from state s'},
-        # 'rho_bar': {'index': ['S_bar_I'], 'doc': 'Proportion of output of task i to state s'},
+        'rho': {'index': ['States', 'I'], 'doc': 'Proportion of input of task i from state s'},
+        'rho_bar': {'index': ['States', 'I'], 'doc': 'Proportion of output of task i to state s'},
+        'V_min': {'index': ['I', 'J'], 'doc': 'Minimum capacity of unit j when used for performing task i'},
+        'V_max': {'index': ['I', 'J'], 'doc': 'Maximum capacity of unit j when used for performing task i'},
     }
     # db parameters need to be constructed explicitly
     controllers = {"Standard": "StandardController"}
@@ -944,7 +945,29 @@ class KondiliSpecification(Specification):
         # user-defined indexed sets
         for s, val in self.user_defined_indexed_sets.items():
             idx = [abstract_model.component(i) for i in val['index']]
-            abstract_model.add_component(s, pe.Set(*idx, doc=val['doc'], within=val['within']))
+            abstract_model.add_component(s, pe.Set(*idx, doc=val['doc'],
+                                                   within=abstract_model.component(val['within'][0])))
+
+        # built in model sets
+        abstract_model.T = pe.Set(doc='Time Periods')
+        abstract_model.K_I = pe.Set(within=abstract_model.J * abstract_model.I,
+                                    doc='Units capable of performing task i')
+        abstract_model.S_I = pe.Set(within=abstract_model.States * abstract_model.I,
+                                    doc='States that feed task i')
+        abstract_model.S_bar_I = pe.Set(within=abstract_model.States * abstract_model.I,
+                                        doc='States produced by task i')
+
+        abstract_model.TS = pe.Set(abstract_model.States, within=abstract_model.I)
+        abstract_model.T_S = pe.Set(within=abstract_model.I * abstract_model.States,
+                                    doc='Tasks receiving material from state s')
+
+        abstract_model.T_barS = pe.Set(abstract_model.States, within=abstract_model.I)
+        abstract_model.T_bar_S = pe.Set(within=abstract_model.I * abstract_model.States,
+                                        doc='Tasks producing material in state s')
+
+        abstract_model.IJ = pe.Set(abstract_model.J, within=abstract_model.I)
+        abstract_model.I_J = pe.Set(within=abstract_model.I * abstract_model.J,
+                                    doc='Tasks that can be performed by unit j')
 
         # user-defined parameters
         for param, val in self.user_defined_parameters.items():
@@ -955,6 +978,123 @@ class KondiliSpecification(Specification):
             else:
                 abstract_model.add_component(param, pe.Param(doc=val['doc'], within=pe.Reals))
 
+        def p_rule(model, i):
+            return max(model.P[s, i] for s in model.S_barI[i])
+        abstract_model.p = pe.Param(abstract_model.I, initialize=p_rule, doc='Completion time for task i')
+
+        # variables
+        abstract_model.W = pe.Var(abstract_model.I_J, abstract_model.T,
+                                  doc='Start task k using unit j at time t', within=pe.Binary)
+
+        abstract_model.B = pe.Var(abstract_model.I_J, abstract_model.T,
+                                  doc='Amount of material which starts undergoing task i in unit j at beginning of t',
+                                  within=pe.NonNegativeReals)
+
+        abstract_model.S = pe.Var(abstract_model.States, abstract_model.T,
+                                  doc='Amount of material stored in state s at beginning of t',
+                                  within=pe.NonNegativeReals)
+
+        abstract_model.Q = pe.Var(abstract_model.J, abstract_model.T,
+                                  doc='Amount of material in unit j at the beginning of time t',
+                                  within=pe.NonNegativeReals)
+
+        # objective TODO: set as a parameter
+        def cost_rule(model, s, t):
+            if s in ['Feed A', 'Feed B', 'Feed C']:
+                cost = 0.0
+            elif s in ['Hot A', 'Int BC', 'Int AB', 'Impure E']:
+                cost = -1.0
+            elif s in ['Product 1', 'Product 2']:
+                cost = 10.0
+            return cost
+
+        abstract_model.Cost = pe.Param(abstract_model.States, abstract_model.T, initialize=cost_rule,
+                                       doc='Unit price of material in state s at time t')
+
+        abstract_model.D = pe.Param(abstract_model.States, abstract_model.T, default=0,
+                                    doc='Delivery of material in state s at time t')
+        abstract_model.R = pe.Param(abstract_model.States, abstract_model.T, default=0,
+                                    doc='Receipt of material in state s at time t')
+
+        def profit_rule(model):
+            value_products = sum(model.Cost[s, model.H] * model.S[s, model.H] +
+                             sum(model.Cost[s, t] * model.D[s, t] for t in model.T if t < model.H)
+                                 for s in model.States)
+            return value_products
+
+        abstract_model.obj = pe.Objective(rule=profit_rule, doc='Maximisation of Profit', sense=pe.maximize)
+
+        # constraints
+        def allocation_constraints_rule(model, i, j, t):
+            lhs = sum(model.W[idash, j, tdash] for tdash in model.T for idash in model.IJ[j]
+                      if tdash >= t and tdash <= t + model.p[i] - 1) - 1
+            rhs = model.M * (1 - model.W[i, j, t])
+            return lhs <= rhs
+
+        abstract_model.allocation_constraints = pe.Constraint(abstract_model.I_J, abstract_model.T,
+                                                              rule=allocation_constraints_rule)
+
+        def capacity_limitations_rule1a(model, j, i, t):
+            return model.W[i, j, t] * model.V_min[i, j] <= model.B[i, j, t]
+
+        abstract_model.capacity_limitations1a = pe.Constraint(abstract_model.K_I, abstract_model.T,
+                                                              rule=capacity_limitations_rule1a)
+
+        def capacity_limitations_rule1b(model, j, i, t):
+            return model.B[i, j, t] <= model.W[i, j, t] * model.V_max[i, j]
+
+        abstract_model.capacity_limitations1b = pe.Constraint(abstract_model.K_I, abstract_model.T,
+                                                              rule=capacity_limitations_rule1b)
+
+        def capacity_limitations_rule2(model, s, t):
+            return pe.inequality(0, model.S[s, t], model.C[s])
+
+        abstract_model.capacity_limitations2 = pe.Constraint(abstract_model.States, abstract_model.T,
+                                                             rule=capacity_limitations_rule2)
+
+        def unit_balances_rule(model, j, t):
+            if t == model.T.first():
+                rhs = 0
+            else:
+                rhs = model.Q[j, t - 1]
+            rhs += sum(model.B[i, j, t] for i in model.IJ[j])
+            for i in model.IJ[j]:
+                for s in model.S_barI[i]:
+                    if t >= model.P[s, i]:
+                        rhs -= model.rho_bar[s, i] * model.B[i, j, t - model.P[s, i]]
+            return model.Q[j, t] == rhs
+
+        abstract_model.unit_balances = pe.Constraint(abstract_model.J, abstract_model.T, rule=unit_balances_rule)
+
+        def terminal_unit_rule(model, j):
+            return model.Q[j, model.H] == 0
+
+        abstract_model.terminal_unit = pe.Constraint(abstract_model.J, rule=terminal_unit_rule)
+
+        # TODO: set as a parameter
+        init_S = {
+            'Feed A': 200, 'Feed B': 200, 'Feed C': 200,
+            'Hot A': 0, 'Int BC': 0, 'Int AB': 0, 'Impure E': 0,
+            'Product 1': 0, 'Product 2': 0
+        }
+
+        def material_balances_rule(model, s, t):
+            if t == model.T.first():
+                rhs = init_S[s]
+            else:
+                rhs = model.S[s, t - 1]
+            if s in model.T_barS.keys():
+                for i in model.T_barS[s]:
+                    rhs += model.rho_bar[s, i] * sum(model.B[i, j, t - model.P[s, i]]
+                                                     for j in model.KI[i] if t >= model.P[s, i])
+            if s in model.TS.keys():
+                for i in model.TS[s]:
+                    rhs -= model.rho[s, i] * sum(model.B[i, j, t] for j in model.KI[i])
+            return model.S[s, t] == rhs + model.R[s, t] - model.D[s, t]
+
+        abstract_model.material_balances = pe.Constraint(abstract_model.States, abstract_model.T,
+                                                         rule=material_balances_rule)
+
 
     def populate(self, json_files=None, elementary_flow_ref_ids=None, db_file=None):
 
@@ -964,6 +1104,36 @@ class KondiliSpecification(Specification):
         for json_file in json_files:
             if json_file:
                 olca_dp.load(filename=json_file)
+
+        # built-in sets
+        map_I_J = {}
+        for i, units in olca_dp.data('KI').items():
+            for j in units:
+                map_I_J.setdefault(j, []).append(i)
+        olca_dp.__setitem__('IJ', map_I_J)
+        olca_dp.__setitem__('I_J', [(i, j) for j in map_I_J.keys() for i in map_I_J[j]])
+
+        map_T_S = {}
+        for i, states in olca_dp.data('SI').items():
+            for s in states:
+                map_T_S.setdefault(s, []).append(i)
+        olca_dp.__setitem__('TS', map_T_S)
+        olca_dp.__setitem__('T_S', [(t, s) for s in map_T_S.keys() for t in map_T_S[s]])
+
+        map_T_bar_S = {}
+        for i, states in olca_dp.data('S_barI').items():
+            for s in states:
+                map_T_bar_S.setdefault(s, []).append(i)
+        olca_dp.__setitem__('T_barS', map_T_bar_S)
+        olca_dp.__setitem__('T_bar_S', [(t, s) for s in map_T_bar_S.keys() for t in map_T_bar_S[s]])
+
+        olca_dp.__setitem__('S_I', [(s, i) for i in olca_dp.data('SI').keys() for s in olca_dp.data('SI')[i]])
+        olca_dp.__setitem__('S_bar_I',
+                            [(s, i) for i in olca_dp.data('S_barI').keys() for s in olca_dp.data('S_barI')[i]])
+        olca_dp.__setitem__('K_I', [(j, i) for i in olca_dp.data('KI').keys() for j in olca_dp.data('KI')[i]])
+
+        # built-in parameters
+        olca_dp.__setitem__('T', range(0, int(olca_dp.data('H')) + 1))
 
         # use DataPortal to build concrete instance
         model_instance = self.abstract_model.create_instance(olca_dp)
@@ -1003,16 +1173,11 @@ class KondiliSpecification(Specification):
             'Reaction 3': ['Reactor 1', 'Reactor 2'],
             'Separation': ['Still']
         }
-        map_T_S = {}
-        for s, tasks in map_S_I.items():
-            for i in tasks:
-                map_T_S.setdefault(i, []).append(s)
 
         user_indexed_sets = {
             'SI': {i: map_S_I.setdefault(i, []) for i in user_sets['I']},
             'S_barI': {i: map_S_bar_I.setdefault(i, []) for i in user_sets['I']},
             'KI': {i: map_K_I.setdefault(i, []) for i in user_sets['I']},
-            'TS': {s: map_T_S.setdefault(s, []) for s in map_T_S.keys()},
         }
         if d is not None:
             user_indexed_sets.update(d)
@@ -1024,14 +1189,66 @@ class KondiliSpecification(Specification):
             'Feed A': float('inf'), 'Feed B': float('inf'), 'Feed C': float('inf'),
             'Hot A': 100, 'Int BC': 150, 'Int AB': 200, 'Impure E': 100,
             'Product 1': float('inf'), 'Product 2': float('inf')}
+        map_P = {
+            ('Hot A', 'Heating'): 1,
+            ('Int BC', 'Reaction 1'): 2,
+            ('Product 1', 'Reaction 2'): 2,
+            ('Int AB', 'Reaction 2'): 2,
+            ('Impure E', 'Reaction 3'): 1,
+            ('Product 2', 'Separation'): 1,
+            ('Int AB', 'Separation'): 2
+        }
+        map_rho = {
+            ('Feed A', 'Heating'): 1,
+            ('Feed B', 'Reaction 1'): 0.5,
+            ('Feed C', 'Reaction 1'): 0.5,
+            ('Hot A', 'Reaction 2'): 0.4,
+            ('Int BC', 'Reaction 2'): 0.6,
+            ('Feed C', 'Reaction 3'): 0.2,
+            ('Int AB', 'Reaction 3'): 0.8,
+            ('Impure E', 'Separation'): 1
+        }
+        map_rho_bar = {
+            ('Hot A', 'Heating'): 1,
+            ('Int BC', 'Reaction 1'): 1,
+            ('Product 1', 'Reaction 2'): 0.4,
+            ('Int AB', 'Reaction 2'): 0.6,
+            ('Impure E', 'Reaction 3'): 1,
+            ('Product 2', 'Separation'): 0.9,
+            ('Int AB', 'Separation'): 0.1
+        }
+        map_V_max = {
+            ('Heating', 'Heater'): 100,
+            ('Reaction 1', 'Reactor 1'): 80,
+            ('Reaction 2', 'Reactor 1'): 80,
+            ('Reaction 3', 'Reactor 1'): 80,
+            ('Reaction 1', 'Reactor 2'): 50,
+            ('Reaction 2', 'Reactor 2'): 50,
+            ('Reaction 3', 'Reactor 2'): 50,
+            ('Separation', 'Still'): 200
+        }
         # ensure the indexed sets are well-defined using their dataframe representation
         indexed_sets = mb.build_indexed_sets(user_sets, user_indexed_sets, self)
+        map_I_J = {}
+        for r, row in indexed_sets['KI'].iterrows():
+            for j in row['Members']:
+                map_I_J.setdefault(j, []).append(row['Index'])
         user_params = {
             'C': [{'index': [s], 'value': map_C.setdefault(s, 0)} for s in user_sets['States']],
-            'T': 10.0,
+            'H': 10.0,
             'M': 40.0,
-            'P': [{'index': [member, row['Index']], 'value': 0} for i, row in indexed_sets['S_barI'].iterrows()
+            'P': [{'index': [member, row['Index']], 'value': map_P[member, row['Index']]}
+                  for i, row in indexed_sets['S_barI'].iterrows()
                   for member in row['Members']],
+            'rho': [{'index': [member, row['Index']], 'value': map_rho[member, row['Index']]}
+                    for i, row in indexed_sets['SI'].iterrows()
+                    for member in row['Members']],
+            'rho_bar': [{'index': [member, row['Index']], 'value': map_rho_bar[member, row['Index']]}
+                        for i, row in indexed_sets['S_barI'].iterrows()
+                        for member in row['Members']],
+            'V_min': [{'index': [t, unit], 'value': 0} for unit, tasks in map_I_J.items() for t in tasks],
+            'V_max': [{'index': [t, unit], 'value': map_V_max[t, unit]}
+                      for unit, tasks in map_I_J.items() for t in tasks],
         }
 
         return user_params

@@ -11,6 +11,7 @@ the conversion can be found in the file `mola\scripts\derby_export_import.py`. T
  found at http://db.apache.org/derby/
 
 It takes about an hour to convert the full Ecoinvent database to sqlite, so it is simplest to use the pre-built version
+called CSV_juice_ecoinvent_36_apos_lci_20200206_20201029-102818.zip
 at https://app.box.com/file/785473640076?s=51zjyp3h5c2x2ftmofd5sqcqp3flb194. Download this
 zip file and uncompress it.
 

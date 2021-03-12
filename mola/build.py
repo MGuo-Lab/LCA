@@ -53,6 +53,7 @@ def build_instance(config, settings=None):
 
     The config dict contains a specification settings key, but these are the values on disk.
     The settings dict reflects updated settings in the current python session.
+
     :param config: dict of configuration data
     :param settings: dict of specification settings
     :return: concreteModel
@@ -62,19 +63,27 @@ def build_instance(config, settings=None):
         settings = config['settings']
     spec = create_specification(config['specification'], settings)
 
-    # write out temp json files for set and parameters for DataPortal
+    # write out temp json files for sets, indexed sets and parameters for DataPortal
     sets_json = NamedTemporaryFile(suffix='.json', delete=False)
+    indexed_sets_json = NamedTemporaryFile(suffix='.json', delete=False)
     parameters_json = NamedTemporaryFile(suffix='.json', delete=False)
+    json_list = [sets_json.name, parameters_json.name]
     with open(sets_json.name, 'w') as fp:
         json.dump(config['sets'], fp)
+    if 'indexed_sets' in config and len(config['indexed_sets']) > 0:
+        with open(indexed_sets_json.name, 'w') as fp:
+            json.dump(config['indexed_sets'], fp)
+        json_list.append(indexed_sets_json.name)
     with open(parameters_json.name, 'w') as fp:
         json.dump(config['parameters'], fp)
 
     sets_json.close()
+    indexed_sets_json.close()
     parameters_json.close()
 
-    # populate sets using DataPortal and temp files
-    concrete_model = spec.populate([sets_json.name, parameters_json.name])
+    # populate sets and parameters using DataPortal and temp files
+    concrete_model = spec.populate(json_list)
+
 
     return concrete_model
 
