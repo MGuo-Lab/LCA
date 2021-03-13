@@ -916,6 +916,8 @@ class KondiliSpecification(Specification):
         'KI': {'index': ['I'], 'doc': 'Units capable of performing task i', 'within': ['J']},
     }
     user_defined_parameters = {
+        'S0': {'index': ['States'], 'doc': 'State at time 0'},
+        'Cost': {'index': ['States'], 'doc': 'Unit price of material in state s at time H'},
         'H': {'doc': 'Time horizon'},
         'C': {'index': ['States'], 'doc': 'Maximum storage capacity dedicated to state s'},
         'M': {'doc': 'Allocation constraint parameter'},
@@ -998,31 +1000,20 @@ class KondiliSpecification(Specification):
                                   doc='Amount of material in unit j at the beginning of time t',
                                   within=pe.NonNegativeReals)
 
-        # objective TODO: set as a parameter
-        def cost_rule(model, s, t):
-            if s in ['Feed A', 'Feed B', 'Feed C']:
-                cost = 0.0
-            elif s in ['Hot A', 'Int BC', 'Int AB', 'Impure E']:
-                cost = -1.0
-            elif s in ['Product 1', 'Product 2']:
-                cost = 10.0
-            return cost
-
-        abstract_model.Cost = pe.Param(abstract_model.States, abstract_model.T, initialize=cost_rule,
-                                       doc='Unit price of material in state s at time t')
-
+        # objective
         abstract_model.D = pe.Param(abstract_model.States, abstract_model.T, default=0,
                                     doc='Delivery of material in state s at time t')
         abstract_model.R = pe.Param(abstract_model.States, abstract_model.T, default=0,
                                     doc='Receipt of material in state s at time t')
 
         def profit_rule(model):
-            value_products = sum(model.Cost[s, model.H] * model.S[s, model.H] +
-                             sum(model.Cost[s, t] * model.D[s, t] for t in model.T if t < model.H)
+            value_products = sum(model.Cost[s] * model.S[s, model.H] +
+                             sum(model.Cost[s] * model.D[s, t] for t in model.T if t < model.H)
                                  for s in model.States)
             return value_products
 
-        abstract_model.obj = pe.Objective(rule=profit_rule, doc='Maximisation of Profit', sense=pe.maximize)
+        abstract_model.Maximise_Profit = pe.Objective(rule=profit_rule, doc='Maximisation of Profit',
+                                                      sense=pe.maximize)
 
         # constraints
         def allocation_constraints_rule(model, i, j, t):
@@ -1071,16 +1062,9 @@ class KondiliSpecification(Specification):
 
         abstract_model.terminal_unit = pe.Constraint(abstract_model.J, rule=terminal_unit_rule)
 
-        # TODO: set as a parameter
-        init_S = {
-            'Feed A': 200, 'Feed B': 200, 'Feed C': 200,
-            'Hot A': 0, 'Int BC': 0, 'Int AB': 0, 'Impure E': 0,
-            'Product 1': 0, 'Product 2': 0
-        }
-
         def material_balances_rule(model, s, t):
             if t == model.T.first():
-                rhs = init_S[s]
+                rhs = model.S0[s]
             else:
                 rhs = model.S[s, t - 1]
             if s in model.T_barS.keys():
@@ -1185,6 +1169,16 @@ class KondiliSpecification(Specification):
         return user_indexed_sets
 
     def get_default_parameters(self, user_sets, user_indexed_sets=[]):
+        map_S0 = {
+            'Feed A': 200, 'Feed B': 200, 'Feed C': 200,
+            'Hot A': 0, 'Int BC': 0, 'Int AB': 0, 'Impure E': 0,
+            'Product 1': 0, 'Product 2': 0
+        }
+        map_Cost = {
+            'Feed A': 0, 'Feed B': 0, 'Feed C': 0,
+            'Hot A': -1, 'Int BC': -1, 'Int AB': -1, 'Impure E': -1,
+            'Product 1': 10, 'Product 2': 10
+        }
         map_C = {
             'Feed A': float('inf'), 'Feed B': float('inf'), 'Feed C': float('inf'),
             'Hot A': 100, 'Int BC': 150, 'Int AB': 200, 'Impure E': 100,
@@ -1234,20 +1228,22 @@ class KondiliSpecification(Specification):
             for j in row['Members']:
                 map_I_J.setdefault(j, []).append(row['Index'])
         user_params = {
+            'S0': [{'index': [s], 'value': map_S0.setdefault(s, 0)} for s in user_sets['States']],
+            'Cost': [{'index': [s], 'value': map_Cost.setdefault(s, 0)} for s in user_sets['States']],
             'C': [{'index': [s], 'value': map_C.setdefault(s, 0)} for s in user_sets['States']],
             'H': 10.0,
             'M': 40.0,
-            'P': [{'index': [member, row['Index']], 'value': map_P[member, row['Index']]}
+            'P': [{'index': [member, row['Index']], 'value': map_P.setdefault((member, row['Index']), 0.0)}
                   for i, row in indexed_sets['S_barI'].iterrows()
                   for member in row['Members']],
-            'rho': [{'index': [member, row['Index']], 'value': map_rho[member, row['Index']]}
+            'rho': [{'index': [member, row['Index']], 'value': map_rho.setdefault((member, row['Index']), 0.0)}
                     for i, row in indexed_sets['SI'].iterrows()
                     for member in row['Members']],
-            'rho_bar': [{'index': [member, row['Index']], 'value': map_rho_bar[member, row['Index']]}
+            'rho_bar': [{'index': [member, row['Index']], 'value': map_rho_bar.setdefault((member, row['Index']), 0.0)}
                         for i, row in indexed_sets['S_barI'].iterrows()
                         for member in row['Members']],
             'V_min': [{'index': [t, unit], 'value': 0} for unit, tasks in map_I_J.items() for t in tasks],
-            'V_max': [{'index': [t, unit], 'value': map_V_max[t, unit]}
+            'V_max': [{'index': [t, unit], 'value': map_V_max.setdefault((t, unit), 0.0)}
                       for unit, tasks in map_I_J.items() for t in tasks],
         }
 

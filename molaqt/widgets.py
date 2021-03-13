@@ -349,7 +349,7 @@ class IndexedSetsEditor(QWidget):
     def remove_from_indexed_set(self):
         current_set = self.indexed_sets_list.currentItem().text()
         df = self.indexed_sets_df[current_set]
-        indices = [v.currentText() for v in self.idx_combobox.values()]
+        indices = [v.currentText() for v in self.idx_combobox.values()][0]
         match_idx = df[df['Index'].apply(lambda x: indices == x)].index
         members = self.indexed_sets_df[current_set].loc[match_idx, 'Members'].iloc[0]
         rows = [i.row() for i in self.indexed_set_table.selectedIndexes()]
@@ -385,7 +385,8 @@ class IndexedSetsEditor(QWidget):
 
     def get_model(self, set_name):
         df = self.indexed_sets_df[set_name]
-        indices = [v.currentText() for v in self.idx_combobox.values()][0]  # TODO: allow more than one indexing set
+        # TODO: allow more than one indexing set - can use tuples for key in dict
+        indices = [v.currentText() for v in self.idx_combobox.values()][0]
         match_df = df[df['Index'].apply(lambda x: indices == x)]
         members = match_df['Members'].iloc[0] if len(match_df) > 0 else []
         set_df = pd.DataFrame({set_name: members})
